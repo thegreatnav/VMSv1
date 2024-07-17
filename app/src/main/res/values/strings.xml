@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">VMSv1</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Visitor Management System</string>
+    <string name="nav_header_subtitle">Manipal Technologies Limited.</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_admin">Admin</string>
+    <string name="menu_user_menu">User_Menu</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="admin_page">Admin Page</string>
+    <string name="add_visitor_to_blacklist">Add visitor to Blacklist</string>
+    <string name="mobile_number">MOBILE NUMBER</string>
+    <string name="name">NAME</string>
+    <string name="reason">REASON</string>
+    <string name="tag"></string>
+    <string name="save">SAVE</string>
+    <string name="visitor_entry">Visitor Entry</string>
+    <string name="visitor_details">Visitor Details</string>
+    <string name="mobile_no">Mobile No</string>
+    <string name="search">Search</string>
+    <string name="visitor_name">Visitor Name</string>
+    <string name="id_proof">ID Proof</string>
+    <string name="id_proof_number">ID Proof Number</string>
+    <string name="home">Home</string>
+    <string-array name="com_google_android_gms_fonts_certs" />
+</resources>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="com.example.vmsv1.ui.user.UserFragment"
+        android:label="Gallery"
+        tools:layout="@layout/fragment_user">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_gallery_to_visitorEntry"
+            app:destination="@id/main" />
+    </fragment>
+    <fragment
+        android:id="@+id/visitorEntryFragment"
+        android:label="Visitor Entry"
+        tools:context=".ui.VisitorEntry">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_admin"
+        android:name="com.example.vmsv1.ui.admin.AdminFragment"
+        android:label="@string/menu_admin"
+        tools:layout="@layout/fragment_admin">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_user"
+        android:name="com.example.vmsv1.ui.user.UserFragment"
+        android:label="@string/menu_user_menu"
+        tools:layout="@layout/fragment_user">
+        <argument
+        android:name="userId"
+        app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.vmsv1.ui.home.HomeFragment"
+        android:label="home"
+        tools:layout="@layout/fragment_home"/>
+
+</navigation>

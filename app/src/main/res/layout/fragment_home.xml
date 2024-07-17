@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="50sp"
+    tools:context=".ui.home.HomeFragment">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/admin_cardview"
+                android:layout_width="200sp"
+                android:layout_height="200sp"
+                android:layout_gravity="center"
+                android:backgroundTint="#ffff">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/admin_image_btn"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:layout_marginTop="20sp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/admin"
+                        tools:ignore="SpeakableTextPresentCheck" />
+
+                    <TextView
+                        android:id="@+id/admin_image_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/admin_image_btn"
+                        android:fontFamily="@font/acme"
+                        android:text="Admin"
+                        android:textColor="@color/black"
+                        android:textSize="30sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <GridLayout
+                android:id="@+id/admin_sub_layout"
+                android:layout_width="350dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/companymaster"
+                    android:layout_width="150sp"
+                    android:layout_height="65sp"
+                    android:backgroundTint="@color/MainColor"
+                    android:text="Company Master"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/locationmaster"
+                    android:layout_width="150sp"
+                    android:layout_height="65sp"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="@color/MainColor"
+                    android:text="Location Master"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/sbumaster"
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="@color/MainColor"
+                    android:text="SBU Master"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/gatemaster"
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="@color/MainColor"
+                    android:text="Gate Master"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/areamaster"
+                    android:layout_width="150sp"
+                    android:layout_height="65sp"
+                    android:layout_row="0"
+                    android:layout_column="5"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/MainColor"
+                    android:text="Area Master"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/idproofmaster"
+                    android:layout_width="150sp"
+                    android:layout_height="65sp"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="@color/MainColor"
+                    android:text="ID Proof Type Master"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/visitortypemaster"
+                    android:layout_width="150sp"
+                    android:layout_height="65sp"
+                    android:backgroundTint="@color/MainColor"
+                    android:text="Visitor Type Master"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/usermaster"
+                    android:layout_width="150sp"
+                    android:layout_height="65sp"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="@color/MainColor"
+                    android:text="User Master"
+                    android:textColor="@color/white" />
+            </GridLayout>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="200sp"
+                android:layout_height="200sp"
+                android:backgroundTint="#ffff"
+                android:layout_marginTop="30sp"
+                android:layout_gravity="center"
+                android:id="@+id/user_cardview">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/user_image_btn"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:layout_marginTop="20sp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/user"
+                        tools:ignore="SpeakableTextPresentCheck" />
+
+                    <TextView
+                        android:id="@+id/user_image_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/user_image_btn"
+                        android:fontFamily="@font/acme"
+                        android:text="User"
+                        android:textColor="@color/black"
+                        android:textSize="30sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <GridLayout
+                android:id="@+id/user_sub_layout"
+                android:layout_width="350dp"
+                android:layout_height="170dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/visitorentry"
+                    android:layout_width="150sp"
+                    android:layout_height="65sp"
+                    android:layout_marginTop="15dp"
+                    android:backgroundTint="@color/MainColor"
+                    android:textColor="@color/white"
+                    android:text="Visitor Entry" />
+
+                <Button
+                    android:id="@+id/managevisitor"
+                    android:layout_width="150sp"
+                    android:layout_height="65sp"
+                    android:backgroundTint="@color/MainColor"
+                    android:textColor="@color/white"
+                    android:text="Manage Visitor" />
+
+                <Button
+                    android:id="@+id/blacklistvisitor"
+                    android:layout_width="150sp"
+                    android:layout_height="65sp"
+                    android:layout_row="0"
+                    android:layout_column="4"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="@color/MainColor"
+                    android:textColor="@color/white"
+                    android:text="Blacklist Visitor" />
+
+                <Button
+                    android:id="@+id/dailyvistor"
+                    android:layout_width="150sp"
+                    android:layout_height="65sp"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="@color/MainColor"
+                    android:textColor="@color/white"
+                    android:text="Daily Visitor" />
+
+            </GridLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

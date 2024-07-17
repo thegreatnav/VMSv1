@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "737602170657",
+    "project_id": "vms-project-fad22",
+    "storage_bucket": "vms-project-fad22.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737602170657:android:96194a2f42b018c8e81860",
+        "android_client_info": {
+          "package_name": "com.example.vmsv1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIpQJotQnzxyBJoARpzc7EStGh5__Le70"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737602170657:android:4a740722cb519e7ee81860",
+        "android_client_info": {
+          "package_name": "com.example1.vms1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIpQJotQnzxyBJoARpzc7EStGh5__Le70"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
