@@ -20,13 +20,18 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.vmsv1.BackgroundTaskExecutor;
 import com.example.vmsv1.GridAdapter_DailyVisitor;
 import com.example.vmsv1.GridAdapter_ManageVisitor;
 import com.example.vmsv1.R;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
 
@@ -137,120 +142,116 @@ public class DailyVisitor extends AppCompatActivity {
 
         search_button.setOnClickListener(view -> {
 
-            /*SimpleDateFormat inputDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-            SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+            SimpleDateFormat inputDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
             String fromdateInString = fromdate_picker.getText().toString();
-            Date entrydatefrom;
-            java.sql.Date entrydatefrom3=null;
-            try {
-                // Parse the input date string to java.util.Date
-                entrydatefrom = inputDateFormat.parse(fromdateInString);
-                Log.d("Tag1", "entry1=" + entrydatefrom);
-
-                // Format the java.util.Date to the desired string format
-                String formattedDate = outputDateFormat.format(entrydatefrom);
-                Log.d("Tag1", "formattedDate=" + formattedDate);
-
-                // Convert java.util.Date to java.sql.Date
-                entrydatefrom3 = new java.sql.Date(entrydatefrom.getTime());
-                Log.d("Tag1", "entry3=" + entrydatefrom3);
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
             String todateInString = todate_picker.getText().toString();
-            Date entrydateto,entrydateto2;
-            java.sql.Date entrydateto3;
+            if(fromdateInString.equals("")||todateInString.equals(""))
+                Toast.makeText(getApplicationContext(),"Please select 'From' and 'To' dates ",Toast.LENGTH_SHORT).show();
+            else
+            {
+                Log.d("Tag1", "fromdate_picker=" + fromdateInString);
+                Date entrydatefrom, utilDatefrom = null;
+                Timestamp sqlTimestampfrom = null;
+                try {
+                    entrydatefrom = inputDateFormat.parse(fromdateInString);
+                    Log.d("Tag1", "entrydatefrom=" + String.valueOf(fromdateInString));
+                    String formattedDate = outputDateFormat.format(entrydatefrom);
+                    Log.d("Tag1", "formattedDate=" + formattedDate);
+                    utilDatefrom = outputDateFormat.parse(formattedDate);
+                    Log.d("Tag1", "utilDatefrom=" + String.valueOf(utilDatefrom));
+                    sqlTimestampfrom = new Timestamp(utilDatefrom.getTime());
 
-            try {
-                entrydateto = inputDateFormat.parse(todateInString);
-                entrydateto2= outputDateFormat.parse(String.valueOf(entrydateto));
-                Log.d("Tag1","entry2="+String.valueOf(entrydateto2));
-                entrydateto3 = new java.sql.Date(entrydateto2.getTime());
-                Log.d("Tag1","entry3="+String.valueOf(entrydateto3));
-
-
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }*/
-
-            String visitorname_text=visitorname_edit_text.getText().toString();
-
-            String mobilenumber_text=mobilenum_edit_text.getText().toString();
-
-            String visitorplace_text=place_edit_text.getText().toString();
-
-            String visitorcompany_text=visitorcompany_edit_text.getText().toString();
-
-            String visitortypeid_text=visitor_type_spinner.getSelectedItem().toString();
-
-            if (fromdate.getVisibility() == View.VISIBLE) {
-                progressBar.setVisibility(View.VISIBLE);
-                search_button.setText("BACK");
-                fromdate.setVisibility(View.GONE);
-                fromdate_picker.setVisibility(View.GONE);
-                fromdate_button.setVisibility(View.GONE);
-                visitorname.setVisibility(View.GONE);
-                visitorname_edit_text.setVisibility(View.GONE);
-                place.setVisibility(View.GONE);
-                place_edit_text.setVisibility(View.GONE);
-                visitortype_edit_text.setVisibility(View.GONE);
-                visitor_type_spinner.setVisibility(View.GONE);
-                exitstatus.setVisibility(View.GONE);
-                exit_status_spinner.setVisibility(View.GONE);
-                todate.setVisibility(View.GONE);
-                todate_picker.setVisibility(View.GONE);
-                todate_button.setVisibility(View.GONE);
-                mobilenum.setVisibility(View.GONE);
-                mobilenum_edit_text.setVisibility(View.GONE);
-                visitorcompany.setVisibility(View.GONE);
-                visitorcompany_edit_text.setVisibility(View.GONE);
-                visitingstaff.setVisibility(View.GONE);
-                visitingstaff_edit_text.setVisibility(View.GONE);
-            } else {
-                search_button.setText("SEARCH");
-                fromdate.setVisibility(View.VISIBLE);
-                fromdate_picker.setVisibility(View.VISIBLE);
-                fromdate_button.setVisibility(View.VISIBLE);
-                visitorname.setVisibility(View.VISIBLE);
-                visitorname_edit_text.setVisibility(View.VISIBLE);
-                place.setVisibility(View.VISIBLE);
-                place_edit_text.setVisibility(View.VISIBLE);
-                visitortype_edit_text.setVisibility(View.VISIBLE);
-                visitor_type_spinner.setVisibility(View.VISIBLE);
-                exitstatus.setVisibility(View.VISIBLE);
-                exit_status_spinner.setVisibility(View.VISIBLE);
-                todate.setVisibility(View.VISIBLE);
-                todate_picker.setVisibility(View.VISIBLE);
-                todate_button.setVisibility(View.VISIBLE);
-                mobilenum.setVisibility(View.VISIBLE);
-                mobilenum_edit_text.setVisibility(View.VISIBLE);
-                visitorcompany.setVisibility(View.VISIBLE);
-                visitorcompany_edit_text.setVisibility(View.VISIBLE);
-                visitingstaff.setVisibility(View.VISIBLE);
-                visitingstaff_edit_text.setVisibility(View.VISIBLE);
-            }
-
-            //java.sql.Date finalEntrydatefrom = entrydatefrom3;
-            BackgroundTaskExecutor.runOnBackgroundThread(() -> {
-                List<VisitorSearchResult> visitorList = new ArrayList<>();
-                int num = 5;
-                VisitorSearchResult vs_obj = db.getVisitorDetails(num);
-
-                while (vs_obj != null) {
-                    visitorList.add(vs_obj);
-                    num++;
-                    vs_obj = db.getVisitorDetails(num);
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
 
-                mainHandler.post(() -> {
-                    progressBar.setVisibility(View.GONE);
-                    gv.setVisibility(View.VISIBLE);
-                    GridAdapter_DailyVisitor gridadapter = new GridAdapter_DailyVisitor(getApplicationContext(), visitorList);
-                    gv.setAdapter(gridadapter);
+                Date entrydateto, utilDateto = null;
+                Timestamp sqlTimestampto = null;
+                try {
+                    entrydateto = inputDateFormat.parse(todateInString);
+                    String formattedDate = outputDateFormat.format(entrydateto);
+                    utilDateto = outputDateFormat.parse(formattedDate);
+                    sqlTimestampto = new Timestamp(utilDateto.getTime());
+
+
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+
+                String visitorname_arg = visitorname_edit_text.getText().toString();
+
+                String mobilenumber_arg = mobilenum_edit_text.getText().toString();
+
+                String visitorplace_arg = place_edit_text.getText().toString();
+
+                String visitorcompany_arg = visitorcompany_edit_text.getText().toString();
+
+                String visitortypeid_arg = visitor_type_spinner.getSelectedItem().toString();
+
+                if (fromdate.getVisibility() == View.VISIBLE) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    search_button.setText("BACK");
+                    fromdate.setVisibility(View.GONE);
+                    fromdate_picker.setVisibility(View.GONE);
+                    fromdate_button.setVisibility(View.GONE);
+                    visitorname.setVisibility(View.GONE);
+                    visitorname_edit_text.setVisibility(View.GONE);
+                    place.setVisibility(View.GONE);
+                    place_edit_text.setVisibility(View.GONE);
+                    visitortype_edit_text.setVisibility(View.GONE);
+                    visitor_type_spinner.setVisibility(View.GONE);
+                    exitstatus.setVisibility(View.GONE);
+                    exit_status_spinner.setVisibility(View.GONE);
+                    todate.setVisibility(View.GONE);
+                    todate_picker.setVisibility(View.GONE);
+                    todate_button.setVisibility(View.GONE);
+                    mobilenum.setVisibility(View.GONE);
+                    mobilenum_edit_text.setVisibility(View.GONE);
+                    visitorcompany.setVisibility(View.GONE);
+                    visitorcompany_edit_text.setVisibility(View.GONE);
+                    visitingstaff.setVisibility(View.GONE);
+                    visitingstaff_edit_text.setVisibility(View.GONE);
+                } else {
+                    search_button.setText("SEARCH");
+                    fromdate.setVisibility(View.VISIBLE);
+                    fromdate_picker.setVisibility(View.VISIBLE);
+                    fromdate_button.setVisibility(View.VISIBLE);
+                    visitorname.setVisibility(View.VISIBLE);
+                    visitorname_edit_text.setVisibility(View.VISIBLE);
+                    place.setVisibility(View.VISIBLE);
+                    place_edit_text.setVisibility(View.VISIBLE);
+                    visitortype_edit_text.setVisibility(View.VISIBLE);
+                    visitor_type_spinner.setVisibility(View.VISIBLE);
+                    exitstatus.setVisibility(View.VISIBLE);
+                    exit_status_spinner.setVisibility(View.VISIBLE);
+                    todate.setVisibility(View.VISIBLE);
+                    todate_picker.setVisibility(View.VISIBLE);
+                    todate_button.setVisibility(View.VISIBLE);
+                    mobilenum.setVisibility(View.VISIBLE);
+                    mobilenum_edit_text.setVisibility(View.VISIBLE);
+                    visitorcompany.setVisibility(View.VISIBLE);
+                    visitorcompany_edit_text.setVisibility(View.VISIBLE);
+                    visitingstaff.setVisibility(View.VISIBLE);
+                    visitingstaff_edit_text.setVisibility(View.VISIBLE);
+                }
+
+                Timestamp finalSqlTimestampfrom = sqlTimestampfrom;
+                Timestamp finalSqlTimestampto = sqlTimestampto;
+                BackgroundTaskExecutor.runOnBackgroundThread(() -> {
+                    List<VisitorSearchResult> visitorList = new ArrayList<>();
+
+                    visitorList = db.getVisitorList(Integer.parseInt(sbuId), Integer.parseInt(defaultGateId), finalSqlTimestampfrom, finalSqlTimestampto, 0, visitorname_arg, mobilenumber_arg, visitorplace_arg, visitorcompany_arg, Integer.parseInt(visitortypeid_arg), 0, "", "", "", "", "", "", Integer.parseInt(userId));
+
+                    List<VisitorSearchResult> finalVisitorList = visitorList;
+                    mainHandler.post(() -> {
+                        progressBar.setVisibility(View.GONE);
+                        gv.setVisibility(View.VISIBLE);
+                        GridAdapter_DailyVisitor gridadapter = new GridAdapter_DailyVisitor(getApplicationContext(), finalVisitorList);
+                        gv.setAdapter(gridadapter);
+                    });
                 });
-            });
+            }
         });
 
         List<String> spinnerArray = new ArrayList<>();
@@ -265,6 +266,7 @@ public class DailyVisitor extends AppCompatActivity {
         exit_status_spinner.setAdapter(adapter);
 
         List<String> visitortype_spinnerArray = new ArrayList<>();
+        visitortype_spinnerArray.add("0");
         visitortype_spinnerArray.add("1");
         visitortype_spinnerArray.add("2");
         visitortype_spinnerArray.add("3");
@@ -273,5 +275,6 @@ public class DailyVisitor extends AppCompatActivity {
 
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         visitor_type_spinner.setAdapter(adapter1);
-    }
+        }
+
 }

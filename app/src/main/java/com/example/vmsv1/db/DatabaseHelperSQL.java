@@ -12,15 +12,16 @@ import com.example.vmsv1.ItemDomain;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Date;
 
 public class DatabaseHelperSQL {
 
@@ -1419,103 +1420,128 @@ public class DatabaseHelperSQL {
         return visitingArea;
     }
 
-    public List<VisitorSearchResult> getVisitorList(int sbuId, int gateId, Date entryDateFrom, Date entryDateTo,
+    public List<VisitorSearchResult> getVisitorList(int sbuId, int gateId, java.sql.Timestamp entryDateFrom, java.sql.Timestamp entryDateTo,
                                                     int visitorId, String visitorName, String mobileNo,
                                                     String visitorPlace, String visitorCompany, int visitorTypeId,
                                                     int visitingAreaId, String visitingFaculty, String approverName,
                                                     String securityName, String securityId, String ndaStatus,
                                                     String exitStatus, int userId) {
         List<VisitorSearchResult> results = new ArrayList<>();
-        Connection conn = getConnection();
+        Connection conn = null;
+        CallableStatement callableStatement = null;
+        ResultSet resultSet = null;
+
+        Log.d("getVisitorList", "sbuId: " + sbuId + ", gateId: " + gateId + ", entryDateFrom: " + entryDateFrom +
+                ", entryDateTo: " + entryDateTo + ", visitorId: " + visitorId + ", visitorName: " + visitorName +
+                ", mobileNo: " + mobileNo + ", visitorPlace: " + visitorPlace + ", visitorCompany: " + visitorCompany +
+                ", visitorTypeId: " + visitorTypeId + ", visitingAreaId: " + visitingAreaId + ", visitingFaculty: " + visitingFaculty +
+                ", approverName: " + approverName + ", securityName: " + securityName + ", securityId: " + securityId +
+                ", ndaStatus: " + ndaStatus + ", exitStatus: " + exitStatus + ", userId: " + userId);
+
         String SP_String = "{call dbo.SP_getVisitorList(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+
         try {
-            CallableStatement SP = conn.prepareCall(SP_String);
+            conn = getConnection();
+            if (conn == null) {
+                throw new SQLException("Failed to establish a database connection.");
+            }
+
+            callableStatement = conn.prepareCall(SP_String);
 
             // Set input parameters
-            SP.setInt(1, sbuId);
-            SP.setInt(2, gateId);
-            SP.setDate(3, new java.sql.Date(entryDateFrom.getTime()));
-            SP.setDate(4, new java.sql.Date(entryDateTo.getTime()));
-            SP.setInt(5, visitorId);
-            SP.setString(6, visitorName);
-            SP.setString(7, mobileNo);
-            SP.setString(8, visitorPlace);
-            SP.setString(9, visitorCompany);
-            SP.setInt(10, visitorTypeId);
-            SP.setInt(11, visitingAreaId);
-            SP.setString(12, visitingFaculty);
-            SP.setString(13, approverName);
-            SP.setString(14, securityName);
-            SP.setString(15, securityId);
-            SP.setString(16, ndaStatus);
-            SP.setString(17, exitStatus);
-            SP.setInt(18, userId);
+            callableStatement.setInt(1, sbuId);
+            callableStatement.setInt(2, gateId);
+            callableStatement.setTimestamp(3, entryDateFrom);
+            callableStatement.setTimestamp(4, entryDateTo);
+            callableStatement.setInt(5, visitorId);
+            callableStatement.setString(6, visitorName);
+            callableStatement.setString(7, mobileNo);
+            callableStatement.setString(8, visitorPlace);
+            callableStatement.setString(9, visitorCompany);
+            callableStatement.setInt(10, visitorTypeId);
+            callableStatement.setInt(11, visitingAreaId);
+            callableStatement.setString(12, visitingFaculty);
+            callableStatement.setString(13, approverName);
+            callableStatement.setString(14, securityName);
+            callableStatement.setString(15, securityId);
+            callableStatement.setString(16, ndaStatus);
+            callableStatement.setString(17, exitStatus);
+            callableStatement.setInt(18, userId);
 
-            ResultSet rs = SP.executeQuery();
-
-            while (rs.next()) {
+            resultSet = callableStatement.executeQuery();
+            int count=0;
+            while (resultSet.next()) {
+                count++;
+                Log.d("Tag1","count="+count);
 
                 VisitorSearchResult result = new VisitorSearchResult();
-                result.setUniqueId(rs.getInt("UniqueId"));
-                result.setVisitorId(rs.getInt("VisitorId"));
-                result.setCompId(rs.getString("CompId"));
-                result.setCompName(rs.getString("CompName"));
-                result.setSbuId(rs.getInt("SBUId"));
-                result.setSbuName(rs.getString("SBUName"));
-                result.setLabelAddress(rs.getString("LabelAddress"));
-                result.setLocationId(rs.getInt("LocationId"));
-                result.setLocationName(rs.getString("LocationName"));
-                result.setGateId(rs.getInt("GateId"));
-                result.setGateName(rs.getString("GateName"));
-                result.setMobileNo(rs.getString("MobileNo"));
-                result.setVisitorName(rs.getString("VisitorName"));
-                result.setVisitorPlace(rs.getString("VisitorPlace"));
-                result.setVisitorCompany(rs.getString("VisitorCompany"));
-                result.setVisitorDesignation(rs.getString("VisitorDesignation"));
-                result.setVisitorTypeId(rs.getInt("VisitorTypeId"));
-                result.setVisitorTypeName(rs.getString("VisitorTypeName"));
-                result.setPurpose(rs.getString("Purpose"));
-                result.setVisitingFaculty(rs.getString("VisitingFaculty"));
-                result.setVisitingAreaId(rs.getInt("VisitingAreaId"));
-                result.setVisitingAreaName(rs.getString("VisitingAreaName"));
-                result.setApproverName(rs.getString("ApproverName"));
-                result.setRefMail(rs.getString("RefMail"));
-                result.setAsset1(rs.getString("Asset1"));
-                result.setAsset2(rs.getString("Asset2"));
-                result.setAsset3(rs.getString("Asset3"));
-                result.setAsset4(rs.getString("Asset4"));
-                result.setAsset5(rs.getString("Asset5"));
-                result.setSecurityName(rs.getString("SecurityName"));
-                result.setSecurityId(rs.getInt("SecurityId"));
-                result.setPhotoFilePath(rs.getString("PhotoFilePath"));
-                result.setPhotoFileName(rs.getString("PhotoFileName"));
-                result.setIdProofType(rs.getInt("IDProofType"));
-                result.setIdProofTypeName(rs.getString("IDProofTypeName"));
-                result.setIdProofValueType(rs.getString("IdProofValueType"));
-                result.setIdProofNo(rs.getString("IDproofNo"));
-                result.setIdProofFilePath(rs.getString("IdProofFilePath"));
-                result.setIdProofFileName(rs.getString("IdProofFileName"));
-                result.setApprovalMailFilePath(rs.getString("ApprovalMailFilePath"));
-                result.setApprovalMailFileName(rs.getString("ApprovalMailFileName"));
-                result.setEntryDatetime(rs.getString("EntryDatetime"));
-                result.setEntryCreatedBy(rs.getInt("EntryCreatedBy"));
-                result.setNdaStatus(rs.getString("NDAStatus"));
-                result.setNdaRemarks(rs.getString("NDARemarks"));
-                result.setNdaUpdatedBy(rs.getInt("NDAUpdatedBy"));
-                result.setNdaUpdatedDate(rs.getString("NDAUpdatedDate"));
-                result.setExitDatetime(rs.getString("ExitDatetime"));
-                result.setExitCreatedBy(rs.getInt("ExitCreatedBy"));
-                result.setCreatedBy(rs.getInt("CreatedBy"));
-                result.setCreatedDate(rs.getString("CreatedDate"));
-                result.setUpdatedBy(rs.getInt("UpdatedBy"));
-                result.setUpdatedDate(rs.getString("UpdatedDate"));
-                result.setNdaUniqueId(rs.getInt("NDAUniqueId"));
+                result.setUniqueId(resultSet.getInt("UniqueId"));
+                result.setVisitorId(resultSet.getInt("VisitorId"));
+                result.setCompId(resultSet.getString("CompId"));
+                result.setCompName(resultSet.getString("CompName"));
+                result.setSbuId(resultSet.getInt("SBUId"));
+                result.setSbuName(resultSet.getString("SBUName"));
+                result.setLabelAddress(resultSet.getString("LabelAddress"));
+                result.setLocationId(resultSet.getInt("LocationId"));
+                result.setLocationName(resultSet.getString("LocationName"));
+                result.setGateId(resultSet.getInt("GateId"));
+                result.setGateName(resultSet.getString("GateName"));
+                result.setMobileNo(resultSet.getString("MobileNo"));
+                result.setVisitorName(resultSet.getString("VisitorName"));
+                result.setVisitorPlace(resultSet.getString("VisitorPlace"));
+                result.setVisitorCompany(resultSet.getString("VisitorCompany"));
+                result.setVisitorDesignation(resultSet.getString("VisitorDesignation"));
+                result.setVisitorTypeId(resultSet.getInt("VisitorTypeId"));
+                result.setVisitorTypeName(resultSet.getString("VisitorTypeName"));
+                result.setPurpose(resultSet.getString("Purpose"));
+                result.setVisitingFaculty(resultSet.getString("VisitingFaculty"));
+                result.setVisitingAreaId(resultSet.getInt("VisitingAreaId"));
+                result.setVisitingAreaName(resultSet.getString("VisitingAreaName"));
+                result.setApproverName(resultSet.getString("ApproverName"));
+                result.setRefMail(resultSet.getString("RefMail"));
+                result.setAsset1(resultSet.getString("Asset1"));
+                result.setAsset2(resultSet.getString("Asset2"));
+                result.setAsset3(resultSet.getString("Asset3"));
+                result.setAsset4(resultSet.getString("Asset4"));
+                result.setAsset5(resultSet.getString("Asset5"));
+                result.setSecurityName(resultSet.getString("SecurityName"));
+                result.setSecurityId(resultSet.getInt("SecurityId"));
+                result.setPhotoFilePath(resultSet.getString("PhotoFilePath"));
+                result.setPhotoFileName(resultSet.getString("PhotoFileName"));
+                result.setIdProofType(resultSet.getInt("IDProofType"));
+                result.setIdProofTypeName(resultSet.getString("IDProofTypeName"));
+                result.setIdProofValueType(resultSet.getString("IdProofValueType"));
+                result.setIdProofNo(resultSet.getString("IDproofNo"));
+                result.setIdProofFilePath(resultSet.getString("IdProofFilePath"));
+                result.setIdProofFileName(resultSet.getString("IdProofFileName"));
+                result.setApprovalMailFilePath(resultSet.getString("ApprovalMailFilePath"));
+                result.setApprovalMailFileName(resultSet.getString("ApprovalMailFileName"));
+                result.setEntryDatetime(resultSet.getString("EntryDatetime"));
+                result.setEntryCreatedBy(resultSet.getInt("EntryCreatedBy"));
+                result.setNdaStatus(resultSet.getString("NDAStatus"));
+                result.setNdaRemarks(resultSet.getString("NDARemarks"));
+                result.setNdaUpdatedBy(resultSet.getInt("NDAUpdatedBy"));
+                result.setNdaUpdatedDate(resultSet.getString("NDAUpdatedDate"));
+                result.setExitDatetime(resultSet.getString("ExitDatetime"));
+                result.setExitCreatedBy(resultSet.getInt("ExitCreatedBy"));
+                result.setCreatedBy(resultSet.getInt("CreatedBy"));
+                result.setCreatedDate(resultSet.getString("CreatedDate"));
+                result.setUpdatedBy(resultSet.getInt("UpdatedBy"));
+                result.setUpdatedDate(resultSet.getString("UpdatedDate"));
+                result.setNdaUniqueId(resultSet.getInt("NDAUniqueId"));
 
                 results.add(result);
             }
-        }
-        catch (Exception e) {
-            System.out.println("Error in getVisitorList: " + e);
+        } catch (Exception e) {
+            Log.e("Tag1", "Error in getVisitorList: ", e);
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (callableStatement != null) callableStatement.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                Log.e("Tag1", "Error closing resources: ", e);
+            }
         }
         return results;
     }
