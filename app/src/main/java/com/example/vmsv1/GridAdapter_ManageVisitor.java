@@ -3,6 +3,7 @@ package com.example.vmsv1;
 import static android.graphics.Color.rgb;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ public class GridAdapter_ManageVisitor extends BaseAdapter {
 
         Button camera_status_button=convertView.findViewById(R.id.camera_status_button);
         Button nda_status_button=convertView.findViewById(R.id.nda_status_button);
-        Button print_status_button=convertView.findViewById(R.id.print_status_button);
+        Button print_label_button=convertView.findViewById(R.id.print_label_button);
         Button exit_status_button=convertView.findViewById(R.id.exit_status_button);
 
         // Assuming 'itemList' contains the list of visitor IDs, and each item has a getVisitorId() method
@@ -80,44 +81,45 @@ public class GridAdapter_ManageVisitor extends BaseAdapter {
 
         entry_time.setText(String.valueOf(currentItem.getEntryDatetime()));
         exit_time.setText(String.valueOf(currentItem.getExitDatetime()));
-
-        /*if(currentItem.getCamera_status()==false){
-            camera_status_button.setText("N");
+        Log.d("Yayay","camerastatus="+String.valueOf(currentItem.getPhotoFilePath()));
+        if(currentItem.getPhotoFilePath()==null)
+        {
             camera_status_button.setBackgroundColor(rgb(255, 87, 51));
         }
-        else {
-            camera_status_button.setText("Y");
+        else
+        {
             camera_status_button.setBackgroundColor(rgb(34, 139, 34));
-        }*/
-
-        if(currentItem.getNdaStatus()=="N") {
-            nda_status_button.setText("N");
+        }
+        Log.d("Yayay","ndastatus="+String.valueOf(currentItem.getNdaStatus()));
+        if(!String.valueOf(currentItem.getNdaStatus()).equals("Y"))
+        {
             nda_status_button.setBackgroundColor(rgb(255, 87, 51));
         }
-        else {
-            nda_status_button.setText("Y");
+        else
+        {
             nda_status_button.setBackgroundColor(rgb(34, 139, 34));
         }
-
-        /*if(currentItem.getPrintStatus()==false)
+        if(currentItem.getMobileNo()!=null && currentItem.getNdaStatus()!=null && currentItem.getPhotoFilePath()!=null)
         {
-            print_status_button.setText("N");
-            print_status_button.setBackgroundColor(rgb(255, 87, 51));
+            Log.d("this1","getmobileno="+String.valueOf(currentItem.getMobileNo()));
+            Log.d("this1","getndastatus="+String.valueOf(currentItem.getNdaStatus()));
+            Log.d("this1","getphoto="+String.valueOf(currentItem.getPhotoFilePath()));
+            print_label_button.setBackgroundColor(rgb(34, 139, 34));
         }
         else {
-            print_status_button.setText("Y");
-            print_status_button.setBackgroundColor(rgb(34, 139, 34));
+            Log.d("this1","getmobileno="+String.valueOf(currentItem.getMobileNo()));
+            Log.d("this1","getndastatus="+String.valueOf(currentItem.getNdaStatus()));
+            Log.d("this1","getphoto="+String.valueOf(currentItem.getPhotoFilePath()));
+            print_label_button.setBackgroundColor(rgb(255, 87, 51));
         }
 
-        if(currentItem.getExit_status()==false) {
-            exit_status_button.setText("N");
+        if(currentItem.getExitDatetime()==null) {
             exit_status_button.setBackgroundColor(rgb(255, 87, 51));
         }
         else
         {
-            exit_status_button.setText("Y");
             exit_status_button.setBackgroundColor(rgb(34, 139, 34));
-        }*/
+        }
 
         return convertView;
     }
