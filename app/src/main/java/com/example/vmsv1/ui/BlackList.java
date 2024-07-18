@@ -20,6 +20,7 @@ import com.example.vmsv1.DataModel;
 import com.example.vmsv1.R;
 import com.example.vmsv1.dataitems.BlackListVisitor;
 import com.example.vmsv1.db.DatabaseHelperSQL;
+import com.example.vmsv1.ui.home.HomeFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BlackList extends AppCompatActivity implements TableAdapter.DeleteVisitorCallback {
+public class BlackList extends AppCompatActivity implements TableAdapter.DeleteVisitorCallback, TableAdapter.AddVisitorCallback {
 
     private DatabaseHelperSQL db;
     private RecyclerView recyclerView;
@@ -58,9 +59,9 @@ public class BlackList extends AppCompatActivity implements TableAdapter.DeleteV
             userId = intent.getStringExtra("userId");
             defaultGateId = intent.getStringExtra("defaultGateId");
             sbuId = intent.getStringExtra("sbuId");
-            Log.d("Black list Act","userid="+userId);
-            Log.d("Black list Act","sbuid="+sbuId);
-            Log.d("Black list Act","defaultid="+defaultGateId);
+            Log.d("Black list Act", "userid=" + userId);
+            Log.d("Black list Act", "sbuid=" + sbuId);
+            Log.d("Black list Act", "defaultid=" + defaultGateId);
             sharedViewModel.setUserId(userId);
             sharedViewModel.setSbuId(sbuId);
             sharedViewModel.setDefaultGateId(defaultGateId);
@@ -77,12 +78,13 @@ public class BlackList extends AppCompatActivity implements TableAdapter.DeleteV
         Button buttonAddVisitor = findViewById(R.id.buttonAddVisitor);
         Button buttonSave = findViewById(R.id.buttonSave);
 
+
         inputContainer = findViewById(R.id.inputContainer);
         editTextMobile = findViewById(R.id.editTextMobile);
         editTextName = findViewById(R.id.editTextName);
         editTextReason = findViewById(R.id.editTextReason);
 
-        recyclerView = findViewById(R.id.CMrecyclerView);
+        recyclerView = findViewById(R.id.recyclerViewHorizontal);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Example data for dynamic table
@@ -91,12 +93,13 @@ public class BlackList extends AppCompatActivity implements TableAdapter.DeleteV
         // Sample data for dynamic table
         dataList = new ArrayList<>();
 
-        tableAdapter = new TableAdapter(dataList, headers, true, "Delete", db, this);
+        tableAdapter = new TableAdapter(dataList, headers, true, "Delete", db, this, this);
         recyclerView.setAdapter(tableAdapter);
 
         buttonAddVisitor.setOnClickListener(v -> inputContainer.setVisibility(View.VISIBLE));
 
         fetchBlacklist();
+
         buttonSave.setOnClickListener(v -> {
             try {
                 String mobile = editTextMobile.getText().toString();
@@ -112,33 +115,7 @@ public class BlackList extends AppCompatActivity implements TableAdapter.DeleteV
                 }
 
                 // Add visitor to blacklist
-                List<String> result = db.addNewBlackListVisitor(mobile, name, reason, Integer.parseInt(userId));
-                String idResult = result.get(0);
-                String messageResult = result.get(1);
-
-                Toast.makeText(BlackList.this, "Result: " + idResult + ", " + messageResult, Toast.LENGTH_LONG).show();
-
-                if (!idResult.contains("Not Available") && !idResult.contains("0")) {
-                    // Add the new entry to the data list and update the table
-                    Map<String, Object> dataMap = new HashMap<>();
-                    dataMap.put("Mobile Number", mobile);
-                    dataMap.put("Name", name);
-                    dataMap.put("Reason", reason);
-                    dataMap.put("Date Added", currentDate);
-
-                    dataList.add(new DataModel(dataMap));
-                    tableAdapter.notifyDataSetChanged();
-                    inputContainer.setVisibility(View.GONE);
-
-                    editTextMobile.setText("");
-                    editTextName.setText("");
-                    editTextReason.setText("");
-
-                    //onAddVisitor(mobile);
-                } else {
-                    // Show error message
-                    Toast.makeText(BlackList.this, "Failed to add visitor to blacklist: " + messageResult, Toast.LENGTH_LONG).show();
-                }
+                addVisitorToBlackList(mobile, name, reason, userId, currentDate);
 
             } catch (Exception e) {
                 Toast.makeText(BlackList.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -192,5 +169,53 @@ public class BlackList extends AppCompatActivity implements TableAdapter.DeleteV
         deleteVisitorFromBlacklist(mobileNo);
     }
 
+    @Override
+    public void onAddVisitor(String mobileNo, String name, String reason, String dateAdded) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("Mobile Number", mobileNo);
+        dataMap.put("Name", name);
+        dataMap.put("Reason", reason);
+        dataMap.put("Date Added", dateAdded);
 
+        dataList.add(new DataModel(dataMap));
+        tableAdapter.notifyItemInserted(dataList.size()-1);
+        tableAdapter.notifyDataSetChanged();
+        inputContainer.setVisibility(View.GONE);
+    }
+
+    private void addVisitorToBlackList(String mobile, String name, String reason, String userId, String currentDate) {
+        try {
+            int userID = Integer.parseInt(userId);
+            List<String> result = db.addNewBlackListVisitor(mobile, name, reason, userID);
+            String idResult = result.get(0);
+            String messageResult = result.get(1);
+
+            Toast.makeText(BlackList.this, "Result: " + idResult + ", " + messageResult, Toast.LENGTH_LONG).show();
+
+            if (!idResult.contains("Not Available") && !idResult.contains("0")) {
+                // Add the new entry to the data list and update the table
+                onAddVisitor(mobile, name, reason, currentDate);
+
+                editTextMobile.setText("");
+                editTextName.setText("");
+                editTextReason.setText("");
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fetchBlacklist(); // Refresh blacklist after delay
+                    }
+                }, 2000);
+
+
+            } else {
+                // Show error message
+                Toast.makeText(BlackList.this, "Failed to add visitor to blacklist: " + messageResult, Toast.LENGTH_LONG).show();
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(BlackList.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("ActivityTag", "Exception: ", e);
+        }
+    }
 }

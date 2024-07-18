@@ -81,7 +81,7 @@ public class GridAdapter_ManageVisitor extends BaseAdapter {
 
         entry_time.setText(String.valueOf(currentItem.getEntryDatetime()));
         exit_time.setText(String.valueOf(currentItem.getExitDatetime()));
-        Log.d("Yayay","camerastatus="+String.valueOf(currentItem.getPhotoFilePath()));
+
         if(currentItem.getPhotoFilePath()==null)
         {
             camera_status_button.setBackgroundColor(rgb(255, 87, 51));
@@ -90,7 +90,6 @@ public class GridAdapter_ManageVisitor extends BaseAdapter {
         {
             camera_status_button.setBackgroundColor(rgb(34, 139, 34));
         }
-        Log.d("Yayay","ndastatus="+String.valueOf(currentItem.getNdaStatus()));
         if(!String.valueOf(currentItem.getNdaStatus()).equals("Y"))
         {
             nda_status_button.setBackgroundColor(rgb(255, 87, 51));
@@ -101,15 +100,9 @@ public class GridAdapter_ManageVisitor extends BaseAdapter {
         }
         if(currentItem.getMobileNo()!=null && currentItem.getNdaStatus()!=null && currentItem.getPhotoFilePath()!=null)
         {
-            Log.d("this1","getmobileno="+String.valueOf(currentItem.getMobileNo()));
-            Log.d("this1","getndastatus="+String.valueOf(currentItem.getNdaStatus()));
-            Log.d("this1","getphoto="+String.valueOf(currentItem.getPhotoFilePath()));
             print_label_button.setBackgroundColor(rgb(34, 139, 34));
         }
         else {
-            Log.d("this1","getmobileno="+String.valueOf(currentItem.getMobileNo()));
-            Log.d("this1","getndastatus="+String.valueOf(currentItem.getNdaStatus()));
-            Log.d("this1","getphoto="+String.valueOf(currentItem.getPhotoFilePath()));
             print_label_button.setBackgroundColor(rgb(255, 87, 51));
         }
 

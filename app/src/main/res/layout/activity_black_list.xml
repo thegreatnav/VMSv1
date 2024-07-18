@@ -115,11 +115,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/CMrecyclerView"
+                android:id="@+id/recyclerViewHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="530dp"
                 android:layout_marginStart="4dp"
-                android:paddingTop="16dp" />
+                android:paddingTop="16dp"
+                android:orientation="horizontal"
+                android:scrollbars="horizontal"/>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

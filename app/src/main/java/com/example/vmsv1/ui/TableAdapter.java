@@ -1,105 +1,54 @@
 package com.example.vmsv1.ui;
 
-
-
-import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.vmsv1.DataModel;
-import com.example.vmsv1.ItemDomain;
 import com.example.vmsv1.R;
-
 import com.example.vmsv1.db.DatabaseHelperSQL;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class TableAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ItemViewHolder> {
 
-    private List<DataModel> dataList;
+    private static List<DataModel> dataList;
     private final List<String> headers;
-    private final boolean button_presence;
-    private final String button_name;
-
-    private static final int VIEW_TYPE_HEADER = 0;
-    private static final int VIEW_TYPE_ITEM = 1;
-    DatabaseHelperSQL db;
+    private static boolean button_presence = false;
+    private static String button_name = "";
+    private DatabaseHelperSQL db;
     private final DeleteVisitorCallback deleteVisitorCallback;
+    private final AddVisitorCallback addVisitorCallback;
 
-    public TableAdapter(List<DataModel> dataList, List<String> headers, boolean button_presence, String button_name,DatabaseHelperSQL db,DeleteVisitorCallback deleteVisitorCallback) {
+    public TableAdapter(List<DataModel> dataList, List<String> headers, boolean button_presence, String button_name, DatabaseHelperSQL db, DeleteVisitorCallback deleteVisitorCallback, AddVisitorCallback addVisitorCallback) {
         this.dataList = dataList;
         this.headers = headers;
-        this.button_presence=button_presence;
-        this.button_name=button_name;
-        this.db=db;
-        this.deleteVisitorCallback=deleteVisitorCallback;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return position == 0 ? VIEW_TYPE_HEADER : VIEW_TYPE_ITEM;
+        this.button_presence = button_presence;
+        this.button_name = button_name;
+        this.db = db;
+        this.deleteVisitorCallback = deleteVisitorCallback;
+        this.addVisitorCallback = addVisitorCallback;
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == VIEW_TYPE_HEADER) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_table_header, parent, false);
-            return new HeaderViewHolder(view);
-        } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_table_row, parent, false);
-            return new ItemViewHolder(view);
-        }
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_table_row, parent, false);
+        return new ItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == VIEW_TYPE_HEADER) {
-            ((HeaderViewHolder) holder).bind(headers);
-        } else {
-            DataModel data = dataList.get(position - 1); // Offset for header
-            ((ItemViewHolder) holder).bind(data, headers);
-        }
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
+        holder.bind(dataList.get(position), headers);
     }
 
     @Override
     public int getItemCount() {
-        return dataList.size() + 1; // +1 for header
-    }
-
-    static class HeaderViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout headerLayout;
-
-        HeaderViewHolder(View itemView) {
-            super(itemView);
-            headerLayout = itemView.findViewById(R.id.headerLayout);
-        }
-
-        void bind(List<String> headers) {
-            headerLayout.removeAllViews();
-            for (String header : headers) {
-                TextView textView = new TextView(headerLayout.getContext());
-                textView.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-                textView.setText(header);
-                textView.setTextColor(headerLayout.getResources().getColor(android.R.color.black));
-                textView.setBackgroundColor(headerLayout.getResources().getColor(android.R.color.white));
-                headerLayout.addView(textView);
-            }
-        }
+        return dataList.size();
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -112,46 +61,42 @@ public class TableAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         void bind(DataModel data, List<String> headers) {
             itemLayout.removeAllViews();
+
             Map<String, Object> dataMap = data.getData();
-            for (String header : headers)
-            {
-                TextView textView = new TextView(itemLayout.getContext());
-                textView.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+            for (String header : headers) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                TextView textView = new TextView(itemView.getContext());
+                textView.setLayoutParams(params);
+                textView.setPadding(20, 20, 20, 20);
                 textView.setText(String.valueOf(dataMap.get(header)));
                 itemLayout.addView(textView);
             }
-            if(button_presence==true)
-            {
-                Button button = new Button(itemLayout.getContext());
+
+            if (button_presence) {
+                Button button = new Button(itemView.getContext());
                 button.setText(button_name);
-                if(button_name.equals("Delete"))
-                {
-                    button.setOnClickListener(v -> {
+                button.setOnClickListener(v -> {
+                    int position = getAdapterPosition();
+                    String mobileNoToDelete = String.valueOf(dataList.get(position).getData().get("Mobile Number"));
+                    dataList.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, dataList.size());
 
-                        int position = getAdapterPosition();
-                        String name_to_be_removed=String.valueOf(dataList.get(position-1).getData().get("Name"));
-                        if (position != RecyclerView.NO_POSITION) {
-                            dataList.remove(position - 1); // Offset for header
-                            notifyItemRemoved(position);
-                            notifyItemRangeChanged(position, dataList.size() + 1);
-                        }
-
-
-                    });
-                }
-                else if(button_name.equals("Reset Password"))
-                {
-                    button.setOnClickListener(v -> {
-
-                    });
-                }
+                    // Call onDeleteVisitor callback
+                    if (deleteVisitorCallback != null) {
+                        deleteVisitorCallback.onDeleteVisitor(mobileNoToDelete);
+                    }
+                });
                 itemLayout.addView(button);
             }
         }
     }
 
-    public interface DeleteVisitorCallback
-    {
+    public interface DeleteVisitorCallback {
         void onDeleteVisitor(String mobileNo);
+    }
+
+    public interface AddVisitorCallback {
+        void onAddVisitor(String mobileNo, String name, String reason, String dateAdded);
     }
 }
