@@ -25,14 +25,19 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.vmsv1.BackgroundTaskExecutor;
+import com.example.vmsv1.GridAdapter_DailyVisitor;
 import com.example.vmsv1.GridAdapter_ManageVisitor;
 import com.example.vmsv1.R;
 
 import com.example.vmsv1.dataitems.VisitorSearchResult;
 import com.example.vmsv1.db.DatabaseHelperSQL;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ManageVisitor extends AppCompatActivity {
@@ -129,8 +134,9 @@ public class ManageVisitor extends AppCompatActivity {
         }
 
         List<String> spinnerArray = new ArrayList<String>();
-        spinnerArray.add("Both");
-        spinnerArray.add("Single");
+        spinnerArray.add("Not sure");
+        spinnerArray.add("Yes");
+        spinnerArray.add("No");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, spinnerArray);
@@ -143,7 +149,12 @@ public class ManageVisitor extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(entry_date.getVisibility()==View.VISIBLE)
+                String entryDate_value = entry_date.getText().toString();
+                String mobilenum_value = mobileno_edit_text.getText().toString();
+                String visitorname_value = visitorname_edit_text.getText().toString();
+                String exitstatus_value = exit_status_spinner.getSelectedItem().toString();
+
+                if (entry_date.getVisibility() == View.VISIBLE)
                 {
                     progressBar.setVisibility(View.VISIBLE);
                     search_button.setText("BACK");
@@ -171,29 +182,109 @@ public class ManageVisitor extends AppCompatActivity {
                     exit_status_spinner.setVisibility(View.VISIBLE);
                 }
 
-                String entry_date_text=entry_date.getText().toString();
-                String mobile_num_text=mobileno_edit_text.getText().toString();
-                String visitor_name_text=visitorname_edit_text.getText().toString();
-                String exit_status_text=exit_status_spinner.getSelectedItem().toString();
+                if(entryDate_value.equals("") && ((!mobilenum_value.equals(""))||(!exitstatus_value.equals("Not sure"))||(!visitorname_value.equals(""))))
+                {
+                    Date currentUtilDate = new Date();
+                    Timestamp currentTimestamp = new Timestamp(currentUtilDate.getTime());
 
-                BackgroundTaskExecutor.runOnBackgroundThread(() -> {
-                    List<VisitorSearchResult> visitorList = new ArrayList<>();
-                    int num = 5;
-                    VisitorSearchResult vs_obj = db.getVisitorDetails(num);
-
-                    while (vs_obj != null) {
-                        visitorList.add(vs_obj);
-                        num++;
-                        vs_obj = db.getVisitorDetails(num);
+                    String dateString = "01/01/2000 00:00:00";
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    Date parsedDate = null;
+                    try {
+                        parsedDate = dateFormat.parse(dateString);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
                     }
+                    Timestamp oldestTimestamp = new Timestamp(parsedDate.getTime());
 
-                    mainHandler.post(() -> {
-                        progressBar.setVisibility(View.GONE);
-                        gv.setVisibility(View.VISIBLE);
-                        GridAdapter_ManageVisitor gridadapter = new GridAdapter_ManageVisitor(getApplicationContext(), visitorList);
-                        gv.setAdapter(gridadapter);
+                    if(exitstatus_value.equals("Yes"))
+                        exitstatus_value="Y";
+                    else if(exitstatus_value.equals("No"))
+                        exitstatus_value="N";
+                    else
+                        exitstatus_value="";
+
+                    String finalExitstatus_value = exitstatus_value;
+                    BackgroundTaskExecutor.runOnBackgroundThread(() -> {
+                        List<VisitorSearchResult> visitorList = new ArrayList<>();
+                        visitorList = db.getVisitorList(Integer.parseInt(sbuId), Integer.parseInt(defaultGateId), oldestTimestamp, currentTimestamp, 0, visitorname_value, mobilenum_value, "", "", 0, 0, "", "", "", "", "", finalExitstatus_value, Integer.parseInt(userId));
+
+                        List<VisitorSearchResult> finalVisitorList = visitorList;
+                        mainHandler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            gv.setVisibility(View.VISIBLE);
+                            GridAdapter_ManageVisitor gridadapter = new GridAdapter_ManageVisitor(getApplicationContext(), finalVisitorList);
+                            gv.setAdapter(gridadapter);
+                        });
                     });
-                });
+                }
+                else if(entryDate_value.equals("") && mobilenum_value.equals("") && visitorname_value.equals("") && (exitstatus_value.equals("Not sure")))
+                {
+                    BackgroundTaskExecutor.runOnBackgroundThread(() -> {
+                        List<VisitorSearchResult> visitorList = new ArrayList<>();
+                        int num = 5;
+                        VisitorSearchResult vs_obj = db.getVisitorDetails(num);
+
+                        while (vs_obj != null) {
+                            visitorList.add(vs_obj);
+                            num++;
+                            vs_obj = db.getVisitorDetails(num);
+                        }
+
+                        mainHandler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            gv.setVisibility(View.VISIBLE);
+                            GridAdapter_ManageVisitor gridadapter = new GridAdapter_ManageVisitor(getApplicationContext(), visitorList);
+                            gv.setAdapter(gridadapter);
+                        });
+                    });
+                }
+                else
+                {
+                    SimpleDateFormat inputDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
+                    Date entryDate, utilDate = null;
+                    Timestamp sqlTimestamp = null;
+                    try {
+                        entryDate = inputDateFormat.parse(entryDate_value);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                    String formattedDate = outputDateFormat.format(entryDate);
+                    try {
+                        utilDate = outputDateFormat.parse(formattedDate);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                    sqlTimestamp = new Timestamp(utilDate.getTime());
+
+                    Timestamp finalSqlTimestamp = sqlTimestamp;
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(utilDate);
+                    calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    Date updatedDate = calendar.getTime();
+                    Timestamp updatedTimestamp = new Timestamp(updatedDate.getTime());
+                    if(exitstatus_value.equals("Yes"))
+                        exitstatus_value="Y";
+                    else if(exitstatus_value.equals("No"))
+                        exitstatus_value="N";
+                    else
+                        exitstatus_value="";
+
+                    String finalExitstatus_value1 = exitstatus_value;
+                    BackgroundTaskExecutor.runOnBackgroundThread(() -> {
+                        List<VisitorSearchResult> visitorList = new ArrayList<>();
+                        visitorList = db.getVisitorList(Integer.parseInt(sbuId), Integer.parseInt(defaultGateId), finalSqlTimestamp, updatedTimestamp, 0, visitorname_value, mobilenum_value, "", "", 0, 0, "", "", "", "", "", finalExitstatus_value1, Integer.parseInt(userId));
+
+                        List<VisitorSearchResult> finalVisitorList = visitorList;
+                        mainHandler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            gv.setVisibility(View.VISIBLE);
+                            GridAdapter_ManageVisitor gridadapter = new GridAdapter_ManageVisitor(getApplicationContext(), finalVisitorList);
+                            gv.setAdapter(gridadapter);
+                        });
+                    });
+                }
             }
         });
 

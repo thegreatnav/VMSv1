@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 import com.example.vmsv1.dataitems.VisitorSearchResult;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 public class GridAdapter_DailyVisitor extends BaseAdapter {
@@ -79,7 +77,7 @@ public class GridAdapter_DailyVisitor extends BaseAdapter {
         TextView exit_date_text=convertView.findViewById(R.id.exit_date_text);
         TextView exit_time=convertView.findViewById(R.id.exit_date_textview);
 
-        Button view_nda_button=convertView.findViewById(R.id.view_nda_button);
+        Button view_nda_button=convertView.findViewById(R.id.camera_status_button);
         ImageButton downarrow_button=convertView.findViewById(R.id.downarrow_Button);
 
         // Assuming 'itemList' contains the list of visitor IDs, and each item has a getVisitorId() method

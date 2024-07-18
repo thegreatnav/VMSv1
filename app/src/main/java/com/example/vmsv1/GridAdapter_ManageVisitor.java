@@ -59,7 +59,7 @@ public class GridAdapter_ManageVisitor extends BaseAdapter {
         TextView entry_time=convertView.findViewById(R.id.entry_date_textview);
         TextView exit_time=convertView.findViewById(R.id.exit_date_textview);
 
-        Button camera_status_button=convertView.findViewById(R.id.view_nda_button);
+        Button camera_status_button=convertView.findViewById(R.id.camera_status_button);
         Button nda_status_button=convertView.findViewById(R.id.nda_status_button);
         Button print_status_button=convertView.findViewById(R.id.print_status_button);
         Button exit_status_button=convertView.findViewById(R.id.exit_status_button);
