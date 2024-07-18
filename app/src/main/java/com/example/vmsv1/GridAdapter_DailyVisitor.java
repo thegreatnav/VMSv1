@@ -14,12 +14,12 @@ import com.example.vmsv1.dataitems.VisitorSearchResult;
 
 import java.util.List;
 
-public class GridAdapter extends BaseAdapter {
+public class GridAdapter_DailyVisitor extends BaseAdapter {
 
     private Context context;
     private List<VisitorSearchResult> itemList;
 
-    public GridAdapter(Context context, List<VisitorSearchResult> itemList) {
+    public GridAdapter_DailyVisitor(Context context, List<VisitorSearchResult> itemList) {
         this.context = context;
         this.itemList = itemList;
     }
@@ -42,7 +42,7 @@ public class GridAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.gridview_element, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.gridview_element_managevisitor, parent, false);
         }
         TextView visitor_id= convertView.findViewById(R.id.visitor_id_textview);
         TextView visitor_name=convertView.findViewById(R.id.visitor_name_textview);
@@ -59,7 +59,7 @@ public class GridAdapter extends BaseAdapter {
         TextView entry_time=convertView.findViewById(R.id.entry_date_textview);
         TextView exit_time=convertView.findViewById(R.id.exit_date_textview);
 
-        Button camera_status_button=convertView.findViewById(R.id.camera_status_button);
+        Button camera_status_button=convertView.findViewById(R.id.view_nda_button);
         Button nda_status_button=convertView.findViewById(R.id.nda_status_button);
         Button print_status_button=convertView.findViewById(R.id.print_status_button);
         Button exit_status_button=convertView.findViewById(R.id.exit_status_button);

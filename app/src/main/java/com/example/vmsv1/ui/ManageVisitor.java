@@ -25,7 +25,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.vmsv1.BackgroundTaskExecutor;
-import com.example.vmsv1.GridAdapter;
+import com.example.vmsv1.GridAdapter_ManageVisitor;
 import com.example.vmsv1.R;
 
 import com.example.vmsv1.dataitems.VisitorSearchResult;
@@ -190,7 +190,7 @@ public class ManageVisitor extends AppCompatActivity {
                     mainHandler.post(() -> {
                         progressBar.setVisibility(View.GONE);
                         gv.setVisibility(View.VISIBLE);
-                        GridAdapter gridadapter = new GridAdapter(getApplicationContext(), visitorList);
+                        GridAdapter_ManageVisitor gridadapter = new GridAdapter_ManageVisitor(getApplicationContext(), visitorList);
                         gv.setAdapter(gridadapter);
                     });
                 });

@@ -2,9 +2,6 @@ package com.example.vmsv1.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,20 +12,13 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.vmsv1.DataModel;
-import com.example.vmsv1.GridAdapter;
-import com.example.vmsv1.ItemDomain;
 import com.example.vmsv1.R;
 
-import com.example.vmsv1.ui.TableAdapter;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CompanyMaster extends AppCompatActivity {
 

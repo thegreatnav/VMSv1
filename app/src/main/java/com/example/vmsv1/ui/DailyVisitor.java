@@ -22,16 +22,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.vmsv1.BackgroundTaskExecutor;
-import com.example.vmsv1.GridAdapter;
+import com.example.vmsv1.GridAdapter_DailyVisitor;
+import com.example.vmsv1.GridAdapter_ManageVisitor;
 import com.example.vmsv1.R;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import com.example.vmsv1.dataitems.VisitorSearchResult;
 import com.example.vmsv1.db.DatabaseHelperSQL;
@@ -249,7 +246,7 @@ public class DailyVisitor extends AppCompatActivity {
                 mainHandler.post(() -> {
                     progressBar.setVisibility(View.GONE);
                     gv.setVisibility(View.VISIBLE);
-                    GridAdapter gridadapter = new GridAdapter(getApplicationContext(), visitorList);
+                    GridAdapter_DailyVisitor gridadapter = new GridAdapter_DailyVisitor(getApplicationContext(), visitorList);
                     gv.setAdapter(gridadapter);
                 });
             });
