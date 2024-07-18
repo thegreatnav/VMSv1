@@ -133,6 +133,7 @@ public class DailyVisitor extends AppCompatActivity {
         sbuName = gatespinnerArray.get(0).get(0);
         sbu.setText(sbuName);
         progressBar.setVisibility(View.GONE);
+        gv.setVisibility(View.GONE);
 
         search_button.setOnClickListener(view -> {
 

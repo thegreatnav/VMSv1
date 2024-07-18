@@ -253,7 +253,7 @@
             <!-- Company Name -->
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/visitor_name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="290dp"
@@ -281,7 +281,7 @@
             <!-- Designation -->
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/designation_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="390dp"
