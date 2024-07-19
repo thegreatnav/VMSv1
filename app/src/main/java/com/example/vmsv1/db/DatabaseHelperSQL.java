@@ -699,50 +699,56 @@ public class DatabaseHelperSQL {
     public List<String> addNewBlackListVisitor(String mobileNo, String name, String reason, int userId) {
         Connection conn = getConnection();
         String spString = "{call dbo.SP_addNewBlackListVisitor(?, ?, ?, ?)}";
+        Log.d("Tag1", "mobileno=" + mobileNo);
+        Log.d("Tag1", "name=" + name);
+        Log.d("Tag1", "reason=" + reason);
+        Log.d("Tag1", "userid=" + userId);
 
         List<String> result = new ArrayList<>();
-        result.add("Id: Not Available");
-        result.add("Message: Not Available");
+        result.add("Id: 0");  // Default values in case of failure
+        result.add("Message: Error occurred while adding visitor to blacklist.");
 
         CallableStatement sp = null;
+        ResultSet rs = null;
 
         try {
             sp = conn.prepareCall(spString);
+            // Set input parameters
             sp.setString(1, mobileNo);
             sp.setString(2, name);
             sp.setString(3, reason);
             sp.setInt(4, userId);
 
-            // Register the output parameters
-            sp.registerOutParameter(1, Types.BIGINT); // Assuming @Id is an output parameter
-            sp.registerOutParameter(2, Types.NVARCHAR); // Assuming @Message is an output parameter
+            // Execute the stored procedure
+            rs = sp.executeQuery();
 
-            sp.execute();
+            // Process the result set
+            if (rs.next()) {
+                long id = rs.getLong("Id");
+                String message = rs.getString("Message");
 
-            // Retrieve the output parameters
-            long id = sp.getLong(1);
-            String message = sp.getString(2);
-
-            // Update the result list
-            result.set(0, "Id: " + id);
-            result.set(1, "Message: " + message);
+                // Update the result list
+                result.set(0, "Id: " + id);
+                result.set(1, "Message: " + message);
+            }
 
         } catch (SQLException e) {
-            System.out.println("Error in addNewBlackListVisitor: " + e.getMessage());
-            result.set(0, "Id: 0");
-            result.set(1, "Message: Error occurred while adding visitor to blacklist.");
+            Log.e("DatabaseHelperSQL", "Error in addNewBlackListVisitor: " + e.getMessage());
         } finally {
-            // Clean up the resources
+            // Clean up resources
             try {
+                if (rs != null) rs.close();
                 if (sp != null) sp.close();
                 if (conn != null) conn.close();
             } catch (SQLException e) {
-                System.out.println("Error closing resources: " + e.getMessage());
+                Log.e("DatabaseHelperSQL", "Error closing resources: " + e.getMessage());
             }
         }
 
         return result;
     }
+
+
 
     public List<BlackListVisitor> getBlackListVisitorList(String mobileNo, String name, int userId) {
         List<BlackListVisitor> blackListVisitors = new ArrayList<>();
