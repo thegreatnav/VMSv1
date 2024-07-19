@@ -2,6 +2,7 @@ package com.example.vmsv1.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -12,20 +13,26 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.vmsv1.DataModel;
 import com.example.vmsv1.R;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.vmsv1.dataitems.BlackListVisitor;
+import com.example.vmsv1.dataitems.Company;
+import com.example.vmsv1.db.DatabaseHelperSQL;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CompanyMaster extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private TableAdapter tableAdapter;
-    FirebaseFirestore db;
+    DatabaseHelperSQL db;
     String userId, defaultGateId, sbuId;
+    private List<DataModel> dataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,7 @@ public class CompanyMaster extends AppCompatActivity {
         if (intent != null && intent.hasExtra("userId") && intent.hasExtra("sbuId")) {
             userId = intent.getStringExtra("userId");
             sbuId = intent.getStringExtra("sbuId");
+            defaultGateId=intent.getStringExtra("defaultGateId");
             Toast.makeText(this, userId + " " + sbuId, Toast.LENGTH_LONG).show();
         }
         EdgeToEdge.enable(this);
@@ -47,11 +55,29 @@ public class CompanyMaster extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.CMrecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        FirebaseApp.initializeApp(this);
-        db = FirebaseFirestore.getInstance();
+        db = new DatabaseHelperSQL();
 
         // Example data for dynamic table
         List<String> headers = Arrays.asList("Company ID", "Company Name", "Status");
+        List<Company> companyList = new ArrayList<>();
+        dataList = new ArrayList<>();
+        try {
+            companyList= db.getCompanyList("","");
+            Log.d("Companylist",String.valueOf(companyList.get(0)));
+            for (Company company : companyList) {
+                Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put("Company ID", company.getCompId());
+                dataMap.put("Company Name", company.getCompName());
+                dataMap.put("Status", company.getStatus());
+                dataList.add(new DataModel(dataMap));
+            }
+            tableAdapter = new TableAdapter(dataList, headers, false, null,db,userId);
+            recyclerView.setAdapter(tableAdapter);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error fetching companylist: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("ActivityTag", "Exception: ", e);
+        }
+
 
      /*   FirebaseFunctionCalls.getCompanyMaster(db, new DataRetrievedCallback() {
             @Override

@@ -11,7 +11,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.vmsv1.R;
 
 public class AreaMaster extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
