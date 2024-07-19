@@ -51,6 +51,18 @@
             android:name=".ui.CompanyMaster"
             android:exported="false" />
         <activity
+            android:name=".ui.AreaMaster"
+            android:exported="false" />
+        <activity
+            android:name=".ui.IDProofTypeMaster"
+            android:exported="false" />
+        <activity
+            android:name=".ui.VisitorTypeMaster"
+            android:exported="false" />
+        <activity
+            android:name=".ui.UserMaster"
+            android:exported="false" />
+        <activity
             android:name=".ui.DailyVisitor"
             android:exported="true" />
         <activity

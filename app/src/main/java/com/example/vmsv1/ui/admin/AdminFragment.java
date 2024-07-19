@@ -18,11 +18,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vmsv1.databinding.FragmentAdminBinding;
+import com.example.vmsv1.ui.AreaMaster;
 import com.example.vmsv1.ui.CompanyMaster;
 import com.example.vmsv1.ui.GateMaster;
+import com.example.vmsv1.ui.IDProofTypeMaster;
 import com.example.vmsv1.ui.LocationMaster;
 import com.example.vmsv1.ui.SBUMaster;
 import com.example.vmsv1.ui.SharedViewModel;
+import com.example.vmsv1.ui.UserMaster;
+import com.example.vmsv1.ui.VisitorTypeMaster;
 
 public class AdminFragment extends Fragment {
 
@@ -106,7 +110,34 @@ public class AdminFragment extends Fragment {
                         i.putExtra("sbuId",sbuId);
                         startActivity(i);
                         break;
-
+                    case 4:
+                        i = new Intent(view.getContext(), AreaMaster.class);
+                        i.putExtra("userId",userId);
+                        i.putExtra("defaultGateId",defaultGateId);
+                        i.putExtra("sbuId",sbuId);
+                        startActivity(i);
+                        break;
+                    case 5:
+                        i = new Intent(view.getContext(), IDProofTypeMaster.class);
+                        i.putExtra("userId",userId);
+                        i.putExtra("defaultGateId",defaultGateId);
+                        i.putExtra("sbuId",sbuId);
+                        startActivity(i);
+                        break;
+                    case 6:
+                        i = new Intent(view.getContext(), VisitorTypeMaster.class);
+                        i.putExtra("userId",userId);
+                        i.putExtra("defaultGateId",defaultGateId);
+                        i.putExtra("sbuId",sbuId);
+                        startActivity(i);
+                        break;
+                    case 7:
+                        i = new Intent(view.getContext(), UserMaster.class);
+                        i.putExtra("userId",userId);
+                        i.putExtra("defaultGateId",defaultGateId);
+                        i.putExtra("sbuId",sbuId);
+                        startActivity(i);
+                        break;
                 }
 
             }

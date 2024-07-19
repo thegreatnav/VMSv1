@@ -2,6 +2,7 @@ package com.example.vmsv1.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,9 @@ import com.example.vmsv1.DataModel;
 import com.example.vmsv1.ItemDomain;
 import com.example.vmsv1.R;
 
+import com.example.vmsv1.dataitems.Company;
+import com.example.vmsv1.dataitems.Location;
+import com.example.vmsv1.db.DatabaseHelperSQL;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -31,7 +35,9 @@ public class LocationMaster extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private TableAdapter tableAdapter;
-    FirebaseFirestore db;
+    DatabaseHelperSQL db;
+    private List<DataModel> dataList;
+    String userId, defaultGateId, sbuId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +46,13 @@ public class LocationMaster extends AppCompatActivity {
         setContentView(R.layout.activity_location_master);
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("userId")) {
-            String value = intent.getStringExtra("userId");
-            Toast.makeText(this, "Received value: " + value, Toast.LENGTH_LONG).show();
+        if (intent != null && intent.hasExtra("userId") && intent.hasExtra("sbuId")) {
+            userId = intent.getStringExtra("userId");
+            sbuId = intent.getStringExtra("sbuId");
+            defaultGateId=intent.getStringExtra("defaultGateId");
+            Toast.makeText(this, userId + " " + sbuId, Toast.LENGTH_LONG).show();
         }
-
+        db = new DatabaseHelperSQL();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -54,30 +62,26 @@ public class LocationMaster extends AppCompatActivity {
         recyclerView = findViewById(R.id.LMrecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        FirebaseApp.initializeApp(this);
-        db = FirebaseFirestore.getInstance();
-
+        // Example data for dynamic table
         List<String> headers = Arrays.asList("Location ID", "Location Name", "Status");
-
-        // Sample data for dynamic table
-        List<DataModel> dataList = new ArrayList<>();
-        Map<String, Object> data1 = new HashMap<>();
-        data1.put("Location ID", 1);
-        data1.put("Location Name", " A");
-        data1.put("Status", 1000);
-        dataList.add(new DataModel(data1));
-
-        Map<String, Object> data2 = new HashMap<>();
-        data2.put("Location ID", 2);
-        data2.put("Location Name", " B");
-        data2.put("Status", 2000);
-        dataList.add(new DataModel(data2));
-
-        Map<String, Object> data3 = new HashMap<>();
-        data3.put("Location ID", 3);
-        data3.put("Location Name", " C");
-        data3.put("Status", 3000);
-        dataList.add(new DataModel(data3));
+        List<Location> locationList = new ArrayList<>();
+        dataList = new ArrayList<>();
+        try {
+            locationList= db.getLocationList("","");
+            Log.d("locationList",String.valueOf(locationList.get(0)));
+            for (Location location : locationList) {
+                Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put("Location ID", location.getLocationId());
+                dataMap.put("Location Name", location.getLocationName());
+                dataMap.put("Status", location.getStatus());
+                dataList.add(new DataModel(dataMap));
+            }
+            tableAdapter = new TableAdapter(dataList, headers, false, null,db,userId);
+            recyclerView.setAdapter(tableAdapter);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error fetching locationList: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("ActivityTag", "Exception: ", e);
+        }
 
         /*FirebaseFunctionCalls.getLocationMaster(db, new DataRetrievedCallback() {
             @Override

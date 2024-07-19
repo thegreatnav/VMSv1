@@ -31,12 +31,14 @@ public class CompanyMaster extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TableAdapter tableAdapter;
     DatabaseHelperSQL db;
-    String userId, defaultGateId, sbuId;
     private List<DataModel> dataList;
+    String userId, defaultGateId, sbuId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_company_master);
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("userId") && intent.hasExtra("sbuId")) {
             userId = intent.getStringExtra("userId");
@@ -44,8 +46,7 @@ public class CompanyMaster extends AppCompatActivity {
             defaultGateId=intent.getStringExtra("defaultGateId");
             Toast.makeText(this, userId + " " + sbuId, Toast.LENGTH_LONG).show();
         }
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_company_master);
+        db = new DatabaseHelperSQL();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -55,7 +56,6 @@ public class CompanyMaster extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.CMrecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        db = new DatabaseHelperSQL();
 
         // Example data for dynamic table
         List<String> headers = Arrays.asList("Company ID", "Company Name", "Status");

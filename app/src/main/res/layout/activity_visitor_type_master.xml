@@ -7,4 +7,21 @@
     android:layout_height="match_parent"
     tools:context=".ui.VisitorTypeMaster">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/VisitorTypeRecycler"
+        android:layout_width="410dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="127dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="107dp"
+        android:layout_marginTop="112dp"
+        android:text="VisitorType Master"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
