@@ -68,9 +68,9 @@ public class BlackList extends AppCompatActivity {
         Button buttonSave = findViewById(R.id.buttonSave);
 
         inputContainer = findViewById(R.id.inputContainer);
-        editTextMobile = findViewById(R.id.editTextCompanyId);
+        editTextMobile = findViewById(R.id.editTextLocationId);
         editTextName = findViewById(R.id.editTextStatus);
-        editTextReason = findViewById(R.id.editTextCompanyName);
+        editTextReason = findViewById(R.id.editTextLocationName);
 
         recyclerView = findViewById(R.id.recyclerViewHorizontal);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -22,7 +22,6 @@ import com.example.vmsv1.dataitems.VisitingArea;
 import com.example.vmsv1.dataitems.VisitorSearchResult;
 import com.example.vmsv1.dataitems.VisitorType;
 import com.example.vmsv1.db.DatabaseHelperSQL;
-import com.example.vmsv1.ui.SharedViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -209,7 +208,7 @@ public class VisitorEntry extends AppCompatActivity {
         editTextMobileNumber = findViewById(R.id.editTextMobileNumber);
         editTextVisitorName = findViewById(R.id.editTextVisitorName);
         editTextPlace = findViewById(R.id.editTextPlace);
-        editTextCompanyName = findViewById(R.id.editTextCompanyName);
+        editTextCompanyName = findViewById(R.id.editTextLocationName);
         editTextDesignation = findViewById(R.id.editTextDesignation);
         editTextVisitingStaff = findViewById(R.id.editTextVisitingStaff);
         editTextApproverName = findViewById(R.id.editTextApproverName);

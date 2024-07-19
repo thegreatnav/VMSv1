@@ -524,44 +524,46 @@ public class DatabaseHelperSQL {
 
     public List<String> addNewLocation(String locationName, String status, int userId) {
         Connection conn = getConnection();
-        String spString = "{call dbo.SP_addNewLocation(?, ?, ?)}";
+        String spString = "{call dbo.SP_addNewLocation(?, ?, ?, ?, ?)}";
 
         List<String> result = new ArrayList<>();
-        result.add("ID: Not Available");
-        result.add("SaveStatus: Not Available");
-        result.add("ErrorMessage: Not Available");
+        result.add("Id: 0");  // Default values in case of failure
+        result.add("Message: Error occurred while adding location.");
 
-        try (CallableStatement sp = conn.prepareCall(spString)) {
+        CallableStatement sp = null;
+
+        try {
+            sp = conn.prepareCall(spString);
             sp.setString(1, locationName);
             sp.setString(2, status);
             sp.setInt(3, userId);
-
-            // Register the output parameters
-            sp.registerOutParameter(1, Types.INTEGER); // @ID
-            sp.registerOutParameter(2, Types.CHAR); // @SaveStatus
-            sp.registerOutParameter(3, Types.VARCHAR); // @ErrorMessage
+            sp.registerOutParameter(4, Types.INTEGER); // Register output parameter for ID
+            sp.registerOutParameter(5, Types.VARCHAR); // Register output parameter for ErrorMessage
 
             sp.execute();
 
             // Retrieve the output parameters
-            int id = sp.getInt(1);
-            String saveStatus = sp.getString(2);
-            String errorMessage = sp.getString(3);
+            int id = sp.getInt(4);
+            String errorMessage = sp.getString(5);
 
-            // Update the result list
-            result.set(0, "ID: " + id);
-            result.set(1, "SaveStatus: " + saveStatus);
-            result.set(2, "ErrorMessage: " + errorMessage);
+            result.set(0, "Id: " + id);
+            result.set(1, "Message: " + errorMessage);
 
         } catch (SQLException e) {
-            System.out.println("Error in addNewLocation: " + e.getMessage());
-            result.set(0, "ID: Not Available");
-            result.set(1, "SaveStatus: Error");
-            result.set(2, "ErrorMessage: Error occurred while adding location.");
+            Log.e("DatabaseHelperSQL", "Error in addNewLocation " + e.getMessage());
+        } finally {
+            // Clean up resources
+            try {
+                if (sp != null) sp.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                Log.e("DatabaseHelperSQL", "Error closing resources: " + e.getMessage());
+            }
         }
 
         return result;
     }
+
 
     public List<String> addNewIdProofType(String idProofTypeName, String valueType, String fieldName, int displayOrder, String status, int userId) {
         Connection conn = getConnection();
@@ -569,8 +571,6 @@ public class DatabaseHelperSQL {
 
         List<String> result = new ArrayList<>();
         result.add("ID: Not Available");
-        result.add("Count: Not Available");
-        result.add("SaveStatus: Not Available");
         result.add("ErrorMessage: Not Available");
 
         try (CallableStatement sp = conn.prepareCall(spString)) {

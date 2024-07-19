@@ -7,7 +7,6 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,14 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.vmsv1.DataModel;
 import com.example.vmsv1.R;
 
-import com.example.vmsv1.dataitems.BlackListVisitor;
 import com.example.vmsv1.dataitems.Company;
 import com.example.vmsv1.db.DatabaseHelperSQL;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +47,6 @@ public class CompanyMaster extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_company_master);
-        handler = new Handler(Looper.getMainLooper());
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("userId") && intent.hasExtra("sbuId")) {
@@ -61,7 +56,7 @@ public class CompanyMaster extends AppCompatActivity {
             Toast.makeText(this, userId + " " + sbuId, Toast.LENGTH_LONG).show();
         }
         db = new DatabaseHelperSQL();
-
+        handler=new Handler(Looper.getMainLooper());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

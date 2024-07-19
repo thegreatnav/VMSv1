@@ -2,6 +2,7 @@ package com.example.vmsv1.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class VisitorTypeMaster extends AppCompatActivity {
     DatabaseHelperSQL db;
     private List<DataModel> dataList;
     String userId, defaultGateId, sbuId;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

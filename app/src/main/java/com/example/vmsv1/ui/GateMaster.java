@@ -2,6 +2,8 @@ package com.example.vmsv1.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,6 +38,7 @@ public class GateMaster extends AppCompatActivity {
     DatabaseHelperSQL db;
     private List<DataModel> dataList;
     String userId, defaultGateId, sbuId;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class GateMaster extends AppCompatActivity {
         });
 
         db=new DatabaseHelperSQL();
+        handler=new Handler(Looper.getMainLooper());
 
         List<String> headers = Arrays.asList("Gate ID", "Gate Name", "Company","SBU","Status");
 

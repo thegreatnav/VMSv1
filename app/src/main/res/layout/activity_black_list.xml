@@ -80,15 +80,15 @@
                 tools:layout_conversion_absoluteWidth="0dp" />
 
             <EditText
-                android:id="@+id/editTextCompanyName"
+                android:id="@+id/editTextLocationName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/edit_text_buttons"
                 android:hint="@string/reason"
                 android:textSize="20dp"
-                app:layout_constraintStart_toStartOf="@+id/editTextCompanyId"
-                app:layout_constraintTop_toBottomOf="@+id/editTextCompanyId"
+                app:layout_constraintStart_toStartOf="@+id/editTextLocationId"
+                app:layout_constraintTop_toBottomOf="@+id/editTextLocationId"
                 tools:ignore="TouchTargetSizeCheck"
                 tools:layout_conversion_absoluteHeight="0dp"
                 tools:layout_conversion_absoluteWidth="0dp" />
@@ -101,14 +101,14 @@
                 android:background="@drawable/edit_text_buttons"
                 android:hint="@string/name"
                 android:textSize="20dp"
-                app:layout_constraintStart_toStartOf="@+id/editTextCompanyName"
-                app:layout_constraintTop_toBottomOf="@+id/editTextCompanyName"
+                app:layout_constraintStart_toStartOf="@+id/editTextLocationName"
+                app:layout_constraintTop_toBottomOf="@+id/editTextLocationName"
                 tools:ignore="TouchTargetSizeCheck"
                 tools:layout_conversion_absoluteHeight="0dp"
                 tools:layout_conversion_absoluteWidth="0dp" />
 
             <EditText
-                android:id="@+id/editTextCompanyId"
+                android:id="@+id/editTextLocationId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
