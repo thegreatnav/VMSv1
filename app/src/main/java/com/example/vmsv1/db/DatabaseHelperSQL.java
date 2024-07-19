@@ -659,38 +659,37 @@ public class DatabaseHelperSQL {
         String spString = "{call dbo.SP_addNewCompany(?, ?, ?, ?)}";
 
         List<String> result = new ArrayList<>();
-        result.add("ID: Not Available");
-        result.add("SaveStatus: Not Available");
-        result.add("ErrorMessage: Not Available");
 
-        try (CallableStatement sp = conn.prepareCall(spString)) {
+        CallableStatement sp = null;
+        ResultSet rs = null;
+
+        try {
+            sp = conn.prepareCall(spString);
             sp.setString(1, compId);
             sp.setString(2, companyName);
             sp.setString(3, status);
             sp.setInt(4, userId);
 
-            // Register the output parameters
-            sp.registerOutParameter(1, Types.VARCHAR); // @ID
-            sp.registerOutParameter(2, Types.CHAR); // @SaveStatus
-            sp.registerOutParameter(3, Types.VARCHAR); // @ErrorMessage
+            rs = sp.executeQuery();
 
-            sp.execute();
+            if (rs.next()) {
+                long id = rs.getLong("Id");
+                String message = rs.getString("Message");
+                result.set(0, "Id: " + id);
+                result.set(1, "Message: " + message);
 
-            // Retrieve the output parameters
-            String id = sp.getString(1);
-            String saveStatus = sp.getString(2);
-            String errorMessage = sp.getString(3);
-
-            // Update the result list
-            result.set(0, "ID: " + id);
-            result.set(1, "SaveStatus: " + saveStatus);
-            result.set(2, "ErrorMessage: " + errorMessage);
-
-        } catch (SQLException e) {
-            System.out.println("Error in addNewCompany: " + e.getMessage());
-            result.set(0, "ID: Not Available");
-            result.set(1, "SaveStatus: Error");
-            result.set(2, "ErrorMessage: Error occurred while adding company.");
+            }
+        }catch (SQLException e) {
+            Log.e("DatabaseHelperSQL", "Error in addNewCompany " + e.getMessage());
+        } finally {
+            // Clean up resources
+            try {
+                if (rs != null) rs.close();
+                if (sp != null) sp.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                Log.e("DatabaseHelperSQL", "Error closing resources: " + e.getMessage());
+            }
         }
 
         return result;
