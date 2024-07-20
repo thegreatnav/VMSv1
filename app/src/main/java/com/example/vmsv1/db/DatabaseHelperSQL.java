@@ -2103,7 +2103,7 @@ public class DatabaseHelperSQL {
         return visitors;
     }
 
-    public static List<String> updateVisitorPhoto(Context context, long uniqueId, String photoFilePath, String photoFileName) throws SQLException {
+    public static List<String> updateVisitorPhoto(long uniqueId, String photoFilePath, String photoFileName) throws SQLException {
         Log.d("Inside updateVisitorPhoto", "uniqueId: " + uniqueId);
         Log.d("PhotoFileName", photoFileName);
         Log.d("PhotoFilePath", photoFilePath);
@@ -2139,14 +2139,9 @@ public class DatabaseHelperSQL {
             Log.d("StoredProcedureResult", "SaveStatus: " + result.get(1));
             Log.d("StoredProcedureResult", "ErrorMessage: " + result.get(2));
 
-            // Display toast messages
-            Toast.makeText(context, "ID: " + result.get(0), Toast.LENGTH_SHORT).show();
-            Toast.makeText(context, "SaveStatus: " + result.get(1), Toast.LENGTH_SHORT).show();
-            Toast.makeText(context, "ErrorMessage: " + result.get(2), Toast.LENGTH_SHORT).show();
 
         } catch (SQLException e) {
             Log.e("SQLException", e.getMessage());
-            Toast.makeText(context, "SQLException: " + e.getMessage(), Toast.LENGTH_LONG).show();
             throw new RuntimeException(e);
         } finally {
             // Close CallableStatement

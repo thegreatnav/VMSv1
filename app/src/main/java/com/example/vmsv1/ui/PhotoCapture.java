@@ -48,7 +48,7 @@ public class PhotoCapture extends AppCompatActivity {
     private int userId;
     private ImageView imageViewPhoto;
     private Button buttonCapture;
-    private Button buttonSave;
+    private Button buttonSaveImage;
     private EditText editTextFilename;
 
     private String savedImageFilename;
@@ -61,26 +61,23 @@ public class PhotoCapture extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("Oncreate","Hello");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_capture);
 
         dbsql = new DatabaseHelperSQL();
         imageViewPhoto = findViewById(R.id.imageViewPhoto);
         buttonCapture = findViewById(R.id.buttonCapture);
-        buttonSave = findViewById(R.id.buttonSave);
+        buttonSaveImage = findViewById(R.id.buttonSaveImage);
         editTextFilename = findViewById(R.id.editTextFileName);
 
         Intent intent = getIntent();
-        Log.d("mobileNum",""+mobileNum);
-        Log.d("gateId",""+gateId);
-        Log.d("userId",""+userId);
-
-        if (intent != null && intent.hasExtra("userId")) {
+        if (intent != null && intent.hasExtra("VisitorEntry.userId")) {
             mobileNum = intent.getStringExtra("VisitorEntry.MobileNumber");
             gateId = Integer.parseInt(intent.getStringExtra("VisitorEntry.gateId"));
             userId = Integer.parseInt(intent.getStringExtra("VisitorEntry.userId"));
 
-            Log.d("mobileNum",""+mobileNum);
+            Log.d("On create mobileNum",""+mobileNum);
             Log.d("gateId",""+gateId);
             Log.d("userId",""+userId);
 
@@ -104,7 +101,7 @@ public class PhotoCapture extends AppCompatActivity {
                         Bitmap imageBitmap = (Bitmap) extras.get("data");
                         imageViewPhoto.setImageBitmap(imageBitmap);
                         editTextFilename.setVisibility(View.VISIBLE);
-                        buttonSave.setVisibility(View.VISIBLE);
+                        buttonSaveImage.setVisibility(View.VISIBLE);
                         saveButton(imageBitmap);
                     }
                 });
@@ -120,7 +117,7 @@ public class PhotoCapture extends AppCompatActivity {
     }
     public void saveButton(Bitmap imageBitMap)
     {
-        buttonSave.setOnClickListener(v -> {
+        buttonSaveImage.setOnClickListener(v -> {
             saveImageToFile(imageBitMap);
         });
     }
@@ -160,18 +157,20 @@ public class PhotoCapture extends AppCompatActivity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             savedImageFilename = photoFile.getName(); // Save the filename
             savedImageFilepath = photoFile.getAbsolutePath();
-            Toast.makeText(this, "Image saved: " + savedImageFilepath, Toast.LENGTH_SHORT).show();
 
             // After saving the image, you can perform further actions if needed
             long uniqueId = getUniqueId();
             Log.d("unique id",""+uniqueId);
 
-            Context context = getApplicationContext();
-            dbsql.updateVisitorPhoto(context,uniqueId,savedImageFilepath,savedImageFilename);
+            DatabaseHelperSQL.updateVisitorPhoto(uniqueId,savedImageFilepath,savedImageFilename);
+            Toast.makeText(this, "Image saved: " + savedImageFilepath, Toast.LENGTH_SHORT).show();
 
+            Intent intentNDA = new Intent(PhotoCapture.this,DisplayNDA.class);
+            startActivity(intentNDA);
 
         } catch (IOException e) {
             Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show();
+            //send msg to manage visitor that image has not been saved
             e.printStackTrace();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -179,6 +178,9 @@ public class PhotoCapture extends AppCompatActivity {
     }
     private long getUniqueId()
     {
+        Log.d("mobileNum",""+mobileNum);
+        Log.d("gateId",""+gateId);
+        Log.d("userId",""+userId);
         List<VisitorSearchResult> visitorSearchResults = dbsql.getVisitorSearchByMobile(mobileNum,gateId,userId);
         Log.d("visitor details list",""+visitorSearchResults);
         VisitorSearchResult visitor_details = visitorSearchResults.get(0);
