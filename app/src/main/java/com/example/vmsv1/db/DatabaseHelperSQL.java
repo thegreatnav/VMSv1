@@ -1187,7 +1187,6 @@ public class DatabaseHelperSQL {
         try {
             CallableStatement SP = conn.prepareCall(SP_String);
 
-            // Set input parameters
             SP.setString(1, compId);
             SP.setString(2, sbuName);
             SP.setInt(3, locationId);

@@ -1,5 +1,7 @@
 package com.example.vmsv1.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -137,7 +139,13 @@ public class TableAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 else if(button_name.equals("Reset Password"))
                 {
                     button.setOnClickListener(v -> {
-
+                        Context context = itemView.getContext();
+                        String userIdToBeChanged = String.valueOf(data.getData().get(headers.get(0)));
+                        Log.d("Tag5",userIdToBeChanged);
+                        Intent intent = new Intent(context, ResetPassword.class);
+                        intent.putExtra("userId_admin", userId);
+                        intent.putExtra("userId_to_be_changed", userIdToBeChanged);
+                        context.startActivity(intent);
                     });
                 }
                 itemLayout.addView(button);
