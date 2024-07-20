@@ -584,7 +584,11 @@ public class DatabaseHelperSQL {
         result.add("ID: Not Available");
         result.add("ErrorMessage: Not Available");
 
-        try (CallableStatement sp = conn.prepareCall(spString)) {
+        CallableStatement sp = null;
+        ResultSet rs = null;
+
+        try{
+            sp=conn.prepareCall(spString);
             sp.setString(1, idProofTypeName);
             sp.setString(2, valueType);
             sp.setString(3, fieldName);
@@ -592,32 +596,32 @@ public class DatabaseHelperSQL {
             sp.setString(5, status);
             sp.setInt(6, userId);
 
-            // Register the output parameters
-            sp.registerOutParameter(1, Types.INTEGER); // @ID
-            sp.registerOutParameter(2, Types.INTEGER); // @Count
-            sp.registerOutParameter(3, Types.CHAR); // @SaveStatus
-            sp.registerOutParameter(4, Types.VARCHAR); // @ErrorMessage
+            rs=sp.executeQuery();
 
-            sp.execute();
+            if (rs.next()) {
+                long id = rs.getLong("ID");
+                long count=rs.getLong("Count");
+                String savestatus=rs.getString("SaveStatus");
+                String message = rs.getString("Message");
 
-            // Retrieve the output parameters
-            int id = sp.getInt(1);
-            int count = sp.getInt(2);
-            String saveStatus = sp.getString(3);
-            String errorMessage = sp.getString(4);
+                // Update the result list
+                result.set(0, "Id: " + id);
+                result.set(1, "Message: " + message);
+                result.set(2, "Count: " + count);
+                result.set(3, "SaveStatus: " + savestatus);
 
-            // Update the result list
-            result.set(0, "ID: " + id);
-            result.set(1, "Count: " + count);
-            result.set(2, "SaveStatus: " + saveStatus);
-            result.set(3, "ErrorMessage: " + errorMessage);
-
+            }
         } catch (SQLException e) {
-            System.out.println("Error in addNewIdProofType: " + e.getMessage());
-            result.set(0, "ID: Not Available");
-            result.set(1, "Count: 0");
-            result.set(2, "SaveStatus: Error");
-            result.set(3, "ErrorMessage: Error occurred while adding ID proof type.");
+            Log.e("DatabaseHelperSQL", "Error in addNewBlackListVisitor: " + e.getMessage());
+        } finally {
+            // Clean up resources
+            try {
+                if (rs != null) rs.close();
+                if (sp != null) sp.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                Log.e("DatabaseHelperSQL", "Error closing resources: " + e.getMessage());
+            }
         }
 
         return result;

@@ -41,9 +41,9 @@ public class SBUMaster extends AppCompatActivity {
     DatabaseHelperSQL db;
     private List<DataModel> dataList;
     String userId, defaultGateId, sbuId;
-    Button addNewLocation_button,save_button;
+    Button addNewSbu_button,save_button;
     private View inputContainer;
-    TextView locationId_textview,locationName_textview,status_textview;
+    TextView SbuId_textview,SbuName_textview,company_textview,location_textview,status_textview;
     private Handler handler;
 
     @Override
@@ -68,18 +68,25 @@ public class SBUMaster extends AppCompatActivity {
             return insets;
         });
 
-        recyclerView = findViewById(R.id.SBUrecyclerView);
+        recyclerView = findViewById(R.id.sbuRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        addNewLocation_button=findViewById(R.id.lmbutton);
+        addNewSbu_button=findViewById(R.id.sbumasterbutton);
         inputContainer=findViewById(R.id.inputContainer);
         save_button=findViewById(R.id.buttonSave);
-        locationId_textview=findViewById(R.id.editTextLocationId);
-        locationName_textview=findViewById(R.id.editTextLocationName);
+        SbuId_textview=findViewById(R.id.editTextSBUId);
+        SbuName_textview=findViewById(R.id.editTextSbuName);
+        company_textview=findViewById(R.id.editTextCompanyName);
+        location_textview=findViewById(R.id.editTextLocationId);
         status_textview=findViewById(R.id.editTextStatus);
 
         // Example data for dynamic table
         List<String> headers = Arrays.asList("SBU Id", "SBU Name","Company","Location","Status");
+        fetchSBU(headers);
+    }
+
+    public void fetchSBU(List<String> headers)
+    {
         List<SBU> sbuList = new ArrayList<>();
         dataList = new ArrayList<>();
         try {
@@ -100,39 +107,5 @@ public class SBUMaster extends AppCompatActivity {
             Toast.makeText(this, "Error fetching sbulist: " + e.getMessage(), Toast.LENGTH_LONG).show();
             Log.e("ActivityTag", "Exception: ", e);
         }
-
-        // Set up adapter
-        /*FirebaseFunctionCalls.getSBUMaster(db, new DataRetrievedCallback() {
-            @Override
-            public void onGridViewDataRetrieved(ArrayList<Item> itemList) {
-            }
-
-            @Override
-            public void onRecyclerViewDataRetrieved(List<DataModel> dataList) {
-                runOnUiThread(() -> {
-                    tableAdapter = new TableAdapter(dataList, headers, false, "",db);
-                    recyclerView.setAdapter(tableAdapter);
-                });
-            }
-
-            @Override
-            public void onCompanyNameCallback(String companyName) {
-
-            }
-            @Override
-            public void onLoginCallback(boolean isSuccess,String message,String userId,String defaultGateId,String sbuId)
-            {
-
-            }
-            public void onBlacklistDeletedCallback(boolean isSuccess)
-            {
-
-            }
-
-            @Override
-            public void onVisitorDetailsRetrieved(FirebaseFunctionCalls.Visitor visitorTypeName) {
-
-            }
-        });*/
     }
 }

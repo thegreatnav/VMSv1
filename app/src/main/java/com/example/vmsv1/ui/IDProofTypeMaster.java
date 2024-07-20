@@ -36,9 +36,9 @@ public class IDProofTypeMaster extends AppCompatActivity {
     DatabaseHelperSQL db;
     private List<DataModel> dataList;
     String userId, defaultGateId, sbuId;
-    Button addNewLocation_button,save_button;
+    Button addNewIdProofType_button,save_button;
     private View inputContainer;
-    TextView locationId_textview,locationName_textview,status_textview;
+    TextView IdProofTypeId_textview,IdProofTypeName_textview,type_textview,fieldName_textview,displayOrder_textview,status_textview;
     private Handler handler;
 
     @Override
@@ -64,18 +64,67 @@ public class IDProofTypeMaster extends AppCompatActivity {
             return insets;
         });
 
-        recyclerView = findViewById(R.id.IDProofRecycler);
+        recyclerView = findViewById(R.id.idProofTypeRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        addNewLocation_button=findViewById(R.id.lmbutton);
+        addNewIdProofType_button=findViewById(R.id.idproofbutton);
         inputContainer=findViewById(R.id.inputContainer);
         save_button=findViewById(R.id.buttonSave);
-        locationId_textview=findViewById(R.id.editTextLocationId);
-        locationName_textview=findViewById(R.id.editTextLocationName);
+        IdProofTypeId_textview=findViewById(R.id.editTextProofTypeId);
+        IdProofTypeName_textview=findViewById(R.id.editTextProofTypeName);
+        type_textview=findViewById(R.id.editTextType);
+        fieldName_textview=findViewById(R.id.editTextFieldName);
+        displayOrder_textview=findViewById(R.id.editTextDisplayOrder);
         status_textview=findViewById(R.id.editTextStatus);
 
         // Example data for dynamic table
         List<String> headers = Arrays.asList("ID Proof Type Id", "ID Proof Type Name", "Type","Field Name","Display Order","Status");
+        fetchIDProofTypes(headers);
+
+        addNewIdProofType_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(inputContainer.getVisibility()==View.GONE)
+                    inputContainer.setVisibility(View.VISIBLE);
+                else
+                    inputContainer.setVisibility(View.GONE);
+            }
+        });
+
+        save_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    String IdProofTypeId_value = IdProofTypeId_textview.getText().toString();
+                    String IdProofTypeName_value = IdProofTypeName_textview.getText().toString();
+                    String type_value=type_textview.getText().toString();
+                    String fieldName_value=fieldName_textview.getText().toString();
+                    String displayOrder_value=displayOrder_textview.getText().toString();
+                    String status_value = status_textview.getText().toString();
+
+                    List<String> message=db.addNewIdProofType(IdProofTypeName_value,type_value,fieldName_value,Integer.parseInt(displayOrder_value),status_value,Integer.parseInt(userId));
+                    Log.d("Tag1","message="+String.valueOf(message.get(0)));
+                    handler.postDelayed(() -> {
+                        fetchIDProofTypes(headers);
+                        IdProofTypeId_textview.setText("");
+                        IdProofTypeName_textview.setText("");
+                        type_textview.setText("");
+                        fieldName_textview.setText("");
+                        displayOrder_textview.setText("");
+                        status_textview.setText("");
+                        inputContainer.setVisibility(View.GONE);
+                    }, 1000);
+                }
+                catch (Exception e) {
+                    Log.e("BlackList", "Error adding data to the list", e);
+                }
+            }
+        });
+
+    }
+
+    public void fetchIDProofTypes(List<String> headers)
+    {
         List<IDProof> idProofList = new ArrayList<>();
         dataList = new ArrayList<>();
         try {
