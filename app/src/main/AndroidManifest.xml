@@ -141,14 +141,6 @@
                 <category android:name="android.intent.category.Adapter" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".testactivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.TESTACTIVITY" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
