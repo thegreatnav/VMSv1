@@ -34,5 +34,6 @@
     <string name="id_proof">ID Proof</string>
     <string name="id_proof_number">ID Proof Number</string>
     <string name="home">Home</string>
+    <string name="reset_password">Reset Password</string>
     <string-array name="com_google_android_gms_fonts_certs" />
 </resources>

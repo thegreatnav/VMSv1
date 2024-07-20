@@ -25,6 +25,8 @@ import com.example.vmsv1.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
+    String userId,defaultGateId,sbuId;
+
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private SharedViewModel sharedViewModel;
@@ -41,8 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 .setAction("Action", null).show());
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_admin, R.id.nav_user)
                 .setOpenableLayout(drawer)
@@ -55,24 +56,23 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("userId")) {
-            String userId = intent.getStringExtra("userId");
-            String defaultGateId = intent.getStringExtra("defaultGateId");
-            String sbuId = intent.getStringExtra("sbuId");
+            userId = intent.getStringExtra("userId");
+            defaultGateId = intent.getStringExtra("defaultGateId");
+            sbuId = intent.getStringExtra("sbuId");
+
             Log.d("Act","mainact userid="+userId);
             Log.d("Act","mainact sbuid="+sbuId);
             Log.d("Act","mainact defaultGateId="+defaultGateId);
+
             sharedViewModel.setUserId(userId);
             sharedViewModel.setSbuId(sbuId);
             sharedViewModel.setDefaultGateId(defaultGateId);
         }
         navController.navigate(R.id.nav_home);
-
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -81,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_reset_password) {
             Intent intent = new Intent(this, ResetPassword.class);
+            intent.putExtra("defaultGateId",defaultGateId);
+            intent.putExtra("sbuId",sbuId);
+            intent.putExtra("userId_admin",userId);
+            intent.putExtra("userId_to_be_changed",userId);
             startActivity(intent);
             return true;
         }

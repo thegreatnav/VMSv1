@@ -1156,6 +1156,29 @@ public class DatabaseHelperSQL {
         return sbuDetails;
     }
 
+    public List<String> getUserPassword(int userId)
+    {
+        List<SBU> sbuList = new ArrayList<>();
+        Connection conn = getConnection();
+        List<String> result = new ArrayList<>();
+        result.add("Password: null");
+        String SP_String = "{call dbo.SP_getUserPassword(?)}";
+        try {
+            CallableStatement SP = conn.prepareCall(SP_String);
+            SP.setInt(1, userId);
+
+            ResultSet rs = SP.executeQuery();
+
+            if (rs.next()) {
+                String password = rs.getString("Password");
+                result.set(0, password);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getSBUList: " + e);
+        }
+        return result;
+    }
+
     public List<SBU> getSBUList(String compId, String sbuName, int locationId, String status) {
         List<SBU> sbuList = new ArrayList<>();
         Connection conn = getConnection();
@@ -1195,6 +1218,7 @@ public class DatabaseHelperSQL {
     }
 
     public UserProfile getUserDetails(int userId) {
+
         UserProfile userDetails = null;
         Connection conn = getConnection();
         String SP_String = "{call dbo.SP_getUserDetails(?)}";
@@ -1725,35 +1749,51 @@ public class DatabaseHelperSQL {
         return visitorTypes;
     }
 
-
-
     public List<String> resetUserPassword(String userId, String password, int updatedBy) {
-        List<String> result = new ArrayList<>();
         Connection conn = getConnection();
-        String SP_String = "{call dbo.SP_ResetUserPassword(?, ?, ?, ?, ?)}";
+        String SP_String = "{call dbo.SP_ResetUserPassword(?, ?, ?)}";
+
+        List<String> result = new ArrayList<>();
+        result.add("Id: -1");  // Default values in case of failure
+        result.add("Count: 0");
+
+        CallableStatement sp = null;
+        ResultSet rs = null;
+
         try {
-            CallableStatement SP = conn.prepareCall(SP_String);
+            sp=conn.prepareCall(SP_String);
 
             // Set input parameters
-            SP.setString(1, userId);
-            SP.setString(2, password);
-            SP.setInt(3, updatedBy);
+            sp.setString(1, userId);
+            sp.setString(2, password);
+            sp.setInt(3, updatedBy);
 
-            // Register output parameters
-            SP.registerOutParameter(4, Types.VARCHAR); // ID
-            SP.registerOutParameter(5, Types.INTEGER); // Count
+            rs = sp.executeQuery();
 
-            SP.execute();
+            if (rs.next()) {
+                long id = rs.getLong("ID");
+                long count = rs.getLong("Count");
 
-            // Retrieve output parameters
-            result.add(SP.getString(4)); // ID
-            result.add(String.valueOf(SP.getInt(5))); // Count
+                result.set(0, "Id: " + id);
+                result.set(1, "Message: " + count);
+            }
+
+        } catch (SQLException e) {
+            Log.e("DatabaseHelperSQL", "Error in resetUserPassword: " + e.getMessage());
+        } finally {
+            // Clean up resources
+            try {
+                if (rs != null) rs.close();
+                if (sp != null) sp.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                Log.e("DatabaseHelperSQL", "Error closing resources: " + e.getMessage());
+            }
         }
-        catch (Exception e) {
-            System.out.println("Error in resetUserPassword: " + e.toString());
-        }
+
         return result;
     }
+
 
     public List<String> updateCompanyDetails(String compId, String companyName, String status, int userId) {
         List<String> result = new ArrayList<>();

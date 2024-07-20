@@ -110,6 +110,17 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.ResetPassword"
+            android:exported="true"
+            android:label="VMS"
+            android:theme="@style/Theme.VMSv1.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.Resetpassword" />
+
+                <category android:name="android.intent.category.RESETPASS" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".DisplayNDA"
             android:exported="true"
             android:label="VMS"
