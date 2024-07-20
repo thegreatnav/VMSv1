@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         navController.navigate(R.id.nav_home);
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);

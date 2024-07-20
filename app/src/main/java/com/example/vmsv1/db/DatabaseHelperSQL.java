@@ -7,7 +7,6 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.vmsv1.db.DefaultValues;
 import com.example.vmsv1.ItemDomain;
 
 import java.sql.CallableStatement;
@@ -15,13 +14,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.Date;
 
 public class DatabaseHelperSQL {
 
@@ -1158,7 +1154,6 @@ public class DatabaseHelperSQL {
 
     public List<String> getUserPassword(int userId)
     {
-        List<SBU> sbuList = new ArrayList<>();
         Connection conn = getConnection();
         List<String> result = new ArrayList<>();
         result.add("Password: null");
@@ -1177,6 +1172,38 @@ public class DatabaseHelperSQL {
             System.out.println("Error in getSBUList: " + e);
         }
         return result;
+    }
+
+    public String getUserIdByAndroidId(String androidId) {
+        Connection conn = getConnection();
+        String SP_String = "{call dbo.SP_GetUserIdByAndroidId(?)}";
+        String userId = null;
+        String saveStatus = null;
+        String errorMessage = null;
+
+        try {
+            CallableStatement SP = conn.prepareCall(SP_String);
+
+            SP.setString(1, androidId);
+            ResultSet rs = SP.executeQuery();
+
+            if (rs.next()) {
+                saveStatus = rs.getString("SaveStatus");
+                errorMessage = rs.getString("ErrorMessage");
+                userId = rs.getString("UserId");
+            }
+
+            if ("Y".equals(saveStatus)) {
+                return userId;
+            } else {
+                System.out.println("Error: " + errorMessage);
+                return "";
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error in getUserIdByAndroidId: " + e);
+            return "";
+        }
     }
 
     public List<SBU> getSBUList(String compId, String sbuName, int locationId, String status) {
@@ -1481,7 +1508,7 @@ public class DatabaseHelperSQL {
         return visitingArea;
     }
 
-    public List<VisitorSearchResult> getVisitorList(int sbuId, int gateId, java.sql.Timestamp entryDateFrom, java.sql.Timestamp entryDateTo,
+    public List<VisitorSearchResult> getVisitorList(int sbuId, int gateId, Timestamp entryDateFrom, Timestamp entryDateTo,
                                                     int visitorId, String visitorName, String mobileNo,
                                                     String visitorPlace, String visitorCompany, int visitorTypeId,
                                                     int visitingAreaId, String visitingFaculty, String approverName,
