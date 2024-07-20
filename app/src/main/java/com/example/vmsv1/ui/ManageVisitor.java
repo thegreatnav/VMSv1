@@ -25,7 +25,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.vmsv1.BackgroundTaskExecutor;
-import com.example.vmsv1.GridAdapter_DailyVisitor;
 import com.example.vmsv1.GridAdapter_ManageVisitor;
 import com.example.vmsv1.R;
 

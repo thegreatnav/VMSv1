@@ -1,7 +1,5 @@
 package com.example.vmsv1.ui.home;
 
-import static android.content.Intent.getIntent;
-
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -20,7 +18,6 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 
-import com.example.vmsv1.MainActivity;
 import com.example.vmsv1.R;
 import com.example.vmsv1.ui.SharedViewModel;
 import com.example.vmsv1.ui.UserMaster;
@@ -130,7 +127,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //Navigation to specific modules
         cm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -55,7 +55,6 @@ public class BlackList extends AppCompatActivity {
             if(intent.hasExtra("sbuId"))
             {
                 sbuId=intent.getStringExtra("sbuId");
-                //Toast.makeText(this, "Received userId: " + userId + "\nReceived sbu: "+ sbuId, Toast.LENGTH_LONG).show();
             }
         }
 

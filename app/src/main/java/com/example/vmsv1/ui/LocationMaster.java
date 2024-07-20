@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.vmsv1.DataModel;
 import com.example.vmsv1.R;
 
-import com.example.vmsv1.dataitems.Company;
 import com.example.vmsv1.dataitems.Location;
 import com.example.vmsv1.db.DatabaseHelperSQL;
 
@@ -54,7 +53,6 @@ public class LocationMaster extends AppCompatActivity {
             userId = intent.getStringExtra("userId");
             sbuId = intent.getStringExtra("sbuId");
             defaultGateId=intent.getStringExtra("defaultGateId");
-            //Toast.makeText(this, userId + " " + sbuId, Toast.LENGTH_LONG).show();
         }
         db = new DatabaseHelperSQL();
         handler=new Handler(Looper.getMainLooper());
@@ -75,7 +73,6 @@ public class LocationMaster extends AppCompatActivity {
         locationName_textview=findViewById(R.id.editTextLocationName);
         status_textview=findViewById(R.id.editTextStatus);
 
-        // Example data for dynamic table
         List<String> headers = Arrays.asList("Location ID", "Location Name", "Status");
         fetchLocations(headers);
 

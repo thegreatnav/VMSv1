@@ -19,14 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vmsv1.DataModel;
-import com.example.vmsv1.ItemDomain;
 import com.example.vmsv1.R;
 
-import com.example.vmsv1.dataitems.Company;
 import com.example.vmsv1.dataitems.Gate;
 import com.example.vmsv1.db.DatabaseHelperSQL;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +54,6 @@ public class GateMaster extends AppCompatActivity {
             userId = intent.getStringExtra("userId");
             sbuId = intent.getStringExtra("sbuId");
             defaultGateId=intent.getStringExtra("defaultGateId");
-            //Toast.makeText(this, userId + " " + sbuId, Toast.LENGTH_LONG).show();
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

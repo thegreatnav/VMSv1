@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.example.vmsv1.BackgroundTaskExecutor;
 import com.example.vmsv1.GridAdapter_DailyVisitor;
-import com.example.vmsv1.GridAdapter_ManageVisitor;
 import com.example.vmsv1.R;
 
 import java.sql.Timestamp;

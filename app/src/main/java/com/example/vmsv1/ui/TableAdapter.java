@@ -1,7 +1,5 @@
 package com.example.vmsv1.ui;
 
-
-import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vmsv1.DataModel;
-import com.example.vmsv1.ItemDomain;
 import com.example.vmsv1.R;
 import com.example.vmsv1.db.DatabaseHelperSQL;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 

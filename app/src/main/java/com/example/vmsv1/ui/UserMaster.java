@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vmsv1.DataModel;
 import com.example.vmsv1.R;
-import com.example.vmsv1.dataitems.Company;
+
 import com.example.vmsv1.dataitems.UserProfile;
 import com.example.vmsv1.db.DatabaseHelperSQL;
 
@@ -52,7 +52,6 @@ public class UserMaster extends AppCompatActivity {
             userId = intent.getStringExtra("userId");
             sbuId = intent.getStringExtra("sbuId");
             defaultGateId=intent.getStringExtra("defaultGateId");
-            //Toast.makeText(this, userId + " " + sbuId, Toast.LENGTH_LONG).show();
         }
         db = new DatabaseHelperSQL();
         handler=new Handler(Looper.getMainLooper());

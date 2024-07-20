@@ -19,14 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vmsv1.DataModel;
-import com.example.vmsv1.ItemDomain;
 import com.example.vmsv1.R;
 
-import com.example.vmsv1.dataitems.Company;
 import com.example.vmsv1.dataitems.SBU;
 import com.example.vmsv1.db.DatabaseHelperSQL;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +53,6 @@ public class SBUMaster extends AppCompatActivity {
             userId = intent.getStringExtra("userId");
             sbuId = intent.getStringExtra("sbuId");
             defaultGateId=intent.getStringExtra("defaultGateId");
-            //Toast.makeText(this, userId + " " + sbuId, Toast.LENGTH_LONG).show();
         }
         db = new DatabaseHelperSQL();
         handler=new Handler(Looper.getMainLooper());
@@ -80,7 +75,6 @@ public class SBUMaster extends AppCompatActivity {
         location_textview=findViewById(R.id.editTextLocationId);
         status_textview=findViewById(R.id.editTextStatus);
 
-        // Example data for dynamic table
         List<String> headers = Arrays.asList("SBU Id", "SBU Name","Company","Location","Status");
         fetchSBU(headers);
 

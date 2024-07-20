@@ -1,7 +1,5 @@
 package com.example.vmsv1.dataitems;
 
-import android.util.Log;
-
 public class VisitingArea {
     private String compId;
     private String compName;

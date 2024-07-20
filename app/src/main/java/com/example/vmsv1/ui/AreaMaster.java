@@ -53,7 +53,6 @@ public class AreaMaster extends AppCompatActivity {
             userId = intent.getStringExtra("userId");
             sbuId = intent.getStringExtra("sbuId");
             defaultGateId=intent.getStringExtra("defaultGateId");
-            //Toast.makeText(this, userId + " " + sbuId, Toast.LENGTH_LONG).show();
         }
         db = new DatabaseHelperSQL();
         handler=new Handler(Looper.getMainLooper());
@@ -76,7 +75,6 @@ public class AreaMaster extends AppCompatActivity {
         sbuId_textview=findViewById(R.id.editTextSBUName);
         status_textview=findViewById(R.id.editTextStatus);
 
-        // Example data for dynamic table
         List<String> headers = Arrays.asList("Visiting Area Id", "Visiting Area Name", "Company","SBU","Status");
         fetchVisitingAreas(headers);
 

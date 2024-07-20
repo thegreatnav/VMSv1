@@ -2,7 +2,6 @@ package com.example.vmsv1.ui.user;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,11 +42,8 @@ public class UserFragment extends Fragment {
 
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         userId= String.valueOf(sharedViewModel.getUserId().getValue());
-        //Log.d("act","userId="+userId);
         sbuId= String.valueOf(sharedViewModel.getSbuId().getValue());
-        //Log.d("act","sbuId="+sbuId);
         defaultGateId= String.valueOf(sharedViewModel.getDefaultGateId().getValue());
-        //Log.d("act","defaultgateId="+defaultGateId);
 
         sharedViewModel.getUserId().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -67,8 +63,6 @@ public class UserFragment extends Fragment {
                 defaultGateId = defaultGateIdb;
             }
         });
-
-        Toast.makeText(getActivity(), "Default Gate Id: "+defaultGateId+"\nSbu Id: "+sbuId, Toast.LENGTH_LONG).show();
 
         final ListView listView = binding.userList;
         String[] useritems ={"Visitor Entry","Manage Visitor","Black List","Daily Visitor List"};
@@ -108,7 +102,6 @@ public class UserFragment extends Fragment {
                         i.putExtra("sbuId",sbuId);
                         startActivity(i);
                         break;
-
                 }
 
             }

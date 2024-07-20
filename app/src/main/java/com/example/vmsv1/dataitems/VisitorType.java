@@ -1,6 +1,5 @@
 package com.example.vmsv1.dataitems;
 
-
 public class VisitorType {
     private int visitorTypeId;
     private String visitorTypeName;

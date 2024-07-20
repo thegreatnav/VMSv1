@@ -46,11 +46,8 @@ public class AdminFragment extends Fragment {
 
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         userId= String.valueOf(sharedViewModel.getUserId().getValue());
-        //Log.d("act","userId="+userId);
         sbuId= String.valueOf(sharedViewModel.getSbuId().getValue());
-        //Log.d("act","sbuId="+sbuId);
         defaultGateId= String.valueOf(sharedViewModel.getDefaultGateId().getValue());
-        //Log.d("act","defaultgateId="+defaultGateId);
 
         sharedViewModel.getUserId().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -70,7 +67,6 @@ public class AdminFragment extends Fragment {
                 defaultGateId = defaultGateIdb;
             }
         });
-        //Toast.makeText(getActivity(), "Default Gate Id: "+defaultGateId+"\nSbu Id: "+sbuId, Toast.LENGTH_LONG).show();
 
         final ListView listView = binding.adminList;
         String[] adminitems ={"Company Master","Location Master","SBU Master","Gate Master","Area Master","ID Proof Type Master","Visitor Type Master","User Master"};

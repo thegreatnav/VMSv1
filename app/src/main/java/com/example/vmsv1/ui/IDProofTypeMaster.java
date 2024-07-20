@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vmsv1.DataModel;
 import com.example.vmsv1.R;
-import com.example.vmsv1.dataitems.Company;
 import com.example.vmsv1.dataitems.IDProof;
 import com.example.vmsv1.db.DatabaseHelperSQL;
 
@@ -53,7 +52,6 @@ public class IDProofTypeMaster extends AppCompatActivity {
             userId = intent.getStringExtra("userId");
             sbuId = intent.getStringExtra("sbuId");
             defaultGateId=intent.getStringExtra("defaultGateId");
-            //Toast.makeText(this, userId + " " + sbuId, Toast.LENGTH_LONG).show();
         }
         db = new DatabaseHelperSQL();
         handler=new Handler(Looper.getMainLooper());
@@ -77,7 +75,6 @@ public class IDProofTypeMaster extends AppCompatActivity {
         displayOrder_textview=findViewById(R.id.editTextDisplayOrder);
         status_textview=findViewById(R.id.editTextStatus);
 
-        // Example data for dynamic table
         List<String> headers = Arrays.asList("ID Proof Type Id", "ID Proof Type Name", "Type","Field Name","Display Order","Status");
         fetchIDProofTypes(headers);
 
