@@ -34,11 +34,11 @@ import java.util.Map;
 public class LocationMaster extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    Button addNewLocation_button,save_button;
     private TableAdapter tableAdapter;
     DatabaseHelperSQL db;
     private List<DataModel> dataList;
     String userId, defaultGateId, sbuId;
+    Button addNewLocation_button,save_button;
     private View inputContainer;
     TextView locationId_textview,locationName_textview,status_textview;
     private Handler handler;

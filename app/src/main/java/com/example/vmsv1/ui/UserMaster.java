@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -33,6 +36,9 @@ public class UserMaster extends AppCompatActivity {
     DatabaseHelperSQL db;
     private List<DataModel> dataList;
     String userId, defaultGateId, sbuId;
+    Button addNewLocation_button,save_button;
+    private View inputContainer;
+    TextView locationId_textview,locationName_textview,status_textview;
     private Handler handler;
 
     @Override
@@ -59,6 +65,13 @@ public class UserMaster extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.UserRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        addNewLocation_button=findViewById(R.id.lmbutton);
+        inputContainer=findViewById(R.id.inputContainer);
+        save_button=findViewById(R.id.buttonSave);
+        locationId_textview=findViewById(R.id.editTextLocationId);
+        locationName_textview=findViewById(R.id.editTextLocationName);
+        status_textview=findViewById(R.id.editTextStatus);
 
         // Example data for dynamic table
         List<String> headers = Arrays.asList("User Id", "Username", "Full Name","Login Method","SBU","Status","Reset");

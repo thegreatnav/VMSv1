@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -38,6 +41,9 @@ public class GateMaster extends AppCompatActivity {
     DatabaseHelperSQL db;
     private List<DataModel> dataList;
     String userId, defaultGateId, sbuId;
+    Button addNewGate_button,save_button;
+    private View inputContainer;
+    TextView gateId_textview,gateName_textview,company_textview,sbuid_textview,status_textview;
     private Handler handler;
 
     @Override
@@ -64,11 +70,62 @@ public class GateMaster extends AppCompatActivity {
         db=new DatabaseHelperSQL();
         handler=new Handler(Looper.getMainLooper());
 
-        List<String> headers = Arrays.asList("Gate ID", "Gate Name", "Company","SBU","Status");
-
-        recyclerView = findViewById(R.id.recyclerview1);
+        recyclerView = findViewById(R.id.gateRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        addNewGate_button=findViewById(R.id.gatebutton);
+        inputContainer=findViewById(R.id.inputContainer);
+        save_button=findViewById(R.id.buttonSave);
+        gateId_textview=findViewById(R.id.editTextGateId);
+        gateName_textview=findViewById(R.id.editTextGateName);
+        company_textview=findViewById(R.id.editTextCompanyName);
+        sbuid_textview=findViewById(R.id.editTextSBUId);
+        status_textview=findViewById(R.id.editTextStatus);
+
+        List<String> headers = Arrays.asList("Gate ID", "Gate Name", "Company","SBU","Status");
+        fetchGates(headers);
+
+        addNewGate_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(inputContainer.getVisibility()==View.GONE)
+                    inputContainer.setVisibility(View.VISIBLE);
+                else
+                    inputContainer.setVisibility(View.GONE);
+            }
+        });
+
+        save_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    String gateId_value = gateId_textview.getText().toString();
+                    String gateName_value = gateName_textview.getText().toString();
+                    String companyName_value=company_textview.getText().toString();
+                    String sbuId_value=sbuid_textview.getText().toString();
+                    String status_value = status_textview.getText().toString();
+
+                    List<String> message=db.addNewGate(Integer.parseInt(sbuId_value),gateName_value,status_value,Integer.parseInt(userId));
+                    Log.d("Tag1","message="+String.valueOf(message.get(0)));
+                    handler.postDelayed(() -> {
+                        fetchGates(headers);
+                        gateId_textview.setText("");
+                        gateName_textview.setText("");
+                        company_textview.setText("");
+                        sbuid_textview.setText("");
+                        status_textview.setText("");
+                        inputContainer.setVisibility(View.GONE);
+                    }, 1000);
+                }
+                catch (Exception e) {
+                    Log.e("BlackList", "Error adding data to the list", e);
+                }
+            }
+        });
+    }
+
+    public void fetchGates(List<String> headers)
+    {
         List<Gate> gateList = new ArrayList<>();
         dataList = new ArrayList<>();
         try {
@@ -89,38 +146,5 @@ public class GateMaster extends AppCompatActivity {
             Toast.makeText(this, "Error fetching gatelist: " + e.getMessage(), Toast.LENGTH_LONG).show();
             Log.e("ActivityTag", "Exception: ", e);
         }
-
-        /*FirebaseFunctionCalls.getGateMaster(db, new DataRetrievedCallback() {
-            @Override
-            public void onGridViewDataRetrieved(ArrayList<Item> itemList) {
-            }
-
-            @Override
-            public void onRecyclerViewDataRetrieved(List<DataModel> dataList) {
-                runOnUiThread(() -> {
-                    tableAdapter = new TableAdapter(dataList, headers, false, "",db);
-                    recyclerView.setAdapter(tableAdapter);
-                });
-            }
-            @Override
-            public void onLoginCallback(boolean isSuccess,String message,String userId,String defaultGateId,String sbuId)
-            {
-
-            }
-
-            @Override
-            public void onCompanyNameCallback(String companyName) {
-
-            }
-            public void onBlacklistDeletedCallback(boolean isSuccess)
-            {
-
-            }
-
-            @Override
-            public void onVisitorDetailsRetrieved(FirebaseFunctionCalls.Visitor visitorTypeName) {
-
-            }
-        });*/
     }
 }

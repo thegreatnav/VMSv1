@@ -400,34 +400,45 @@ public class DatabaseHelperSQL {
         result.add("SaveStatus: Not Available");
         result.add("ErrorMessage: Not Available");
 
-        try (CallableStatement sp = conn.prepareCall(spString)) {
+        CallableStatement sp = null;
+        ResultSet rs = null;
+
+        try {
+            sp = conn.prepareCall(spString);
             sp.setInt(1, sbuId);
             sp.setString(2, areaName);
             sp.setString(3, status);
             sp.setInt(4, userId);
 
-            // Register the output parameters
-            sp.registerOutParameter(1, Types.INTEGER); // @ID
-            sp.registerOutParameter(2, Types.CHAR); // @SaveStatus
-            sp.registerOutParameter(3, Types.VARCHAR); // @ErrorMessage
+            // Execute the stored procedure
+            rs = sp.executeQuery();
 
-            sp.execute();
+            // Retrieve results from the ResultSet
+            if (rs.next()) {
+                int id = rs.getInt("ID");
+                String saveStatus = rs.getString("SaveStatus");
+                String errorMessage = rs.getString("ErrorMessage");
 
-            // Retrieve the output parameters
-            int id = sp.getInt(1);
-            String saveStatus = sp.getString(2);
-            String errorMessage = sp.getString(3);
-
-            // Update the result list
-            result.set(0, "ID: " + id);
-            result.set(1, "SaveStatus: " + saveStatus);
-            result.set(2, "ErrorMessage: " + errorMessage);
+                // Update the result list
+                result.set(0, "ID: " + id);
+                result.set(1, "SaveStatus: " + saveStatus);
+                result.set(2, "ErrorMessage: " + errorMessage);
+            }
 
         } catch (SQLException e) {
             System.out.println("Error in addNewVisitingArea: " + e.getMessage());
             result.set(0, "ID: Not Available");
             result.set(1, "SaveStatus: Error");
             result.set(2, "ErrorMessage: Error occurred while adding visiting area.");
+        } finally {
+            // Clean up resources
+            try {
+                if (rs != null) rs.close();
+                if (sp != null) sp.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
         }
 
         return result;
@@ -621,34 +632,38 @@ public class DatabaseHelperSQL {
         result.add("SaveStatus: Not Available");
         result.add("ErrorMessage: Not Available");
 
-        try (CallableStatement sp = conn.prepareCall(spString)) {
+        CallableStatement sp = null;
+        ResultSet rs = null;
+
+        try {
+            sp = conn.prepareCall(spString);
             sp.setInt(1, sbuId);
             sp.setString(2, gateName);
             sp.setString(3, status);
             sp.setInt(4, userId);
 
-            // Register the output parameters
-            sp.registerOutParameter(1, Types.INTEGER); // @ID
-            sp.registerOutParameter(2, Types.CHAR); // @SaveStatus
-            sp.registerOutParameter(3, Types.VARCHAR); // @ErrorMessage
+            rs = sp.executeQuery();
 
-            sp.execute();
+            if (rs.next()) {
+                int id = rs.getInt("ID");
+                String saveStatus = rs.getString("SaveStatus");
+                String errorMessage = rs.getString("ErrorMessage");
 
-            // Retrieve the output parameters
-            int id = sp.getInt(1);
-            String saveStatus = sp.getString(2);
-            String errorMessage = sp.getString(3);
-
-            // Update the result list
-            result.set(0, "ID: " + id);
-            result.set(1, "SaveStatus: " + saveStatus);
-            result.set(2, "ErrorMessage: " + errorMessage);
-
+                result.set(0, "ID: " + id);
+                result.set(1, "SaveStatus: " + saveStatus);
+                result.set(2, "ErrorMessage: " + errorMessage);
+            }
         } catch (SQLException e) {
-            System.out.println("Error in addNewGate: " + e.getMessage());
-            result.set(0, "ID: Not Available");
-            result.set(1, "SaveStatus: Error");
-            result.set(2, "ErrorMessage: Error occurred while adding gate.");
+            Log.e("DatabaseHelperSQL", "Error in addNewBlackListVisitor: " + e.getMessage());
+        } finally {
+            // Clean up resources
+            try {
+                if (rs != null) rs.close();
+                if (sp != null) sp.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                Log.e("DatabaseHelperSQL", "Error closing resources: " + e.getMessage());
+            }
         }
 
         return result;
