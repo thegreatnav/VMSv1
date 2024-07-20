@@ -1,8 +1,7 @@
 package com.example.vmsv1;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.Canvas;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.CancellationSignal;
@@ -12,6 +11,10 @@ import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
 import android.print.pdf.PrintedPdfDocument;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,6 +23,8 @@ public class MyPrintDocumentAdapter extends PrintDocumentAdapter {
 
     private Context context;
     private PrintedPdfDocument pdfDocument;
+    private int pageHeight;
+    private int pageWidth;
 
     public MyPrintDocumentAdapter(Context context) {
         this.context = context;
@@ -27,6 +32,12 @@ public class MyPrintDocumentAdapter extends PrintDocumentAdapter {
 
     @Override
     public void onLayout(PrintAttributes oldAttributes, PrintAttributes newAttributes, CancellationSignal cancellationSignal, LayoutResultCallback callback, Bundle extras) {
+        // Retrieve the media size from the new attributes
+        PrintAttributes.MediaSize mediaSize = newAttributes.getMediaSize();
+        pageWidth = mediaSize.getWidthMils() / 1000 * 72;
+        pageHeight = mediaSize.getHeightMils() / 1000 * 72;
+
+        // Create a new PrintedPdfDocument with the new attributes
         pdfDocument = new PrintedPdfDocument(context, newAttributes);
 
         if (cancellationSignal.isCanceled()) {
@@ -34,14 +45,13 @@ public class MyPrintDocumentAdapter extends PrintDocumentAdapter {
             return;
         }
 
-        PrintDocumentInfo info = new PrintDocumentInfo.Builder("Document")
+        PrintDocumentInfo info = new PrintDocumentInfo.Builder("NDA_Document")
                 .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
-                .setPageCount(1)
+                .setPageCount(PrintDocumentInfo.PAGE_COUNT_UNKNOWN) // Use UNKNOWN to allow for dynamic page count
                 .build();
 
         callback.onLayoutFinished(info, true);
     }
-
 
     @Override
     public void onWrite(PageRange[] pages, ParcelFileDescriptor destination, CancellationSignal cancellationSignal, WriteResultCallback callback) {
@@ -54,12 +64,30 @@ public class MyPrintDocumentAdapter extends PrintDocumentAdapter {
             return;
         }
 
-        Paint paint = new Paint();
-        paint.setColor(Color.BLACK); // Set text color
-        paint.setTextSize(16);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ConstraintLayout layout = (ConstraintLayout) inflater.inflate(R.layout.activity_print_label, null);
 
-        // Draw content on the page (for simplicity, printing "Hello, world!")
-        page.getCanvas().drawText("Hello, world!", 100, 100, paint);
+        // Adjust layout parameters dynamically
+        ViewGroup.LayoutParams params = layout.getLayoutParams();
+        if (params == null) {
+            params = new ViewGroup.LayoutParams(pageWidth, pageHeight);
+        } else {
+            params.width = pageWidth;
+            params.height = pageHeight;
+        }
+        layout.setLayoutParams(params);
+
+        // Measure and layout the view
+        layout.measure(View.MeasureSpec.makeMeasureSpec(pageWidth, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(pageHeight, View.MeasureSpec.EXACTLY));
+        layout.layout(0, 0, layout.getMeasuredWidth(), layout.getMeasuredHeight());
+
+        // Draw the view on the PDF page
+        Canvas canvas = page.getCanvas();
+        canvas.clipRect(0, 0, pageWidth, pageHeight);
+        float scale = Math.min((float) pageWidth / layout.getWidth(), (float) pageHeight / layout.getHeight());
+        canvas.scale(scale, scale);
+        layout.draw(canvas);
 
         pdfDocument.finishPage(page);
 

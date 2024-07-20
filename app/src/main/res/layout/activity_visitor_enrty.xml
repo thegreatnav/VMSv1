@@ -120,15 +120,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/editTextMobileNumber" />
 
             <!-- ID Proof -->
+
             <TextView
                 android:id="@+id/visitor_name_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/visitor_name"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.052"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buttonSearch" />
 
@@ -149,11 +150,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="180dp"
+                android:layout_marginTop="156dp"
                 android:text="@string/id_proof"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.011"
+                app:layout_constraintHorizontal_bias="0.097"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -190,6 +191,7 @@
                 android:layout_marginTop="223dp"
                 android:background="@drawable/edit_text_buttons"
                 android:padding="8dp"
+                android:inputType="number"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.819"
@@ -237,20 +239,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- Company Name -->
+
             <EditText
                 android:id="@+id/editTextPlace"
                 android:layout_width="170dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="280dp"
+                android:layout_marginTop="316dp"
                 android:background="@drawable/edit_text_buttons"
                 android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.819"
+                app:layout_constraintHorizontal_bias="0.823"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-            <!-- Company Name -->
 
             <TextView
                 android:id="@+id/visitor_name_text"
@@ -265,20 +267,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- Designation -->
+
             <EditText
-                android:id="@+id/editTextLocationName"
+                android:id="@+id/editTextCompanyName"
                 android:layout_width="170dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="330dp"
+                android:layout_marginTop="272dp"
                 android:background="@drawable/edit_text_buttons"
                 android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.819"
+                app:layout_constraintHorizontal_bias="0.823"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-            <!-- Designation -->
 
             <TextView
                 android:id="@+id/designation_text"
@@ -292,23 +294,47 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- Purpose -->
+
             <EditText
                 android:id="@+id/editTextDesignation"
                 android:layout_width="170dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="380dp"
+                android:layout_marginTop="408dp"
                 android:background="@drawable/edit_text_buttons"
                 android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.819"
+                app:layout_constraintHorizontal_bias="0.823"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-            <!-- Purpose -->
-
+            <TextView
+                android:id="@+id/purpose_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="368dp"
+                android:text="Purpose"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.011"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!-- Visitor Type -->
+
+            <EditText
+                android:id="@+id/editTextPurpose"
+                android:layout_width="170dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="368dp"
+                android:background="@drawable/edit_text_buttons"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.823"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -327,11 +353,11 @@
                 android:id="@+id/spinnerVisitorType"
                 android:layout_width="170dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="432dp"
+                android:layout_marginTop="452dp"
                 android:background="@drawable/edit_text_buttons"
                 android:backgroundTint="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.819"
+                app:layout_constraintHorizontal_bias="0.823"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="TouchTargetSizeCheck" />
@@ -464,7 +490,7 @@
                 <!-- EditTexts for Equipments Allowed -->
 
                 <EditText
-                    android:id="@+id/textViewEquipment1"
+                    android:id="@+id/editTextAsset1"
                     android:layout_width="170dp"
                     android:layout_height="40dp"
                     android:background="@drawable/edit_text_buttons"
@@ -480,7 +506,7 @@
                     tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
                 <EditText
-                    android:id="@+id/textViewEquipment2"
+                    android:id="@+id/editTextAsset2"
                     android:layout_width="170dp"
                     android:layout_height="40dp"
                     android:background="@drawable/edit_text_buttons"
@@ -496,7 +522,7 @@
                     tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
                 <EditText
-                    android:id="@+id/textViewEquipment3"
+                    android:id="@+id/editTextAsset3"
                     android:layout_width="170dp"
                     android:layout_height="40dp"
                     android:background="@drawable/edit_text_buttons"
@@ -511,7 +537,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
-                    android:id="@+id/textViewEquipment4"
+                    android:id="@+id/editTextAsset4"
                     android:layout_width="170dp"
                     android:layout_height="40dp"
                     android:background="@drawable/edit_text_buttons"
@@ -526,7 +552,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
-                    android:id="@+id/textViewEquipment5"
+                    android:id="@+id/editTextAsset5"
                     android:layout_width="170dp"
                     android:layout_height="40dp"
                     android:background="@drawable/edit_text_buttons"

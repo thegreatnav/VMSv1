@@ -69,10 +69,15 @@ public class LoginPage extends AppCompatActivity {
 
             Intent intent = new Intent(LoginPage.this, MainActivity.class);
             intent.putExtra("userId", ans);
-            intent.putExtra("sbuId", user.getSbuId());
+            Log.d("Tag11","userid="+ans);
+            intent.putExtra("sbuId", String.valueOf(user.getSbuId()));
+                Log.d("Tag11","sbuid="+user.getSbuId());
             intent.putExtra("FullName", user.getFullName());
-            intent.putExtra("defaultGateId", user.getDefaultGateId());
+                Log.d("Tag11","fullname="+user.getFullName());
+            intent.putExtra("defaultGateId",String.valueOf(user.getDefaultGateId()));
+                Log.d("Tag11","defaultgateid="+String.valueOf(user.getDefaultGateId()));
             intent.putExtra("androidId", androidId);
+                Log.d("Tag11","androidid="+androidId);
             startActivity(intent);
             }, 1000);
         }

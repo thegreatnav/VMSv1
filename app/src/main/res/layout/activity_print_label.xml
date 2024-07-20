@@ -2,26 +2,24 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_width="250dp"
+    android:layout_height="150dp"
+    android:padding="0dp">
 
-
-    <!-- Bottom right signature text -->
-
+    <!-- Vertical Guidelines -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
+        app:layout_constraintGuide_begin="10dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp" />
+        app:layout_constraintGuide_end="10dp" />
 
     <!-- Horizontal Guidelines -->
     <androidx.constraintlayout.widget.Guideline
@@ -29,64 +27,85 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="16dp" />
+        app:layout_constraintGuide_begin="5dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="16dp" />
+        app:layout_constraintGuide_end="5dp" />
 
-    <!-- Other Views -->
+    <!-- Image View Left -->
+
+    <!-- Title TextView -->
+
+    <!-- Subtitle TextView -->
+
+    <!-- Details Layout -->
+
+    <!-- Signature Text -->
+
+    <!-- Image View Right -->
+
     <ImageView
         android:id="@+id/imageViewLeft"
-        android:layout_width="68dp"
-        android:layout_height="71dp"
+        android:layout_width="40dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="5dp"
         android:src="@drawable/mtl_img"
-        app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toTopOf="@id/guidelineTop" />
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintHorizontal_bias="0.03"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+        app:layout_constraintVertical_bias="0.03" />
 
     <TextView
         android:id="@+id/textViewTitle"
-        android:layout_width="0dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:gravity="start"
         android:text="Manipal Technologies Limited"
-        android:textSize="21sp"
+        android:textSize="8sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/imageViewLeft"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@id/imageViewLeft"
-        app:layout_constraintTop_toTopOf="@id/imageViewLeft"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintHorizontal_bias="0.55"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+        app:layout_constraintVertical_bias="0.034" />
+
 
     <TextView
         android:id="@+id/textViewSubtitle"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:gravity="center"
-        android:text="Unit 4, Press Corner, Manipal - 576 104"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@id/imageViewLeft"
-        app:layout_constraintTop_toTopOf="@+id/guidelineTop" />
+        android:layout_marginTop="15dp"
+        android:gravity="start"
+        android:text="@string/unit_4_press_corner_manipal_576_104"
+        android:textSize="5sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/detailsLayout"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+        app:layout_constraintVertical_bias="0.333" />
 
     <LinearLayout
         android:id="@+id/detailsLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="164dp"
+        android:layout_height="105dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
-        android:paddingTop="16dp"
+        android:paddingTop="3dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSignature"
-        app:layout_constraintVertical_bias="0.328">
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintHorizontal_bias="0.144"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@+id/textViewSubtitle"
+        app:layout_constraintVertical_bias="0.25">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,14 +117,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Visitor ID: " />
+                android:padding="3dp"
+                android:text="Visitor ID: "
+                android:textSize="5sp" />
 
-            <EditText
-                android:id="@+id/editTextVisitorID"
+            <TextView
+                android:id="@+id/visitorIdLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Enter Visitor ID"
+                android:padding="3dp"
+                android:text="Enter Visitor ID"
+                android:textSize="5sp"
                 tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
 
@@ -119,14 +142,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Visitor Name: " />
+                android:padding="3dp"
+                android:text="Visitor Name: "
+                android:textSize="5sp" />
 
-            <EditText
-                android:id="@+id/editTextVisitorName"
+            <TextView
+                android:id="@+id/visitorNameLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Enter Visitor Name"
+                android:padding="3dp"
+                android:text="@string/enter_visitor_name"
+                android:textSize="5sp"
                 tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
 
@@ -140,14 +167,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Company Name: " />
+                android:padding="3dp"
+                android:text="Company Name: "
+                android:textSize="5sp" />
 
-            <EditText
-                android:id="@+id/editTextLocationName"
+            <TextView
+                android:id="@+id/visitorCompanyLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Enter Company Name" />
+                android:padding="3dp"
+                android:text="Company Name: "
+                android:textSize="5sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -160,15 +191,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Place: " />
+                android:padding="3dp"
+                android:text="Place: "
+                android:textSize="5sp" />
 
-            <EditText
-                android:id="@+id/editTextPlace"
+            <TextView
+                android:id="@+id/visitorPlaceLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Enter Place"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:padding="3dp"
+                android:text="Place: "
+                android:textSize="5sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -181,15 +215,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Contact No: " />
+                android:padding="3dp"
+                android:text="Contact No: "
+                android:textSize="5sp" />
 
-            <EditText
-                android:id="@+id/editTextContactNo"
+            <TextView
+                android:id="@+id/visitorContactNumLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Enter Contact No"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:padding="3dp"
+                android:text="Contact No: "
+                android:textSize="5sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -202,15 +239,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Visiting Staff: " />
+                android:padding="3dp"
+                android:text="Visiting Staff: "
+                android:textSize="5sp" />
 
-            <EditText
-                android:id="@+id/editTextVisitingStaff"
+            <TextView
+                android:id="@+id/visitingStaffLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Enter Visiting Staff"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:padding="3dp"
+                android:text="Visiting Staff: "
+                android:textSize="5sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -223,15 +263,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Date and Time: " />
+                android:padding="3dp"
+                android:text="Date and Time: "
+                android:textSize="5sp" />
 
-            <EditText
-                android:id="@+id/editTextDateTime"
+            <TextView
+                android:id="@+id/entryDateTimeLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Enter Date and Time"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:padding="3dp"
+                android:text="entry time: "
+                android:textSize="5sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -240,55 +283,51 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textViewOutTime"
+                android:id="@+id/exit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Out Time: " />
+                android:padding="3dp"
+                android:text="Out Time: "
+                android:textSize="5sp" />
 
-            <EditText
-                android:id="@+id/editTextOutTime"
+            <TextView
+                android:id="@+id/exitDateTimeLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Enter Out Time"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:padding="3dp"
+                android:text="exit Time "
+                android:textSize="5sp" />
         </LinearLayout>
-
-
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/TextSignature"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:paddingTop="8dp"
+        android:text="Visiting Staff Signature:"
+        android:textSize="5sp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toEndOf="@+id/detailsLayout"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewRight"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/imageViewRight"
-        android:layout_width="88dp"
-        android:layout_height="76dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="104dp"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="50dp"
         android:src="@drawable/visitor_img"
-        app:layout_constraintBottom_toTopOf="@+id/detailsLayout"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintHorizontal_bias="0.057"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-        app:layout_constraintTop_toTopOf="@+id/guidelineTop"
-        app:layout_constraintVertical_bias="0.185" />
-
-    <TextView
-        android:id="@+id/textViewSignature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:paddingTop="16dp"
-        android:text="Visiting Staff Signature:"
         app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintHorizontal_bias="0.935"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSubtitle"
-        app:layout_constraintVertical_bias="0.162" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/detailsLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

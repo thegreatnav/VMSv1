@@ -35,5 +35,7 @@
     <string name="id_proof_number">ID Proof Number</string>
     <string name="home">Home</string>
     <string name="reset_password">Reset Password</string>
+    <string name="enter_visitor_name">Enter Visitor Name</string>
+    <string name="unit_4_press_corner_manipal_576_104">Unit 4, Press Corner, Manipal - 576 104</string>
     <string-array name="com_google_android_gms_fonts_certs" />
 </resources>

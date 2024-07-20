@@ -22,6 +22,7 @@ import com.example.vmsv1.dataitems.VisitingArea;
 import com.example.vmsv1.dataitems.VisitorSearchResult;
 import com.example.vmsv1.dataitems.VisitorType;
 import com.example.vmsv1.db.DatabaseHelperSQL;
+import com.example.vmsv1.ui.SharedViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +37,7 @@ public class VisitorEntry extends AppCompatActivity {
 
     private EditText editTextMobileNumber;
     private EditText editTextVisitorName;
-    private EditText editTextSecurityPersonnel;
-    private EditText editTextSecurityId;
+
     private EditText editTextPlace;
     private EditText editTextDesignation;
     private EditText editTextCompanyName;
@@ -58,12 +58,14 @@ public class VisitorEntry extends AppCompatActivity {
     protected String sbuId;
 
     private VisitorSearchResult visitor;
-    private EditText editTextRefMail;
     private EditText editTextAsset1;
     private EditText editTextAsset2;
     private EditText editTextAsset3;
     private EditText editTextAsset4;
     private EditText editTextAsset5;
+
+    private EditText editTextSecurityPersonnel;
+    private EditText editTextSecurityId;
 
     private TextView textViewInfo;
     private SharedViewModel sharedViewModel;
@@ -108,6 +110,13 @@ public class VisitorEntry extends AppCompatActivity {
             if (validateInputs()) {
                 saveData();
                 Intent intentPhoto = new Intent(VisitorEntry.this, PhotoCapture.class);
+                String mobileNum = editTextMobileNumber.getText().toString();
+                Log.d("Before intent mobileNo",""+mobileNum);
+                Log.d("gateid",""+defaultGateId);
+                Log.d("userId",""+userId);
+                intentPhoto.putExtra("VisitorEntry.MobileNumber",mobileNum);
+                intentPhoto.putExtra("VisitorEntry.gateId",defaultGateId);
+                intentPhoto.putExtra("VisitorEntry.userId",userId);
                 startActivity(intentPhoto);
             }
         });
@@ -131,11 +140,15 @@ public class VisitorEntry extends AppCompatActivity {
                 List<VisitorSearchResult> visitorDetails = dbsql.getVisitorSearchByMobile(mobileNo, Integer.parseInt(gateId), Integer.parseInt(userId));
                 // Process the visitor details as needed
                 if (visitorDetails.isEmpty()) {
+
                     Toast.makeText(VisitorEntry.this, "No visitor found", Toast.LENGTH_SHORT).show();
                 } else {
                     // Do something with visitorDetails
                     // For example, display the details
                     visitor = visitorDetails.get(0);
+                    Log.d("visitor",""+visitor.getUniqueId());
+                    Log.d("visitor",""+visitor.getMobileNo());
+                    Log.d("visitor company1",""+visitor.getVisitorCompany());
                     prefillFields(visitor);
                 }
             }
@@ -144,6 +157,9 @@ public class VisitorEntry extends AppCompatActivity {
         openCameraButton.setOnClickListener(v -> {
             Intent intentPhoto = new Intent(VisitorEntry.this, PhotoCapture.class);
             String mobileNum = editTextMobileNumber.getText().toString();
+            Log.d("Before intent mobileNo",""+mobileNum);
+            Log.d("gateid",""+defaultGateId);
+            Log.d("userId",""+userId);
             intentPhoto.putExtra("VisitorEntry.MobileNumber",mobileNum);
             intentPhoto.putExtra("VisitorEntry.gateId",defaultGateId);
             intentPhoto.putExtra("VisitorEntry.userId",userId);
@@ -180,9 +196,9 @@ public class VisitorEntry extends AppCompatActivity {
                     // Update UI with the fetched data
                     if (items != null && !items.isEmpty()) {
                         populateSpinner(spinner, (ArrayList<T>) items);
-                        Toast.makeText(VisitorEntry.this, "Data fetched successfully", Toast.LENGTH_SHORT).show();
+                        Log.d("Spinner Data","Fetched successfully");
                     } else {
-                        Toast.makeText(VisitorEntry.this, "No data found", Toast.LENGTH_SHORT).show();
+                        Log.d("Spinner Data","Could not fetch");
                     }
                 });
 
@@ -208,7 +224,7 @@ public class VisitorEntry extends AppCompatActivity {
         editTextMobileNumber = findViewById(R.id.editTextMobileNumber);
         editTextVisitorName = findViewById(R.id.editTextVisitorName);
         editTextPlace = findViewById(R.id.editTextPlace);
-        editTextCompanyName = findViewById(R.id.editTextLocationName);
+        editTextCompanyName = findViewById(R.id.editTextCompanyName);
         editTextDesignation = findViewById(R.id.editTextDesignation);
         editTextVisitingStaff = findViewById(R.id.editTextVisitingStaff);
         editTextApproverName = findViewById(R.id.editTextApproverName);
@@ -222,8 +238,15 @@ public class VisitorEntry extends AppCompatActivity {
         spinnerIDProof = findViewById(R.id.spinnerIdProof);
         spinnerVisitingArea = findViewById(R.id.spinnerVisitingArea);
         spinnerVisitorType = findViewById(R.id.spinnerVisitorType);
-        //editTextPurpose = findViewById(R.id.editTextPurpose);
+        editTextPurpose = findViewById(R.id.editTextPurpose);
         buttonSearch = findViewById(R.id.buttonSearch);
+        editTextAsset1 = findViewById(R.id.editTextAsset1);
+        editTextAsset2 = findViewById(R.id.editTextAsset2);
+        editTextAsset3 = findViewById(R.id.editTextAsset3);
+        editTextAsset4 = findViewById(R.id.editTextAsset4);
+        editTextAsset5 = findViewById(R.id.editTextAsset5);
+        editTextSecurityPersonnel = findViewById(R.id.editTextSecurityPersonnel);
+        editTextSecurityId = findViewById(R.id.editTextSecurityId);
     }
 
     protected static boolean isNumeric(String str) {
@@ -243,9 +266,9 @@ public class VisitorEntry extends AppCompatActivity {
         EditText[] fields = {
                 editTextVisitorName, editTextPlace,
                 editTextCompanyName, editTextDesignation, editTextVisitingStaff,
-                editTextApproverName, editTextReferenceMail
+                editTextApproverName, editTextReferenceMail,editTextSecurityPersonnel,editTextSecurityId
         };
-        if ( !isNumeric(editTextMobileNumber.getText().toString()) || editTextMobileNumber.getText().toString()  .length() != 10) {
+        if ( !isNumeric(editTextMobileNumber.getText().toString()) || editTextMobileNumber.getText().toString().length() != 10) {
             editTextMobileNumber.setError("Please enter a valid mobile number"+editTextMobileNumber.getText());
             return false;
         }
@@ -301,23 +324,29 @@ public class VisitorEntry extends AppCompatActivity {
         editTextPlace.setText(v.getLocationName());
         Log.d("location",""+editTextPlace.getText());
         editTextCompanyName.setText(v.getCompName()); //null
-        //Log.d("Comp name",""+editTextCompanyName.getText());
+        Log.d("Comp name",""+editTextCompanyName.getText());
         editTextDesignation.setText(v.getVisitorDesignation());
         Log.d("Designation",""+editTextDesignation.getText());
         editTextPurpose.setText(v.getPurpose()); //null
-        Log.d("Purpose",""+editTextCompanyName.getText());
+        Log.d("Purpose",""+editTextPurpose.getText());
         editTextVisitingStaff.setText(v.getVisitingFaculty());
         Log.d("visiting staff",""+editTextVisitingStaff.getText());
         editTextApproverName.setText(v.getApproverName());
         Log.d("approver name",""+editTextApproverName.getText());
-        editTextRefMail.setText(v.getRefMail());
-        Log.d("Ref mail",""+editTextRefMail.getText());
+        Log.d("ref mail from v: ",""+v.getRefMail());
+        editTextReferenceMail.setText(v.getRefMail());
+        Log.d("Ref mail",""+editTextReferenceMail.getText());
         editTextAsset1.setText(v.getAsset1());
         Log.d("asset 1",""+editTextAsset1.getText());
         editTextAsset2.setText(v.getAsset2());
         editTextAsset3.setText(v.getAsset3());
         editTextAsset4.setText(v.getAsset4());
         editTextAsset5.setText(v.getAsset5());
+
+        Log.d("security name",""+v.getSecurityName());
+        editTextSecurityPersonnel.setText(v.getSecurityName());
+        Log.d("security id",""+v.getSecurityId());
+        editTextSecurityId.setText(Integer.toString(v.getSecurityId()));
 
         setSpinnerValue(spinnerIDProof, visitor.getIdProofTypeName());
         setSpinnerValue(spinnerVisitorType, visitor.getVisitorTypeName());

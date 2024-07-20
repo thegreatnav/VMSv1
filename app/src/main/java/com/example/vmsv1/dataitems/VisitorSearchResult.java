@@ -68,8 +68,9 @@ public class VisitorSearchResult {
         this.uniqueId = uniqueId;
     }
 
-    public int getVisitorId() {
-        return visitorId;
+    public String getVisitorId() {
+        return String.valueOf(visitorId);
+
     }
 
     public void setVisitorId(int visitorId) {
