@@ -50,7 +50,6 @@ public class VisitingArea {
     public void setUpdatedDate(String updatedDate) { this.updatedDate = updatedDate; }
 
     public String getVisitingAreaName()  {
-        Log.d("areaName",""+areaName);
         return areaName;}
 }
 

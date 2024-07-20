@@ -1,9 +1,7 @@
 package com.example.vmsv1.dataitems;
 
-import java.sql.Date;
-
 public class VisitorSearchResult {
-    // Define all fields corresponding to the columns in the SELECT statement
+
     private int uniqueId;
     private int visitorId;
     private String compId;
