@@ -30,7 +30,6 @@ import java.util.List;
 
 public class LoginPage extends AppCompatActivity {
 
-    //FirebaseFirestore db;
     DatabaseHelperSQL dbsql;
     String userId,defaultGateId,sbuId;
 
@@ -43,9 +42,6 @@ public class LoginPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
 
-        //FirebaseApp.initializeApp(this);
-        //db = FirebaseFirestore.getInstance();
-
         login_btn = findViewById(R.id.login);
         password =findViewById(R.id.ps);
         username =findViewById(R.id.un);
@@ -53,58 +49,8 @@ public class LoginPage extends AppCompatActivity {
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                String us =username.getText().toString().trim();
-                String p =password.getText().toString().trim();
-
-                login_validation(us, p, new DataRetrievedCallback(){
-                    @Override
-                    public void onGridViewDataRetrieved(ArrayList<Item> itemList) {
-
-                    }
-
-                    @Override
-                    public void onRecyclerViewDataRetrieved(List<DataModel> dataList) {
-
-                    }
-
-                    @Override
-                    public void onCompanyNameCallback(String companyName) {
-
-                    }
-                    public void onBlacklistDeletedCallback(boolean isSuccess)
-                    {
-
-                    }
-
-                    @Override
-                    public void onVisitorDetailsRetrieved(FirebaseFunctionCalls.Visitor visitorTypeName) {
-
-                    }
-
-                    @Override
-                    public void onLoginCallback(boolean isSuccess, String message, String userId,String defaultGateId,String sbuId) {
-                        runOnUiThread(() -> Toast.makeText(LoginPage.this, message, Toast.LENGTH_SHORT).show());
-                        if (isSuccess) {
-                            Intent i = new Intent(LoginPage.this, MainActivity.class);
-                            /*Log.d("Act","userid="+userId);
-                            Log.d("Act","sbuid="+sbuId);
-                            Log.d("Act","defaultid="+defaultGateId);
-                            i.putExtra("userId",userId);
-                            i.putExtra("sbuId",sbuId);
-                            i.putExtra("defaultGateId",defaultGateId);
-                            startActivity(i);
-                            finish();
-
-                        }
-                    }
-                });
-                */
-
                 String us = username.getText().toString().trim();
                 String p = password.getText().toString().trim();
-
-
 
                 if (us.isEmpty() || p.isEmpty()) {
                     Toast.makeText(LoginPage.this, "Username and password are required", Toast.LENGTH_SHORT).show();
@@ -138,43 +84,4 @@ public class LoginPage extends AppCompatActivity {
             }
         });
     }
-
-    /*private void login_validation(String username, String password, DataRetrievedCallback callback) {
-        if (password.isEmpty() || username.isEmpty()) {
-            callback.onLoginCallback(false, "Username or password cannot be empty","","","");
-            return;
-        }
-
-        db.collection("User_Master")
-                .whereEqualTo("UserName", username)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot querySnapshot = task.getResult();
-                            if (!querySnapshot.isEmpty()) {
-                                DocumentSnapshot document = querySnapshot.getDocuments().get(0);
-                                String storedPassword = document.getString("Password");
-                                userId=String.valueOf(document.get("UserId"));
-                                //Log.d("Act","Userid="+userId);
-                                defaultGateId=String.valueOf(document.get("DefaultGateId"));
-                                //Log.d("Act","defaulgateid="+defaultGateId);
-                                sbuId=String.valueOf(document.get("SBUId"));
-                                //Log.d("Act","Sbuid="+sbuId);
-                                if (password.equals(storedPassword)) {
-                                    callback.onLoginCallback(true, "Login successful",userId,defaultGateId,sbuId);
-                                } else {
-                                    callback.onLoginCallback(false, "Invalid password","","","");
-                                }
-                            } else {
-                                callback.onLoginCallback(false, "User does not exist","","","");
-                            }
-                        } else {
-                            callback.onLoginCallback(false, "Error getting user data","","","");
-                        }
-                    }
-                });
-    }*/
-
 }
