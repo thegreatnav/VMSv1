@@ -36,9 +36,9 @@ public class UserMaster extends AppCompatActivity {
     DatabaseHelperSQL db;
     private List<DataModel> dataList;
     String userId, defaultGateId, sbuId;
-    Button addNewLocation_button,save_button;
+    Button addNewUser_button,save_button;
     private View inputContainer;
-    TextView locationId_textview,locationName_textview,status_textview;
+    TextView loginType_textview,userName_textview,password_textview,fullName_textview,sbuId_textview,defaultGateId_textview,status_textview;
     private Handler handler;
 
     @Override
@@ -66,15 +66,65 @@ public class UserMaster extends AppCompatActivity {
         recyclerView = findViewById(R.id.UserRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        addNewLocation_button=findViewById(R.id.lmbutton);
+        addNewUser_button=findViewById(R.id.userbutton);
         inputContainer=findViewById(R.id.inputContainer);
         save_button=findViewById(R.id.buttonSave);
-        locationId_textview=findViewById(R.id.editTextLocationId);
-        locationName_textview=findViewById(R.id.editTextLocationName);
+        loginType_textview=findViewById(R.id.editTextLoginType);
+        userName_textview=findViewById(R.id.editTextUserName);
+        password_textview=findViewById(R.id.editTextPassword);
+        fullName_textview=findViewById(R.id.editTextFullName);
+        sbuId_textview=findViewById(R.id.editTextSBUId);
+        defaultGateId_textview=findViewById(R.id.editTextDefaultGateId);
         status_textview=findViewById(R.id.editTextStatus);
 
-        // Example data for dynamic table
         List<String> headers = Arrays.asList("User Id", "Username", "Full Name","Login Method","SBU","Status","Reset");
+        fetchUsers(headers);
+
+        addNewUser_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(inputContainer.getVisibility()==View.GONE)
+                    inputContainer.setVisibility(View.VISIBLE);
+                else
+                    inputContainer.setVisibility(View.GONE);
+            }
+        });
+
+        save_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    String loginType_value = loginType_textview.getText().toString();
+                    String userName_value = userName_textview.getText().toString();
+                    String password_value=password_textview.getText().toString();
+                    String fullName_value=fullName_textview.getText().toString();
+                    String sbuId_value=sbuId_textview.getText().toString();
+                    String defaultGateId_value=defaultGateId_textview.getText().toString();
+                    String status_value = status_textview.getText().toString();
+
+                    List<String> message=db.addNewUser(loginType_value,userName_value,password_value,fullName_value,Integer.parseInt(sbuId_value),Integer.parseInt(defaultGateId_value),status_value,Integer.parseInt(userId));
+                    Log.d("Tag1","message="+String.valueOf(message.get(0)));
+                    handler.postDelayed(() -> {
+                        fetchUsers(headers);
+                        loginType_textview.setText("");
+                        userName_textview.setText("");
+                        password_textview.setText("");
+                        fullName_textview.setText("");
+                        sbuId_textview.setText("");
+                        defaultGateId_textview.setText("");
+                        status_textview.setText("");
+                        inputContainer.setVisibility(View.GONE);
+                    }, 1000);
+                }
+                catch (Exception e) {
+                    Log.e("BlackList", "Error adding data to the list", e);
+                }
+            }
+        });
+
+    }
+    public void fetchUsers(List<String> headers)
+    {
         List<UserProfile> userList = new ArrayList<>();
         dataList = new ArrayList<>();
         try {

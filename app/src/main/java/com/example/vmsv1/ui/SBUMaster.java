@@ -76,13 +76,51 @@ public class SBUMaster extends AppCompatActivity {
         save_button=findViewById(R.id.buttonSave);
         SbuId_textview=findViewById(R.id.editTextSBUId);
         SbuName_textview=findViewById(R.id.editTextSbuName);
-        company_textview=findViewById(R.id.editTextCompanyName);
+        company_textview=findViewById(R.id.editTextCompanyId);
         location_textview=findViewById(R.id.editTextLocationId);
         status_textview=findViewById(R.id.editTextStatus);
 
         // Example data for dynamic table
         List<String> headers = Arrays.asList("SBU Id", "SBU Name","Company","Location","Status");
         fetchSBU(headers);
+
+        addNewSbu_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(inputContainer.getVisibility()==View.GONE)
+                    inputContainer.setVisibility(View.VISIBLE);
+                else
+                    inputContainer.setVisibility(View.GONE);
+            }
+        });
+
+        save_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    String SbuId_value = SbuId_textview.getText().toString();
+                    String SbuName_value = SbuName_textview.getText().toString();
+                    String companyId_value=company_textview.getText().toString();
+                    String locationId_value=location_textview.getText().toString();
+                    String status_value = status_textview.getText().toString();
+
+                    List<String> message=db.addNewSBU(companyId_value,SbuName_value, Integer.parseInt(locationId_value),status_value,Integer.parseInt(userId));
+                    Log.d("Tag1","message="+String.valueOf(message.get(0)));
+                    handler.postDelayed(() -> {
+                        fetchSBU(headers);
+                        SbuId_textview.setText("");
+                        SbuName_textview.setText("");
+                        company_textview.setText("");
+                        location_textview.setText("");
+                        status_textview.setText("");
+                        inputContainer.setVisibility(View.GONE);
+                    }, 1000);
+                }
+                catch (Exception e) {
+                    Log.e("BlackList", "Error adding data to the list", e);
+                }
+            }
+        });
     }
 
     public void fetchSBU(List<String> headers)

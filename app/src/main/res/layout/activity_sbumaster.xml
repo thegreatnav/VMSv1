@@ -16,7 +16,7 @@
         android:orientation="vertical"
         android:paddingStart="20dp"
         android:paddingTop="16dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/guideline_end"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/sbumasterbutton"
@@ -24,12 +24,12 @@
         tools:layout_conversion_absoluteWidth="0dp">
 
         <EditText
-            android:id="@+id/editTextCompanyName"
+            android:id="@+id/editTextCompanyId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/edit_text_buttons"
-            android:hint="Company Name"
+            android:hint="Company ID"
             android:textSize="20dp"
             app:layout_constraintStart_toStartOf="@+id/editTextSBUId"
             app:layout_constraintTop_toBottomOf="@+id/editTextSbuName"
@@ -72,7 +72,7 @@
             android:hint="Location ID"
             android:textSize="20dp"
             app:layout_constraintStart_toStartOf="@+id/editTextSBUId"
-            app:layout_constraintTop_toBottomOf="@+id/editTextCompanyName"
+            app:layout_constraintTop_toBottomOf="@+id/editTextCompanyId"
             tools:ignore="TouchTargetSizeCheck"
             tools:layout_conversion_absoluteHeight="0dp"
             tools:layout_conversion_absoluteWidth="0dp" />
