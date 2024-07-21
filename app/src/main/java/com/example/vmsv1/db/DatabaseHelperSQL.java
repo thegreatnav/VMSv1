@@ -2054,10 +2054,6 @@ public class DatabaseHelperSQL {
     }
 
 
-
-
-
-
     public List<ItemDomain> getRecyclerView(String companyID, String sbuID){
 
 
