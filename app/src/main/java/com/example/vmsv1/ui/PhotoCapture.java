@@ -142,7 +142,6 @@ public class PhotoCapture extends AppCompatActivity {
             return;
         }
 
-        // Save image to device's photo directory with custom filename
         File photoDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         if (!photoDirectory.exists()) {
             if (!photoDirectory.mkdirs()) {
@@ -162,15 +161,14 @@ public class PhotoCapture extends AppCompatActivity {
             long uniqueId = getUniqueId();
             Log.d("unique id",""+uniqueId);
 
-            DatabaseHelperSQL.updateVisitorPhoto(uniqueId,savedImageFilepath,savedImageFilename);
-            Toast.makeText(this, "Image saved: " + savedImageFilepath, Toast.LENGTH_SHORT).show();
+            List<String> message=dbsql.updateVisitorPhoto(uniqueId,savedImageFilepath,savedImageFilename);
+            Toast.makeText(this, "Image saved with unique Id " + String.valueOf(message.get(0)) + " to "+ savedImageFilepath, Toast.LENGTH_SHORT).show();
 
             Intent intentNDA = new Intent(PhotoCapture.this,DisplayNDA.class);
             startActivity(intentNDA);
 
         } catch (IOException e) {
             Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show();
-            //send msg to manage visitor that image has not been saved
             e.printStackTrace();
         } catch (SQLException e) {
             throw new RuntimeException(e);

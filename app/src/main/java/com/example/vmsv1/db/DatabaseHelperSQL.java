@@ -2103,55 +2103,59 @@ public class DatabaseHelperSQL {
         return visitors;
     }
 
-    public static List<String> updateVisitorPhoto(long uniqueId, String photoFilePath, String photoFileName) throws SQLException {
+    public List<String> updateVisitorPhoto(long uniqueId, String photoFilePath, String photoFileName) throws SQLException {
         Log.d("Inside updateVisitorPhoto", "uniqueId: " + uniqueId);
         Log.d("PhotoFileName", photoFileName);
         Log.d("PhotoFilePath", photoFilePath);
 
-        List<String> result = new ArrayList<>();
         Connection conn = getConnection();
-        CallableStatement cstmt = null;
+        String spString="{call [dbo].[SP_updateVisitorPhoto](?, ?, ?)}";
+        List<String> result = new ArrayList<>();
+        result.add(0,"Id : null");
+        result.add(1,"SaveStatus: N");
+        result.add(2,"ErrorMessage: null");
+
+        CallableStatement sp = null;
+        ResultSet rs = null;
 
         try {
             // Prepare and execute the stored procedure call
-            cstmt = conn.prepareCall("{call [dbo].[SP_updateVisitorPhoto](?, ?, ?, ?, ?, ?)}");
+            sp = conn.prepareCall(spString);
 
             // Set the parameters
-            cstmt.setLong(1, uniqueId);
-            cstmt.setString(2, photoFilePath);
-            cstmt.setString(3, photoFileName);
-
-            // Output parameters
-            cstmt.registerOutParameter(4, Types.NUMERIC); // ID
-            cstmt.registerOutParameter(5, Types.VARCHAR); // SaveStatus
-            cstmt.registerOutParameter(6, Types.VARCHAR); // ErrorMessage
+            sp.setLong(1, uniqueId);
+            sp.setString(2, photoFilePath);
+            sp.setString(3, photoFileName);
 
             // Execute the stored procedure
-            cstmt.execute();
+            rs=sp.executeQuery();
 
-            // Retrieve output parameters
-            result.add(String.valueOf(cstmt.getLong(4))); // ID
-            result.add(cstmt.getString(5)); // SaveStatus
-            result.add(cstmt.getString(6)); // ErrorMessage
+            if (rs.next()) {
+                long id = rs.getLong("ID");
+                String savestatus=rs.getString("SaveStatus");
+                String message = rs.getString("ErrorMessage");
 
-            // Log results
-            Log.d("StoredProcedureResult", "ID: " + result.get(0));
-            Log.d("StoredProcedureResult", "SaveStatus: " + result.get(1));
-            Log.d("StoredProcedureResult", "ErrorMessage: " + result.get(2));
-
-
+                // Update the result list
+                result.set(0, "Id: " + id);
+                result.set(1, "Save status: "+savestatus);
+                result.set(2, "Message: " + message);
+            }
         } catch (SQLException e) {
-            Log.e("SQLException", e.getMessage());
-            throw new RuntimeException(e);
+            Log.e("DatabaseHelperSQL", "Error in updateVisitorPhoto: " + e.getMessage());
         } finally {
-            // Close CallableStatement
-            if (cstmt != null) {
-                cstmt.close();
+            // Clean up resources
+            try {
+                if (rs != null) rs.close();
+                if (sp != null) sp.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                Log.e("DatabaseHelperSQL", "Error closing resources: " + e.getMessage());
             }
         }
 
         return result;
     }
+
 }
 
 
