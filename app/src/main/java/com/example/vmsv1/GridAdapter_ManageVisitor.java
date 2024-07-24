@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.vmsv1.dataitems.VisitorSearchResult;
@@ -60,10 +61,22 @@ public class GridAdapter_ManageVisitor extends BaseAdapter {
         TextView entry_time=convertView.findViewById(R.id.entry_date_textview);
         TextView exit_time=convertView.findViewById(R.id.exit_date_textview);
 
-        Button camera_status_button=convertView.findViewById(R.id.camera_status_button);
-        Button nda_status_button=convertView.findViewById(R.id.nda_status_button);
-        Button print_label_button=convertView.findViewById(R.id.print_label_button);
-        Button exit_status_button=convertView.findViewById(R.id.exit_status_button);
+        ImageButton camera_status_button=convertView.findViewById(R.id.camera_status_button);
+        ImageButton nda_status_button=convertView.findViewById(R.id.nda_status_button);
+        ImageButton print_label_button=convertView.findViewById(R.id.print_label_button);
+        ImageButton exit_status_button=convertView.findViewById(R.id.exit_status_button);
+        ImageButton downarrow_button = convertView.findViewById(R.id.downarrow_Button);
+
+        TextView designation = convertView.findViewById(R.id.designation_text);
+        TextView place = convertView.findViewById(R.id.place_text);
+        TextView company = convertView.findViewById(R.id.company_text);
+        TextView entry_date = convertView.findViewById(R.id.entry_date_text);
+        TextView exit_date = convertView.findViewById(R.id.exit_date_text);
+        TextView visiting_staff_text = convertView.findViewById(R.id.visiting_staff_text);
+        TextView approver_name_text = convertView.findViewById(R.id.approver_name_text);
+        TextView purpose_text = convertView.findViewById(R.id.purpose_text);
+        TextView visiting_area_text = convertView.findViewById(R.id.visiting_area_text);
+        TextView visitor_name_text = convertView.findViewById(R.id.visitor_name_text);
 
         // Assuming 'itemList' contains the list of visitor IDs, and each item has a getVisitorId() method
         VisitorSearchResult currentItem = itemList.get(position);
@@ -84,36 +97,72 @@ public class GridAdapter_ManageVisitor extends BaseAdapter {
 
         if(currentItem.getPhotoFilePath()==null)
         {
-            camera_status_button.setBackgroundColor(rgb(255, 87, 51));
+            camera_status_button.setImageResource(R.drawable.camera_red);
         }
         else
         {
-            camera_status_button.setBackgroundColor(rgb(34, 139, 34));
+            camera_status_button.setImageResource(R.drawable.camera_green);
         }
         if(!String.valueOf(currentItem.getNdaStatus()).equals("Y"))
         {
-            nda_status_button.setBackgroundColor(rgb(255, 87, 51));
+            nda_status_button.setImageResource(R.drawable.lock_red);
         }
         else
         {
-            nda_status_button.setBackgroundColor(rgb(34, 139, 34));
+            nda_status_button.setImageResource(R.drawable.lock_green);
         }
         if(currentItem.getMobileNo()!=null && currentItem.getNdaStatus()!=null && currentItem.getPhotoFilePath()!=null)
         {
-            print_label_button.setBackgroundColor(rgb(34, 139, 34));
+            print_label_button.setImageResource(R.drawable.print_green);
         }
         else {
-            print_label_button.setBackgroundColor(rgb(255, 87, 51));
+            print_label_button.setImageResource(R.drawable.print_red);
         }
 
         if(currentItem.getExitDatetime()==null) {
-            exit_status_button.setBackgroundColor(rgb(255, 87, 51));
+            exit_status_button.setImageResource(R.drawable.exit_red);
         }
         else
         {
-            exit_status_button.setBackgroundColor(rgb(34, 139, 34));
+            exit_status_button.setImageResource(R.drawable.exit_green);
         }
 
+        downarrow_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int visibility = visitor_name.getVisibility() == View.GONE ? View.VISIBLE : View.GONE;
+
+                camera_status_button.setVisibility(visibility);
+                nda_status_button.setVisibility(visibility);
+                print_label_button.setVisibility(visibility);
+                exit_status_button.setVisibility(visibility);
+                visitor_name_text.setVisibility(visibility);
+                visitor_name.setVisibility(visibility);
+                visitor_designation.setVisibility(visibility);
+                designation.setVisibility(visibility);
+                place.setVisibility(visibility);
+                company.setVisibility(visibility);
+                entry_date.setVisibility(visibility);
+                exit_date.setVisibility(visibility);
+                visiting_staff_text.setVisibility(visibility);
+                approver_name_text.setVisibility(visibility);
+                purpose_text.setVisibility(visibility);
+                visiting_area_text.setVisibility(visibility);
+                visitor_designation.setVisibility(visibility);
+                visitor_place.setVisibility(visibility);
+                visitor_company.setVisibility(visibility);
+                entry_time.setVisibility(visibility);
+                exit_time.setVisibility(visibility);
+                visiting_staff.setVisibility(visibility);
+                approver_name.setVisibility(visibility);
+                purpose.setVisibility(visibility);
+                visiting_area.setVisibility(visibility);
+
+                // Assuming 'itemList' contains the list of visitor IDs, and each item has a getVisitorId() method
+
+
+            }
+        });
         return convertView;
     }
 }
