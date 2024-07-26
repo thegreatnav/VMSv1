@@ -135,8 +135,6 @@ public class VisitorEntry extends AppCompatActivity {
                     return;
                 }
 
-
-
                 List<VisitorSearchResult> visitorDetails = dbsql.getVisitorSearchByMobile(mobileNo, Integer.parseInt(gateId), Integer.parseInt(userId));
                 // Process the visitor details as needed
                 if (visitorDetails.isEmpty()) {

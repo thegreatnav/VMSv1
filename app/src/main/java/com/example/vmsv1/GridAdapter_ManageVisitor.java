@@ -159,8 +159,6 @@ public class GridAdapter_ManageVisitor extends BaseAdapter {
                 visiting_area.setVisibility(visibility);
 
                 // Assuming 'itemList' contains the list of visitor IDs, and each item has a getVisitorId() method
-
-
             }
         });
         return convertView;
