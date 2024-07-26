@@ -541,7 +541,8 @@ public class DatabaseHelperSQL {
         return result;
     }
 
-    public List<String> addNewLocation(String locationName, String status, int userId) {
+    public List<String> addNewLocation(String locationName, String status, int userId)
+    {
         Connection conn = getConnection();
         String spString = "{call dbo.SP_addNewLocation(?, ?, ?, ?, ?)}";
 
@@ -581,7 +582,6 @@ public class DatabaseHelperSQL {
                 Log.e("DatabaseHelperSQL", "Error closing resources: " + e.getMessage());
             }
         }
-
         return result;
     }
 

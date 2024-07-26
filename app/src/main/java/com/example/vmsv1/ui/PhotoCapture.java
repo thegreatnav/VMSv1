@@ -203,6 +203,7 @@ public class PhotoCapture extends AppCompatActivity {
                 Toast.makeText(this, "Image saved with unique Id " + String.valueOf(update.get(0)) + " to " + savedImageFilepath, Toast.LENGTH_SHORT).show();
 
                 Intent intentBack = new Intent(PhotoCapture.this, VisitorEntry.class);
+
                 startActivity(intentBack);
             } else
             {

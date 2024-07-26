@@ -144,8 +144,7 @@ public class VisitorEntry extends AppCompatActivity {
                 List<String> update = null;
                 try {
                     update = dbsql.updateVisitorIDProofDetails(unique_id,ID, String.valueOf(IDProofNum),null,null);
-                    //Toast.makeText(this, "Update saved with unique Id " + String.valueOf(update.get(0)) + " to database", Toast.LENGTH_SHORT).show();
-                    Log.d("Update Status","Update saved with unique Id " + String.valueOf(update.get(0)) + " to database");
+                    Log.d("Update Status","Update saved with unique Id " + update.get(0) + " to database");
                 } catch (SQLException e) {
                     Log.d("Update Status","Update not saved to database");
                     throw new RuntimeException(e);
@@ -153,9 +152,9 @@ public class VisitorEntry extends AppCompatActivity {
                 saveData();
                 Intent intentPhoto = new Intent(VisitorEntry.this, PhotoCapture.class);
                 //String mobileNum = editTextMobileNumber.getText().toString();
-                Log.d("Before intent mobileNo",""+mobileNum);
-                Log.d("gateid",""+defaultGateId);
-                Log.d("userId",""+userId);
+                Log.d("Before intent mobileNo", mobileNum);
+                Log.d("gateid", defaultGateId);
+                Log.d("userId", userId);
                 intentPhoto.putExtra("VisitorEntry.MobileNumber",mobileNum);
                 intentPhoto.putExtra("VisitorEntry.gateId",defaultGateId);
                 intentPhoto.putExtra("VisitorEntry.userId",userId);
@@ -169,9 +168,9 @@ public class VisitorEntry extends AppCompatActivity {
                 String mobileNo = editTextMobileNumber.getText().toString();
                 String gateId = defaultGateId;
 
-                Log.d("mobile num visitor entry ",""+mobileNo);
-                Log.d("gate id visitor entry",""+gateId); //is null
-                Log.d("User id visitor entry",""+userId);
+                Log.d("mobile num visitor entry ", mobileNo);
+                Log.d("gate id visitor entry", gateId); //is null
+                Log.d("User id visitor entry", userId);
 
                 if (mobileNo.isEmpty() || !isNumeric(mobileNo) || mobileNo.length() != 10) {
                     Toast.makeText(VisitorEntry.this, "Enter valid number", Toast.LENGTH_SHORT).show();
