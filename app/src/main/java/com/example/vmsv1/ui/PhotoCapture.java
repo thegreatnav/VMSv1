@@ -26,6 +26,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.vmsv1.DisplayNDA;
 import com.example.vmsv1.PrintLabel;
+import com.example.vmsv1.Visitor;
 import com.example.vmsv1.ui.SharedViewModel;
 import com.example.vmsv1.R;
 import com.example.vmsv1.db.DatabaseHelperSQL;
@@ -54,6 +55,11 @@ public class PhotoCapture extends AppCompatActivity {
     private String savedImageFilename;
     private String savedImageFilepath;
 
+    private int idprooftype;
+    private String numidproof;
+    private String fileidproof;
+    private String idproofname;
+
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<Intent> takePictureLauncher;
 
@@ -72,7 +78,35 @@ public class PhotoCapture extends AppCompatActivity {
         editTextFilename = findViewById(R.id.editTextFileName);
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("VisitorEntry.userId")) {
+        if (intent != null && intent.hasExtra("IDProofType")) {
+            mobileNum = intent.getStringExtra("VisitorEntry.MobileNumber");
+            Log.d("On create mobileNum",""+mobileNum);
+            gateId = Integer.parseInt(intent.getStringExtra("VisitorEntry.gateId"));
+            Log.d("gateId",""+gateId);
+            userId = Integer.parseInt(intent.getStringExtra("VisitorEntry.userId"));
+            Log.d("userId",""+userId);
+            idprooftype = Integer.parseInt(intent.getStringExtra("IDProofType"));
+            Log.d("idprooftype",""+idprooftype);
+            numidproof = intent.getStringExtra("IDProofNum");
+            Log.d("numidproof",""+numidproof);
+           /* fileidproof = intent.getStringExtra("FileIDProof");
+            Log.d("fileidproof",""+fileidproof);
+            if (numidproof == null)
+            {
+                idproofname = fileidproof;
+                Log.d("idproofname","null case");
+                Log.d("idproofname",idproofname);
+
+            }
+            else {
+                idproofname = numidproof;
+                Log.d("idproofname","non null case");
+            }*/
+
+            //Log.d("On create mobileNum",""+mobileNum);
+        }
+        else
+        if (intent != null && !intent.hasExtra("IDProofType")) {
             mobileNum = intent.getStringExtra("VisitorEntry.MobileNumber");
             gateId = Integer.parseInt(intent.getStringExtra("VisitorEntry.gateId"));
             userId = Integer.parseInt(intent.getStringExtra("VisitorEntry.userId"));
@@ -82,6 +116,8 @@ public class PhotoCapture extends AppCompatActivity {
             Log.d("userId",""+userId);
 
         }
+
+
         // Register activity result launchers
         requestPermissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
@@ -159,13 +195,25 @@ public class PhotoCapture extends AppCompatActivity {
 
             // After saving the image, you can perform further actions if needed
             long uniqueId = getUniqueId();
-            Log.d("unique id",""+uniqueId);
+            Log.d("unique id", "" + uniqueId);
 
-            List<String> message=dbsql.updateVisitorPhoto(uniqueId,savedImageFilepath,savedImageFilename);
-            Toast.makeText(this, "Image saved with unique Id " + String.valueOf(message.get(0)) + " to "+ savedImageFilepath, Toast.LENGTH_SHORT).show();
+            if (idprooftype> 0 ){
 
-            Intent intentNDA = new Intent(PhotoCapture.this,DisplayNDA.class);
-            startActivity(intentNDA);
+                List<String> update = dbsql.updateVisitorIDProofDetails(uniqueId,idprooftype,numidproof,savedImageFilepath,savedImageFilename);
+                Toast.makeText(this, "Image saved with unique Id " + String.valueOf(update.get(0)) + " to " + savedImageFilepath, Toast.LENGTH_SHORT).show();
+
+                Intent intentBack = new Intent(PhotoCapture.this, VisitorEntry.class);
+                startActivity(intentBack);
+            } else
+            {
+                List<String> message = dbsql.updateVisitorPhoto(uniqueId, savedImageFilepath, savedImageFilename);
+                Toast.makeText(this, "Image saved with unique Id " + String.valueOf(message.get(0)) + " to " + savedImageFilepath, Toast.LENGTH_SHORT).show();
+
+                //check if nda status is 'Y'
+                Intent intentNDA = new Intent(PhotoCapture.this,DisplayNDA.class);
+                startActivity(intentNDA);
+            }
+
 
         } catch (IOException e) {
             Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show();

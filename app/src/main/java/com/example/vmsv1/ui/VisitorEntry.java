@@ -24,7 +24,9 @@ import com.example.vmsv1.dataitems.VisitorType;
 import com.example.vmsv1.db.DatabaseHelperSQL;
 import com.example.vmsv1.ui.SharedViewModel;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -69,6 +71,9 @@ public class VisitorEntry extends AppCompatActivity {
 
     private TextView textViewInfo;
     private SharedViewModel sharedViewModel;
+
+    private String selectedNumberIdProof;
+    private String selectedFileIdProof;
 
 
     @Override
@@ -120,6 +125,7 @@ public class VisitorEntry extends AppCompatActivity {
                 startActivity(intentPhoto);
             }
         });
+
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,23 +161,89 @@ public class VisitorEntry extends AppCompatActivity {
         openCameraButton.setOnClickListener(v -> {
             Intent intentPhoto = new Intent(VisitorEntry.this, PhotoCapture.class);
             String mobileNum = editTextMobileNumber.getText().toString();
+            List<String>IDProofType;
+            int ID =0;
+            int IDProofNum=0;
+            if(!editTextIDProofNumber.getText().toString().equals(""))
+            {
+                IDProofNum = Integer.parseInt(editTextIDProofNumber.getText().toString());
+            }
+            else{
+                editTextIDProofNumber.setError("Please enter ID Proof Number");
+            }
+            if(selectedNumberIdProof!= null)
+            {
+                try {
+                    IDProofType = dbsql.getIDProofTypeIdByName(selectedNumberIdProof);
+                    Log.d("ID proof type id ",""+ IDProofType.get(0));
+                    ID = Integer.parseInt(IDProofType.get(0));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            else if(selectedFileIdProof != null){
+                try {
+                    IDProofType = dbsql.getIDProofTypeIdByName(selectedFileIdProof);
+                    Log.d("ID proof file type id ",""+ IDProofType.get(0));
+                    ID = Integer.parseInt(IDProofType.get(0));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            else
+                ID =0;
+
             Log.d("Before intent mobileNo",""+mobileNum);
             Log.d("gateid",""+defaultGateId);
             Log.d("userId",""+userId);
             intentPhoto.putExtra("VisitorEntry.MobileNumber",mobileNum);
             intentPhoto.putExtra("VisitorEntry.gateId",defaultGateId);
             intentPhoto.putExtra("VisitorEntry.userId",userId);
+            intentPhoto.putExtra("IDProofType",String.valueOf(ID));
+            Log.d("ID",""+ID);
+            if(IDProofNum!=0)
+            {
+                intentPhoto.putExtra("IDProofNum",IDProofNum);
+            }
+            if(selectedNumberIdProof!=null)
+            {
+                intentPhoto.putExtra("NumberIDProof",selectedNumberIdProof);
+            }
+            Log.d("NUMBER ID PROOF",""+selectedNumberIdProof);
+            if(selectedFileIdProof!=null)
+            {
+                intentPhoto.putExtra("FileIDProof",selectedFileIdProof);
+            }
+            Log.d("FILE ID PROOF",""+selectedFileIdProof);
             startActivity(intentPhoto);
         });
+
 
         // Set listener for ID proof spinner
         spinnerIDProof.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
-                boolean isNumberIDProof = selectedItem.equals("Aadhaar No.") || selectedItem.equals("Employee ID");
-                boolean isFileIDProof = selectedItem.equals("Passport") || selectedItem.equals("Driving License")
+
+                // Save the selected item name to the appropriate variable
+                boolean b = selectedItem.equals("Passport") || selectedItem.equals("Driving License")
                         || selectedItem.equals("Voter ID") || selectedItem.equals("PAN Card");
+                if (selectedItem.equals("Aadhaar No.") || selectedItem.equals("Employee ID")) {
+                    selectedNumberIdProof = selectedItem;
+                    selectedFileIdProof = null; // Reset file ID proof selection
+                    Log.d("SelectedNumberIdProof", "Selected Number ID Proof: " + selectedNumberIdProof);
+                } else if (b) {
+                    selectedFileIdProof = selectedItem;
+                    selectedNumberIdProof = null; // Reset number ID proof selection
+                    Log.d("SelectedFileIdProof", "Selected File ID Proof: " + selectedFileIdProof);
+                } else {
+                    selectedNumberIdProof = null;
+                    selectedFileIdProof = null;
+                }
+
+                boolean isNumberIDProof = selectedItem.equals("Aadhaar No.") || selectedItem.equals("Employee ID");
+                boolean isFileIDProof = b;
+
                 editTextIDProofNumber.setVisibility(isNumberIDProof ? View.VISIBLE : View.GONE);
                 textViewInfo.setVisibility(isNumberIDProof ? View.VISIBLE : View.GONE);
                 openCameraButton.setVisibility(isFileIDProof ? View.VISIBLE : View.GONE);
@@ -179,10 +251,9 @@ public class VisitorEntry extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Log.d("VisitorEntry", "Nothing selected");
+                // Handle case when nothing is selected if needed
             }
         });
-
     }
 
     private <T> void retrieveDropDownList(@NonNull Future<List<T>> future, Spinner spinner) {
@@ -319,6 +390,10 @@ public class VisitorEntry extends AppCompatActivity {
     {
         editTextVisitorName.setText(v.getVisitorName());
         Log.d("visitor name",""+editTextVisitorName.getText().toString());
+        if(v.getIdProofNo()!=null)
+        {
+            editTextIDProofNumber.setText(v.getIdProofNo());
+        }
         editTextPlace.setText(v.getLocationName());
         Log.d("location",""+editTextPlace.getText());
         editTextCompanyName.setText(v.getCompName()); //null

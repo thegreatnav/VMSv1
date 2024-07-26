@@ -2152,6 +2152,111 @@ public class DatabaseHelperSQL {
         return result;
     }
 
+    public List<String> updateVisitorIDProofDetails(long uniqueId, int idProofType, String idProofNumber, String idProofFilePath, String idProofFileName) throws SQLException {
+        Log.d("Inside updateVisitorIDProofDetails", "uniqueId: " + uniqueId);
+        Log.d("IDProofType", String.valueOf(idProofType));
+        Log.d("IDProofNumber", "idproofnumber="+idProofNumber);
+        Log.d("IDProofFilePath", idProofFilePath);
+        Log.d("IDProofFileName", idProofFileName);
+
+        Connection conn = getConnection();
+        String spString = "{call [dbo].[SP_updateVisitorIDProofDetails](?, ?, ?, ?, ?)}";
+        List<String> result = new ArrayList<>();
+        result.add("Id : null");
+        result.add("SaveStatus: N");
+        result.add("ErrorMessage: null");
+
+        CallableStatement sp = null;
+        ResultSet rs = null;
+
+        try {
+            // Prepare and execute the stored procedure call
+            sp = conn.prepareCall(spString);
+
+            // Set the parameters
+            sp.setLong(1, uniqueId);
+            sp.setInt(2, idProofType);
+            sp.setString(3, idProofNumber);
+            sp.setString(4, idProofFilePath);
+            sp.setString(5, idProofFileName);
+
+            // Execute the stored procedure
+            rs = sp.executeQuery();
+
+            if (rs.next()) {
+                long id = rs.getLong("ID");
+                String saveStatus = rs.getString("SaveStatus");
+                String message = rs.getString("ErrorMessage");
+
+                // Update the result list
+                result.set(0, "Id: " + id);
+                result.set(1, "Save status: " + saveStatus);
+                result.set(2, "Message: " + message);
+            }
+        } catch (SQLException e) {
+            Log.e("DatabaseHelperSQL", "Error in updateVisitorIDProofDetails: " + e.getMessage());
+        } finally {
+            // Clean up resources
+            try {
+                if (rs != null) rs.close();
+                if (sp != null) sp.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                Log.e("DatabaseHelperSQL", "Error closing resources: " + e.getMessage());
+            }
+        }
+        return result;
+    }
+
+    public List<String> getIDProofTypeIdByName(String idProofTypeName) throws SQLException {
+        Log.d("Inside getIDProofTypeIdByName", "IDProofTypeName: " + idProofTypeName);
+
+        Connection conn = getConnection();
+        String spString = "{call [dbo].[SP_getIDProofTypeIdByName](?)}";
+        List<String> result = new ArrayList<>();
+        result.add("0");
+        result.add("SaveStatus: N");
+        result.add("ErrorMessage: null");
+
+        CallableStatement sp = null;
+        ResultSet rs = null;
+
+        try {
+            // Prepare and execute the stored procedure call
+            sp = conn.prepareCall(spString);
+
+            // Set the parameter
+            sp.setString(1, idProofTypeName);
+
+            // Execute the stored procedure
+            rs = sp.executeQuery();
+
+            if (rs.next()) {
+                int idProofTypeId = rs.getInt("IDProofTypeId");
+                String saveStatus = rs.getString("SaveStatus");
+                String message = rs.getString("ErrorMessage");
+
+                // Update the result list
+                result.set(0, String.valueOf(idProofTypeId));
+                result.set(1, "SaveStatus: " + saveStatus);
+                result.set(2, "ErrorMessage: " + message);
+            }
+        } catch (SQLException e) {
+            Log.e("DatabaseHelperSQL", "Error in getIDProofTypeIdByName: " + e.getMessage());
+        } finally {
+            // Clean up resources
+            try {
+                if (rs != null) rs.close();
+                if (sp != null) sp.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                Log.e("DatabaseHelperSQL", "Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return result;
+    }
+
 }
 
 
