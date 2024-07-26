@@ -74,6 +74,8 @@ public class VisitorEntry extends AppCompatActivity {
 
     private String selectedNumberIdProof;
     private String selectedFileIdProof;
+    int ID =0;
+    int IDProofNum=0;
 
 
     @Override
@@ -113,9 +115,44 @@ public class VisitorEntry extends AppCompatActivity {
         // Set listeners for buttons
         buttonSave.setOnClickListener(v -> {
             if (validateInputs()) {
+                if(selectedNumberIdProof!= null)
+                {
+                    try {
+                        List<String>IDProofType = dbsql.getIDProofTypeIdByName(selectedNumberIdProof);
+                        Log.d("ID proof type id ",""+ IDProofType.get(0));
+                        ID = Integer.parseInt(IDProofType.get(0));
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else if(selectedFileIdProof != null){
+                    try {
+                        List<String> IDProofType = dbsql.getIDProofTypeIdByName(selectedFileIdProof);
+                        Log.d("ID proof file type id ",""+ IDProofType.get(0));
+                        ID = Integer.parseInt(IDProofType.get(0));
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else
+                    ID =6;
+
+                String mobileNum = editTextMobileNumber.getText().toString();
+                long unique_id=getUniqueId(mobileNum);
+
+                IDProofNum = Integer.parseInt(editTextIDProofNumber.getText().toString());
+                List<String> update = null;
+                try {
+                    update = dbsql.updateVisitorIDProofDetails(unique_id,ID, String.valueOf(IDProofNum),null,null);
+                    //Toast.makeText(this, "Update saved with unique Id " + String.valueOf(update.get(0)) + " to database", Toast.LENGTH_SHORT).show();
+                    Log.d("Update Status","Update saved with unique Id " + String.valueOf(update.get(0)) + " to database");
+                } catch (SQLException e) {
+                    Log.d("Update Status","Update not saved to database");
+                    throw new RuntimeException(e);
+                }
                 saveData();
                 Intent intentPhoto = new Intent(VisitorEntry.this, PhotoCapture.class);
-                String mobileNum = editTextMobileNumber.getText().toString();
+                //String mobileNum = editTextMobileNumber.getText().toString();
                 Log.d("Before intent mobileNo",""+mobileNum);
                 Log.d("gateid",""+defaultGateId);
                 Log.d("userId",""+userId);
@@ -162,8 +199,6 @@ public class VisitorEntry extends AppCompatActivity {
             Intent intentPhoto = new Intent(VisitorEntry.this, PhotoCapture.class);
             String mobileNum = editTextMobileNumber.getText().toString();
             List<String>IDProofType;
-            int ID =0;
-            int IDProofNum=0;
             if(!editTextIDProofNumber.getText().toString().equals(""))
             {
                 IDProofNum = Integer.parseInt(editTextIDProofNumber.getText().toString());
@@ -191,7 +226,7 @@ public class VisitorEntry extends AppCompatActivity {
                 }
             }
             else
-                ID =0;
+                ID =6;
 
             Log.d("Before intent mobileNo",""+mobileNum);
             Log.d("gateid",""+defaultGateId);
@@ -426,6 +461,17 @@ public class VisitorEntry extends AppCompatActivity {
         setSpinnerValue(spinnerVisitingArea, visitor.getVisitingAreaName());
 
         Toast.makeText(this, "Visitor details loaded", Toast.LENGTH_SHORT).show();
+    }
+    private long getUniqueId(String mobileNum)
+    {
+        Log.d("gateId",""+defaultGateId);
+        Log.d("userId",""+userId);
+        List<VisitorSearchResult> visitorSearchResults = dbsql.getVisitorSearchByMobile(mobileNum,Integer.parseInt(defaultGateId),Integer.parseInt(userId));
+        Log.d("visitor details list",""+visitorSearchResults);
+        VisitorSearchResult visitor_details = visitorSearchResults.get(0);
+        Log.d("visitor details",""+visitor_details);
+
+        return visitor_details.getUniqueId();
 
     }
 }

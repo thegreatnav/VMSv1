@@ -2156,8 +2156,8 @@ public class DatabaseHelperSQL {
         Log.d("Inside updateVisitorIDProofDetails", "uniqueId: " + uniqueId);
         Log.d("IDProofType", String.valueOf(idProofType));
         Log.d("IDProofNumber", "idproofnumber="+idProofNumber);
-        Log.d("IDProofFilePath", idProofFilePath);
-        Log.d("IDProofFileName", idProofFileName);
+        //Log.d("IDProofFilePath", idProofFilePath);
+        //Log.d("IDProofFileName", idProofFileName);
 
         Connection conn = getConnection();
         String spString = "{call [dbo].[SP_updateVisitorIDProofDetails](?, ?, ?, ?, ?)}";

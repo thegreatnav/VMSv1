@@ -197,7 +197,7 @@ public class PhotoCapture extends AppCompatActivity {
             long uniqueId = getUniqueId();
             Log.d("unique id", "" + uniqueId);
 
-            if (idprooftype> 0 ){
+            if (idprooftype!=1 && idprooftype!=6 ){
 
                 List<String> update = dbsql.updateVisitorIDProofDetails(uniqueId,idprooftype,numidproof,savedImageFilepath,savedImageFilename);
                 Toast.makeText(this, "Image saved with unique Id " + String.valueOf(update.get(0)) + " to " + savedImageFilepath, Toast.LENGTH_SHORT).show();
