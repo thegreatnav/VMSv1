@@ -7,42 +7,63 @@
     android:layout_height="match_parent"
     tools:context=".ui.DailyVisitor">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="16dp" />
+
+    <!-- Vertical Guidelines -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
     <TextView
         android:id="@+id/textViewMainHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:text="Daily Visitor"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.093"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        app:layout_constraintVertical_bias="0" />
 
-    <TextView
-        android:id="@+id/search_visitor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search Visitor"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.055"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.026" />
+
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="415dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintVertical_bias="0.091">
 
         <include
@@ -51,284 +72,311 @@
     </LinearLayout>
 
     <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="match_parent"
+        android:id="@+id/scroll_view"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingStart="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_visitor"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="SpeakableTextPresentCheck">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/sub_constraint_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <TextView
+                android:id="@+id/textViewSubHeading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:text="Search Visitor"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/sub_constraint_layout" />
 
 
             <TextView
                 android:id="@+id/fromdate"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="16sp"
                 android:text="Visit Date From "
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.011"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewSubHeading" />
 
             <TextView
                 android:id="@+id/fromdate_picker"
-                android:layout_width="170dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/edit_text_buttons"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.933"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="60dp"
+                android:background="@drawable/textbox_background"
+                android:padding="8dp"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@+id/fromdate"/>
 
 
             <ImageButton
                 android:id="@+id/fromdate_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="1dp"
-                android:layout_marginEnd="1dp"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="@+id/fromdate_picker"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/fromdate_picker"
                 app:layout_constraintTop_toTopOf="@+id/fromdate_picker"
-                app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+                app:srcCompat="@android:drawable/ic_menu_my_calendar"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
 
             <Button
                 android:id="@+id/search"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="166dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
                 android:text="Search"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/visitingstaff_edit_text" />
 
-            <EditText
-                android:id="@+id/place_edit_text"
-                android:layout_width="170dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="120dp"
-                android:background="@drawable/edit_text_buttons"
-                android:inputType="text"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.933"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+
 
             <TextView
                 android:id="@+id/visitorname"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="75dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="16sp"
                 android:text="Visitor Name"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.011"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/fromdate_picker"/>
 
             <EditText
                 android:id="@+id/visitorname_edit_text"
-                android:layout_width="170dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="52dp"
-                android:background="@drawable/edit_text_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/textbox_background"
                 android:inputType="text"
-                android:textSize="15sp"
+                android:padding="8dp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.933"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/fromdate_picker"
+                app:layout_constraintTop_toBottomOf="@+id/visitorname"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/place"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="135dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="16sp"
                 android:text="Visitor Place"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.011"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/visitorname_edit_text" />
+
+            <EditText
+                android:id="@+id/place_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/textbox_background"
+                android:inputType="text"
+                android:padding="8dp"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/place"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/visitortype_edit_text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="185dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="16sp"
                 android:text="Visitor Type"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.011"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/place_edit_text"/>
 
             <Spinner
                 android:id="@+id/visitortype_spinner"
-                android:layout_width="170dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="175dp"
-                android:background="@drawable/edit_text_buttons"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.933"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/textbox_background"
+                android:padding="8dp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/visitortype_edit_text"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/exitstatus"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="240dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="16sp"
                 android:text="Exit Status"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.011"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/visitortype_spinner"/>
 
             <Spinner
                 android:id="@+id/exitstatus_spinner"
-                android:layout_width="170dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="230dp"
-                android:background="@drawable/edit_text_buttons"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.933"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/textbox_background"
+                android:padding="8dp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/exitstatus"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/todate"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="295dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="16sp"
                 android:text="Visit Date To"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.011"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/exitstatus_spinner"/>
 
             <TextView
                 android:id="@+id/todate_picker"
-                android:layout_width="170dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="285dp"
-                android:background="@drawable/edit_text_buttons"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.933"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/mobilenum"
-                android:layout_width="101dp"
-                android:layout_height="18dp"
-                android:layout_marginTop="355dp"
-                android:text="Mobile Number"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.011"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/visitorcompany"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="410dp"
-                android:text="Visitor Company"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.011"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/visitorcompany_edit_text"
-                android:layout_width="170dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="395dp"
-                android:background="@drawable/edit_text_buttons"
-                android:ems="10"
-                android:inputType="text"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.933"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/visitingstaff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="470dp"
-                android:text="Visiting Staff/Person"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.011"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/visitingstaff_edit_text"
-                android:layout_width="170dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="455dp"
-                android:background="@drawable/edit_text_buttons"
-                android:ems="10"
-                android:inputType="text"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.933"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="60dp"
+                android:background="@drawable/textbox_background"
+                android:padding="8dp"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@+id/todate"/>
 
             <ImageButton
                 android:id="@+id/todate_button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="2dp"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="@+id/todate_picker"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/todate_picker"
                 app:layout_constraintTop_toTopOf="@+id/todate_picker"
                 app:srcCompat="@android:drawable/ic_menu_my_calendar"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
+            <TextView
+                android:id="@+id/mobilenum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="16sp"
+                android:text="Mobile Number"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/todate_picker"/>
+
             <EditText
                 android:id="@+id/mobilenum_edit_text"
-                android:layout_width="170dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="340dp"
-                android:background="@drawable/edit_text_buttons"
-                android:ems="10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/textbox_background"
                 android:inputType="number"
-                android:minHeight="48dp"
-                android:textSize="15sp"
+                android:padding="8dp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.933"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/mobilenum"
+                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/visitorcompany"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="16sp"
+                android:text="Visitor Company"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mobilenum_edit_text"/>
+
+            <EditText
+                android:id="@+id/visitorcompany_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/textbox_background"
+                android:inputType="number"
+                android:padding="8dp"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/visitorcompany"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/visitingstaff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="16sp"
+                android:text="Visiting Staff/Person"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/visitorcompany_edit_text"/>
+
+            <EditText
+                android:id="@+id/visitingstaff_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/textbox_background"
+                android:inputType="number"
+                android:padding="8dp"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/visitingstaff"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <GridView
                 android:id="@+id/gridview1"
@@ -358,8 +406,9 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:visibility="visible"
-                app:layout_constraintStart_toStartOf="@+id/search"
-                app:layout_constraintTop_toBottomOf="@+id/search" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/search"
+                app:layout_constraintStart_toStartOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

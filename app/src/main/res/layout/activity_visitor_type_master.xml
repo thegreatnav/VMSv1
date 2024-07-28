@@ -7,97 +7,131 @@
     android:layout_height="match_parent"
     tools:context=".ui.LocationMaster">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="16dp" />
+
+    <!-- Vertical Guidelines -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/inputContainer"
-        android:layout_width="373dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingStart="20dp"
         android:paddingTop="16dp"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/visitortypebutton"
-        tools:layout_conversion_absoluteHeight="0dp"
-        tools:layout_conversion_absoluteWidth="0dp">
+        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+        app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@+id/visitortypebutton">
 
         <Button
             android:id="@+id/buttonSave"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:paddingTop="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
             android:text="@string/save"
-            app:layout_constraintStart_toStartOf="@+id/editTextStatus"
-            app:layout_constraintTop_toBottomOf="@+id/editTextStatus"
-            tools:layout_conversion_absoluteHeight="0dp"
-            tools:layout_conversion_absoluteWidth="0dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextStatus" />
 
         <EditText
             android:id="@+id/editTextStatus"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/edit_text_buttons"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/textbox_background"
+            android:fontFamily="@font/acme"
             android:hint="Status"
             android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="@+id/editTextVisitorTypeName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextVisitorTypeName"
-            tools:ignore="TouchTargetSizeCheck"
-            tools:layout_conversion_absoluteHeight="0dp"
-            tools:layout_conversion_absoluteWidth="0dp" />
+            tools:ignore="TouchTargetSizeCheck" />
 
         <EditText
             android:id="@+id/editTextVisitorTypeName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
-            android:background="@drawable/edit_text_buttons"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/textbox_background"
+            android:fontFamily="@font/acme"
             android:hint="VisitorType Name"
             android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="TouchTargetSizeCheck"
-            tools:layout_conversion_absoluteHeight="0dp"
-            tools:layout_conversion_absoluteWidth="0dp" />
+            tools:ignore="TouchTargetSizeCheck" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/visitortypebutton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
         android:text="Add New Visitor Type"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/visitortypetext"
-        app:layout_constraintVertical_bias="0.012" />
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+        app:layout_constraintTop_toBottomOf="@+id/visitortypetext"/>
 
     <TextView
         android:id="@+id/visitortypetext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Visitor Type Master"
-        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Visitor Type Master"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.446"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.063" />
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        app:layout_constraintTop_toTopOf="@+id/guideline_top"
+        app:layout_constraintBottom_toTopOf="@+id/visitortypebutton"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/VisitorTypeRecycler"
-        android:layout_width="379dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
         app:layout_constraintTop_toBottomOf="@+id/inputContainer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

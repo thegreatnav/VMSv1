@@ -76,8 +76,8 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:text="Entry Date"
                 android:textSize="16sp"
+                android:text="Entry Date"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewSubHeading" />
 
@@ -243,11 +243,24 @@
 
             <GridView
                 android:id="@+id/gridview1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="450dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
+                android:fastScrollAlwaysVisible="false"
+                android:fastScrollEnabled="false"
+                android:scrollbarSize="25dp"
+                android:scrollbars="none"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/search_button" />
+                app:layout_constraintTop_toBottomOf="@+id/search_button"
+                app:layout_constraintVertical_bias="1.0">
+
+            </GridView>
+
 
             <ProgressBar
                 android:id="@+id/progressBar"

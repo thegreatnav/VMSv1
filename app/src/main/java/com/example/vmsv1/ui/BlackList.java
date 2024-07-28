@@ -12,8 +12,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vmsv1.DataModel;
@@ -38,9 +41,11 @@ public class BlackList extends AppCompatActivity {
     private List<DataModel> dataList;
     private EditText editTextMobile, editTextName, editTextReason;
     private View inputContainer;
-    String userId="5";
+    private TextView sbu;
+    String userId="5",sbuName;
     String sbuId="4";
     String defaultGateId="11";
+    Spinner gate_spinner;
     private Handler handler;
 
     @Override
@@ -61,6 +66,9 @@ public class BlackList extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_black_list);
 
+        gate_spinner = findViewById(R.id.gate_spinner);
+        sbu = findViewById(R.id.unit_name);
+
         Button buttonAddVisitor = findViewById(R.id.buttonAddVisitor);
         Button buttonSave = findViewById(R.id.buttonSave);
 
@@ -71,6 +79,21 @@ public class BlackList extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerViewHorizontal);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        List<List<String>> gatespinnerArray;
+        gatespinnerArray = db.getGateListSpinner("MTL", sbuId);
+
+        ArrayList<String> gatespinnerarray2 = new ArrayList<>();
+        for (List<String> gate : gatespinnerArray) {
+            gatespinnerarray2.add(gate.get(2));
+        }
+        ArrayAdapter<String> gateadapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, gatespinnerarray2);
+        gateadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gate_spinner.setAdapter(gateadapter);
+
+        sbuName = gatespinnerArray.get(0).get(0);
+        sbu.setText(sbuName);
 
         List<String> headers = Arrays.asList("Mobile Number", "Name", "Reason","Date Added","Action");
         fetchBlacklist(headers);
@@ -91,7 +114,7 @@ public class BlackList extends AppCompatActivity {
                 String mobile = editTextMobile.getText().toString();
                 String name = editTextName.getText().toString();
                 String reason = editTextReason.getText().toString();
-                String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+                //String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
 
                 List<String> message=db.addNewBlackListVisitor(mobile,name,reason,Integer.parseInt(userId));
                 Toast.makeText(getApplicationContext(),String.valueOf(message.get(1)),Toast.LENGTH_SHORT).show();
