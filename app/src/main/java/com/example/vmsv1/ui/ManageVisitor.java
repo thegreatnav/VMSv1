@@ -212,7 +212,7 @@ public class ManageVisitor extends AppCompatActivity {
                         mainHandler.post(() -> {
                             progressBar.setVisibility(View.GONE);
                             gv.setVisibility(View.VISIBLE);
-                            GridAdapter_ManageVisitor gridadapter = new GridAdapter_ManageVisitor(getApplicationContext(), finalVisitorList);
+                            GridAdapter_ManageVisitor gridadapter = new GridAdapter_ManageVisitor(getApplicationContext(), finalVisitorList,userId);
                             gv.setAdapter(gridadapter);
                         });
                     });
@@ -233,7 +233,7 @@ public class ManageVisitor extends AppCompatActivity {
                         mainHandler.post(() -> {
                             progressBar.setVisibility(View.GONE);
                             gv.setVisibility(View.VISIBLE);
-                            GridAdapter_ManageVisitor gridadapter = new GridAdapter_ManageVisitor(getApplicationContext(), visitorList);
+                            GridAdapter_ManageVisitor gridadapter = new GridAdapter_ManageVisitor(getApplicationContext(), visitorList,userId);
                             gv.setAdapter(gridadapter);
                         });
                     });
@@ -279,7 +279,7 @@ public class ManageVisitor extends AppCompatActivity {
                         mainHandler.post(() -> {
                             progressBar.setVisibility(View.GONE);
                             gv.setVisibility(View.VISIBLE);
-                            GridAdapter_ManageVisitor gridadapter = new GridAdapter_ManageVisitor(getApplicationContext(), finalVisitorList);
+                            GridAdapter_ManageVisitor gridadapter = new GridAdapter_ManageVisitor(getApplicationContext(), finalVisitorList,userId);
                             gv.setAdapter(gridadapter);
                         });
                     });

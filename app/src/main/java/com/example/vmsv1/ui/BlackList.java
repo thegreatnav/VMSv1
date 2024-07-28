@@ -114,7 +114,7 @@ public class BlackList extends AppCompatActivity {
                 String mobile = editTextMobile.getText().toString();
                 String name = editTextName.getText().toString();
                 String reason = editTextReason.getText().toString();
-                //String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+
 
                 List<String> message=db.addNewBlackListVisitor(mobile,name,reason,Integer.parseInt(userId));
                 Toast.makeText(getApplicationContext(),String.valueOf(message.get(1)),Toast.LENGTH_SHORT).show();

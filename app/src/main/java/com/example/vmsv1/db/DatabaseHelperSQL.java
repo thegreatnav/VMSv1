@@ -87,11 +87,8 @@ public class DatabaseHelperSQL {
     }
 
 
-    public List<String> addNewVisitorExit(
-            int uniqueId,
-            String securityName,
-            String securityId,
-            int userId) {
+    public List<String> addNewVisitorExit(int uniqueId, String securityName, String securityId, int userId)
+    {
         Connection conn = null;
         CallableStatement sp = null;
         List<String> result = new ArrayList<>();

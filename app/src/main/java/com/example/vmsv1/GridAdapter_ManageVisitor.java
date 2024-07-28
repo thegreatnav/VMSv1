@@ -1,27 +1,25 @@
 package com.example.vmsv1;
 
-import static android.graphics.Color.rgb;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.example.vmsv1.dataitems.VisitorSearchResult;
-
+import com.example.vmsv1.db.DatabaseHelperSQL;
 import java.util.List;
 
 public class GridAdapter_ManageVisitor extends BaseAdapter {
-
+    DatabaseHelperSQL db;
+    private String userId;
     private Context context;
     private List<VisitorSearchResult> itemList;
 
-    public GridAdapter_ManageVisitor(Context context, List<VisitorSearchResult> itemList) {
+    public GridAdapter_ManageVisitor(Context context, List<VisitorSearchResult> itemList,String userId) {
+        this.userId=userId;
         this.context = context;
         this.itemList = itemList;
     }
@@ -46,6 +44,7 @@ public class GridAdapter_ManageVisitor extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.gridview_element_managevisitor, parent, false);
         }
+        db=new DatabaseHelperSQL();
         TextView visitor_id= convertView.findViewById(R.id.visitor_id_textview);
         TextView visitor_name=convertView.findViewById(R.id.visitor_name_textview);
         TextView mob_no=convertView.findViewById(R.id.mob_no_textview);
@@ -78,7 +77,6 @@ public class GridAdapter_ManageVisitor extends BaseAdapter {
         TextView visiting_area_text = convertView.findViewById(R.id.visiting_area_text);
         TextView visitor_name_text = convertView.findViewById(R.id.visitor_name_text);
 
-        // Assuming 'itemList' contains the list of visitor IDs, and each item has a getVisitorId() method
         VisitorSearchResult currentItem = itemList.get(position);
         visitor_id.setText(String.valueOf(currentItem.getVisitorId()));
         visitor_name.setText(String.valueOf(currentItem.getVisitorName()));
@@ -115,17 +113,35 @@ public class GridAdapter_ManageVisitor extends BaseAdapter {
         {
             print_label_button.setImageResource(R.drawable.print_green);
         }
-        else {
+        else
+        {
             print_label_button.setImageResource(R.drawable.print_red);
         }
 
-        if(currentItem.getExitDatetime()==null) {
+        if(currentItem.getExitDatetime()==null)
+        {
             exit_status_button.setImageResource(R.drawable.exit_red);
         }
         else
         {
             exit_status_button.setImageResource(R.drawable.exit_green);
         }
+
+        exit_status_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(currentItem.getExitDatetime()==null)
+                {
+                    int visitor_id = currentItem.getUniqueId();
+                    String securityName = currentItem.getSecurityName();
+                    int securityId = currentItem.getSecurityId();
+                    List<String> ans = db.addNewVisitorExit(visitor_id, securityName, String.valueOf(securityId), Integer.parseInt(userId));
+                    Log.d("Tag1", "message=" + (ans.get(0)));
+                    exit_status_button.setImageResource(R.drawable.exit_green);
+                }
+            }
+        });
 
         downarrow_button.setOnClickListener(new View.OnClickListener() {
             @Override
