@@ -22,11 +22,9 @@ import com.example.vmsv1.dataitems.VisitingArea;
 import com.example.vmsv1.dataitems.VisitorSearchResult;
 import com.example.vmsv1.dataitems.VisitorType;
 import com.example.vmsv1.db.DatabaseHelperSQL;
-import com.example.vmsv1.ui.SharedViewModel;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -230,6 +228,7 @@ public class VisitorEntry extends AppCompatActivity {
             Log.d("Before intent mobileNo",""+mobileNum);
             Log.d("gateid",""+defaultGateId);
             Log.d("userId",""+userId);
+            Log.d("ID",""+ID);
             intentPhoto.putExtra("VisitorEntry.MobileNumber",mobileNum);
             intentPhoto.putExtra("VisitorEntry.gateId",defaultGateId);
             intentPhoto.putExtra("VisitorEntry.userId",userId);

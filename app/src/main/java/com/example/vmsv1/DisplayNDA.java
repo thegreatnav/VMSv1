@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.vmsv1.R;
 import com.example.vmsv1.PrintLabel;
+import com.example.vmsv1.ui.home.HomeFragment;
 
 public class DisplayNDA extends AppCompatActivity {
     Button buttonAccept;
@@ -35,8 +36,8 @@ public class DisplayNDA extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(DisplayNDA.this, "NDA declined", Toast.LENGTH_SHORT).show();
-                //Intent intentPrint = new Intent(DisplayNDA.this,PrintLabel.class);
-                //startActivity(intentPrint);
+                Intent intentHome = new Intent(DisplayNDA.this, MainActivity.class);
+                startActivity(intentHome);
             }
         });
     }
