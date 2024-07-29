@@ -53,9 +53,9 @@ public class VisitorEntry extends AppCompatActivity {
     private Button openCameraButton;
     private Button buttonSearch;
 
-    protected String userId;
-    protected String defaultGateId;
-    protected String sbuId;
+    private String userId;
+    private String defaultGateId;
+    private String sbuId;
 
     private VisitorSearchResult visitor;
     private EditText editTextAsset1;
@@ -112,23 +112,31 @@ public class VisitorEntry extends AppCompatActivity {
 
         // Set listeners for buttons
         buttonSave.setOnClickListener(v -> {
-            if (validateInputs()) {
+            if (validateInputs())
+            {
                 if(selectedNumberIdProof!= null)
                 {
-                    try {
+                    try
+                    {
                         List<String>IDProofType = dbsql.getIDProofTypeIdByName(selectedNumberIdProof);
                         Log.d("ID proof type id ",""+ IDProofType.get(0));
                         ID = Integer.parseInt(IDProofType.get(0));
-                    } catch (SQLException e) {
+                    }
+                    catch (SQLException e)
+                    {
                         throw new RuntimeException(e);
                     }
                 }
-                else if(selectedFileIdProof != null){
-                    try {
+                else if(selectedFileIdProof != null)
+                {
+                    try
+                    {
                         List<String> IDProofType = dbsql.getIDProofTypeIdByName(selectedFileIdProof);
                         Log.d("ID proof file type id ",""+ IDProofType.get(0));
                         ID = Integer.parseInt(IDProofType.get(0));
-                    } catch (SQLException e) {
+                    }
+                    catch (SQLException e)
+                    {
                         throw new RuntimeException(e);
                     }
                 }
@@ -143,7 +151,9 @@ public class VisitorEntry extends AppCompatActivity {
                 try {
                     update = dbsql.updateVisitorIDProofDetails(unique_id,ID, String.valueOf(IDProofNum),null,null);
                     Log.d("Update Status","Update saved with unique Id " + update.get(0) + " to database");
-                } catch (SQLException e) {
+                }
+                catch (SQLException e)
+                {
                     Log.d("Update Status","Update not saved to database");
                     throw new RuntimeException(e);
                 }
@@ -153,16 +163,19 @@ public class VisitorEntry extends AppCompatActivity {
                 Log.d("Before intent mobileNo", mobileNum);
                 Log.d("gateid", defaultGateId);
                 Log.d("userId", userId);
+                Log.d("ID", String.valueOf(ID));
                 intentPhoto.putExtra("VisitorEntry.MobileNumber",mobileNum);
                 intentPhoto.putExtra("VisitorEntry.gateId",defaultGateId);
                 intentPhoto.putExtra("VisitorEntry.userId",userId);
+                intentPhoto.putExtra("VisitorEntry.ID",String.valueOf(ID));
                 startActivity(intentPhoto);
             }
         });
 
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 String mobileNo = editTextMobileNumber.getText().toString();
                 String gateId = defaultGateId;
 
@@ -170,19 +183,19 @@ public class VisitorEntry extends AppCompatActivity {
                 Log.d("gate id visitor entry", gateId); //is null
                 Log.d("User id visitor entry", userId);
 
-                if (mobileNo.isEmpty() || !isNumeric(mobileNo) || mobileNo.length() != 10) {
+                if (mobileNo.isEmpty() || !isNumeric(mobileNo) || mobileNo.length() != 10)
+                {
                     Toast.makeText(VisitorEntry.this, "Enter valid number", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 List<VisitorSearchResult> visitorDetails = dbsql.getVisitorSearchByMobile(mobileNo, Integer.parseInt(gateId), Integer.parseInt(userId));
                 // Process the visitor details as needed
-                if (visitorDetails.isEmpty()) {
-
+                if (visitorDetails.isEmpty())
+                {
                     Toast.makeText(VisitorEntry.this, "No visitor found", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Do something with visitorDetails
-                    // For example, display the details
+                } else
+                {
                     visitor = visitorDetails.get(0);
                     Log.d("visitor",""+visitor.getUniqueId());
                     Log.d("visitor",""+visitor.getMobileNo());
@@ -200,7 +213,8 @@ public class VisitorEntry extends AppCompatActivity {
             {
                 IDProofNum = Integer.parseInt(editTextIDProofNumber.getText().toString());
             }
-            else{
+            else
+            {
                 editTextIDProofNumber.setError("Please enter ID Proof Number");
             }
             if(selectedNumberIdProof!= null)
@@ -209,16 +223,22 @@ public class VisitorEntry extends AppCompatActivity {
                     IDProofType = dbsql.getIDProofTypeIdByName(selectedNumberIdProof);
                     Log.d("ID proof type id ",""+ IDProofType.get(0));
                     ID = Integer.parseInt(IDProofType.get(0));
-                } catch (SQLException e) {
+                }
+                catch (SQLException e)
+                {
                     throw new RuntimeException(e);
                 }
             }
-            else if(selectedFileIdProof != null){
-                try {
+            else if(selectedFileIdProof != null)
+            {
+                try
+                {
                     IDProofType = dbsql.getIDProofTypeIdByName(selectedFileIdProof);
                     Log.d("ID proof file type id ",""+ IDProofType.get(0));
                     ID = Integer.parseInt(IDProofType.get(0));
-                } catch (SQLException e) {
+                }
+                catch (SQLException e)
+                {
                     throw new RuntimeException(e);
                 }
             }
@@ -232,11 +252,10 @@ public class VisitorEntry extends AppCompatActivity {
             intentPhoto.putExtra("VisitorEntry.MobileNumber",mobileNum);
             intentPhoto.putExtra("VisitorEntry.gateId",defaultGateId);
             intentPhoto.putExtra("VisitorEntry.userId",userId);
-            intentPhoto.putExtra("IDProofType",String.valueOf(ID));
-            Log.d("ID",""+ID);
+            intentPhoto.putExtra("VisitorEntry.ID",String.valueOf(ID));
             if(IDProofNum!=0)
             {
-                intentPhoto.putExtra("IDProofNum",IDProofNum);
+                intentPhoto.putExtra("IDProofNum",String.valueOf(IDProofNum));
             }
             if(selectedNumberIdProof!=null)
             {

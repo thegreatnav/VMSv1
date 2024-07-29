@@ -103,7 +103,7 @@ public class PhotoCapture extends AppCompatActivity {
             mobileNum = intent.getStringExtra("VisitorEntry.MobileNumber");
             gateId = Integer.parseInt(intent.getStringExtra("VisitorEntry.gateId"));
             userId = Integer.parseInt(intent.getStringExtra("VisitorEntry.userId"));
-            idprooftype = Integer.parseInt(intent.getStringExtra("IDProofType"));
+            idprooftype = Integer.parseInt(intent.getStringExtra("VisitorEntry.ID"));
             numidproof = intent.getStringExtra("IDProofNum");
             Log.d("Intent Data", "mobileNum: " + mobileNum + ", gateId: " + gateId + ", userId: " + userId + ", idprooftype: " + idprooftype + ", numidproof: " + numidproof);
         }
