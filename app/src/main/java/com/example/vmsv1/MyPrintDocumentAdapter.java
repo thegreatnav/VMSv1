@@ -14,20 +14,26 @@ import android.print.pdf.PrintedPdfDocument;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.example.vmsv1.dataitems.VisitorSearchResult;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class MyPrintDocumentAdapter extends PrintDocumentAdapter {
 
+    private VisitorSearchResult v;
     private Context context;
     private PrintedPdfDocument pdfDocument;
     private int pageHeight;
     private int pageWidth;
 
-    public MyPrintDocumentAdapter(Context context) {
+    public MyPrintDocumentAdapter(Context context,VisitorSearchResult v) {
         this.context = context;
+        this.v=v;
     }
 
     @Override
@@ -66,6 +72,25 @@ public class MyPrintDocumentAdapter extends PrintDocumentAdapter {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ConstraintLayout layout = (ConstraintLayout) inflater.inflate(R.layout.activity_print_label, null);
+
+        TextView visitorIdView = layout.findViewById(R.id.visitorIdLabel);
+        TextView visitorNameView = layout.findViewById(R.id.visitorNameLabel);
+        TextView visitorCompanyView = layout.findViewById(R.id.visitorCompanyLabel);
+        TextView visitorPlaceView = layout.findViewById(R.id.visitorPlaceLabel);
+        TextView visitorContactNumView = layout.findViewById(R.id.visitorContactNumLabel);
+        TextView visitingStaffView = layout.findViewById(R.id.visitingStaffLabel);
+        TextView entryDateTimeView = layout.findViewById(R.id.entryDateTimeLabel);
+        TextView exitDateTimeView = layout.findViewById(R.id.exitDateTimeLabel);
+
+        // Populate the data
+        visitorIdView.setText(v.getVisitorId());
+        visitorNameView.setText(v.getVisitorName());
+        visitorCompanyView.setText(v.getVisitorCompany());
+        visitorPlaceView.setText(v.getVisitorPlace());
+        visitorContactNumView.setText(v.getMobileNo());
+        visitingStaffView.setText(v.getVisitingFaculty());
+        entryDateTimeView.setText(v.getEntryDatetime());
+        exitDateTimeView.setText(v.getExitDatetime() != null ? v.getExitDatetime() : "_");
 
         // Adjust layout parameters dynamically
         ViewGroup.LayoutParams params = layout.getLayoutParams();
