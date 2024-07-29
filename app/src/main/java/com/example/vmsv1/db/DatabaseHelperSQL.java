@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -1465,7 +1466,9 @@ public class DatabaseHelperSQL {
     }
 
 
-    public List<VisitorSearchResult> getVisitorSearchByMobile(String mobileNo, int gateId, int userId) {
+    public List<VisitorSearchResult> getVisitorSearchByMobile(String mobileNo, int gateId, int userId)
+    {
+
         List<VisitorSearchResult> results = new ArrayList<>();
         Connection conn = getConnection();
         String SP_String = "{call dbo.SP_getVisitorSearchbyMobile(?, ?, ?)}";
@@ -2224,7 +2227,37 @@ public class DatabaseHelperSQL {
 
         return result;
     }
+    public long getHighestUniqueId()
+    {
+        // If the mobile number does not exist, generate a new unique ID
+        Statement stmt = null;
+        ResultSet rs = null;
+        long newUniqueId = 0;
 
+        try {
+            conn = getConnection();
+            String query = "SELECT ISNULL(MAX(CAST(UniqueId AS BIGINT)), 0) + 1 AS NewUniqueId FROM Visitor_Entry";
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+
+            if (rs.next()) {
+                newUniqueId = rs.getLong("NewUniqueId");
+            }
+        } catch (SQLException e) {
+            Log.e("DatabaseHelperSQL", "Error in getUniqueId: " + e.getMessage());
+        } finally {
+            // Clean up resources
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                Log.e("DatabaseHelperSQL", "Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return newUniqueId;
+    }
 }
 
 

@@ -167,6 +167,7 @@ public class VisitorEntry extends AppCompatActivity {
                 intentPhoto.putExtra("VisitorEntry.MobileNumber",mobileNum);
                 intentPhoto.putExtra("VisitorEntry.gateId",defaultGateId);
                 intentPhoto.putExtra("VisitorEntry.userId",userId);
+                intentPhoto.putExtra("VisitorEntry.sbuId",sbuId);
                 intentPhoto.putExtra("VisitorEntry.ID",String.valueOf(ID));
                 startActivity(intentPhoto);
             }
@@ -252,6 +253,7 @@ public class VisitorEntry extends AppCompatActivity {
             intentPhoto.putExtra("VisitorEntry.MobileNumber",mobileNum);
             intentPhoto.putExtra("VisitorEntry.gateId",defaultGateId);
             intentPhoto.putExtra("VisitorEntry.userId",userId);
+            intentPhoto.putExtra("VisitorEntry.sbuId",sbuId);
             intentPhoto.putExtra("VisitorEntry.ID",String.valueOf(ID));
             if(IDProofNum!=0)
             {

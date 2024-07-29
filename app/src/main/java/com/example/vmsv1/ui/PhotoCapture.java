@@ -36,7 +36,7 @@ import java.util.List;
 public class PhotoCapture extends AppCompatActivity {
 
     private String mobileNum;
-    private int gateId;
+    private int gateId,sbuId;
     private int userId;
     private int idprooftype;
     private String numidproof;
@@ -104,6 +104,7 @@ public class PhotoCapture extends AppCompatActivity {
             gateId = Integer.parseInt(intent.getStringExtra("VisitorEntry.gateId"));
             userId = Integer.parseInt(intent.getStringExtra("VisitorEntry.userId"));
             idprooftype = Integer.parseInt(intent.getStringExtra("VisitorEntry.ID"));
+            sbuId=Integer.parseInt(intent.getStringExtra("VisitorEntry.sbuId"));
             numidproof = intent.getStringExtra("IDProofNum");
             Log.d("Intent Data", "mobileNum: " + mobileNum + ", gateId: " + gateId + ", userId: " + userId + ", idprooftype: " + idprooftype + ", numidproof: " + numidproof);
         }
@@ -160,12 +161,27 @@ public class PhotoCapture extends AppCompatActivity {
 
     private long getUniqueId() {
         List<VisitorSearchResult> visitorSearchResults = dbsql.getVisitorSearchByMobile(mobileNum, gateId, userId);
-        VisitorSearchResult visitorDetails = visitorSearchResults.get(0);
-        return visitorDetails.getUniqueId();
+        Log.d("gateId",""+gateId);
+        Log.d("userId",""+userId);
+        Log.d("visitor details list",""+visitorSearchResults);
+        //VisitorSearchResult visitor_details = visitorSearchResults.get(0);
+        if (!visitorSearchResults.isEmpty())
+        {
+            Log.d("ans", "inside if");
+            VisitorSearchResult visitor_details = visitorSearchResults.get(0);
+            Log.d("visitor details", "" + visitor_details);
+            return visitor_details.getUniqueId();
+        } else {
+            Log.d("ans", "inside else");
+            long ans=dbsql.getHighestUniqueId();
+            Log.d("ans", String.valueOf(ans));
+            return dbsql.getHighestUniqueId();
+        }
     }
 
     private void navigateToVisitorEntry() {
         Intent intentBack = new Intent(PhotoCapture.this, VisitorEntry.class);
+        intentBack.putExtra("sbuId",String.valueOf(sbuId));
         intentBack.putExtra("ImagePath", savedImageFilepath);
         intentBack.putExtra("ImageName", savedImageFilename);
         startActivity(intentBack);
@@ -173,6 +189,7 @@ public class PhotoCapture extends AppCompatActivity {
 
     private void navigateToDisplayNDA() {
         Intent intentNDA = new Intent(PhotoCapture.this, DisplayNDA.class);
+        intentNDA.putExtra("sbuId",String.valueOf(sbuId));
         startActivity(intentNDA);
     }
 }
