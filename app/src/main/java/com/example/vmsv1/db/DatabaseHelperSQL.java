@@ -820,6 +820,42 @@ public class DatabaseHelperSQL {
         return gates;
     }
 
+    public List<NDADetails> getNDADetails(int sbuId) {
+        List<NDADetails> ndaDetailsList = new ArrayList<>();
+        Connection conn = getConnection();
+        String SP_String = "{call dbo.SP_getSBUDetailedInfo(?)}";
+
+        try {
+            CallableStatement SP = conn.prepareCall(SP_String);
+
+            // Set input parameters
+            SP.setInt(1, sbuId);
+
+            ResultSet rs = SP.executeQuery();
+
+            while (rs.next()) {
+                NDADetails ndaDetail = new NDADetails();
+                ndaDetail.setSbuId(rs.getInt("sbuid"));
+                ndaDetail.setUnitAddress(rs.getString("unitaddress"));
+                ndaDetail.setUnitDescription(rs.getString("unitdescription"));
+                ndaDetail.setVar1(rs.getString("var1"));
+                ndaDetail.setVar2(rs.getString("var2"));
+                ndaDetail.setVar3(rs.getString("var3"));
+                ndaDetail.setVar4(rs.getString("var4"));
+                ndaDetailsList.add(ndaDetail);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getNDADetails: " + e);
+        } finally {
+            try {
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing connection: " + e);
+            }
+        }
+        return ndaDetailsList;
+    }
+
     public IDProof getIdProofTypeDetails(int idProofTypeId) {
         IDProof idProofType = null;
         Connection conn = getConnection();
