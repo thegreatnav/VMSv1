@@ -67,11 +67,13 @@ public class VisitorEntry extends AppCompatActivity {
     private EditText editTextSecurityPersonnel;
     private EditText editTextSecurityId;
 
-    private TextView textViewInfo;
+    private TextView textViewInfo,sbu;
     private SharedViewModel sharedViewModel;
 
     private String selectedNumberIdProof;
-    private String selectedFileIdProof;
+    private String selectedFileIdProof,sbuName;
+
+    private Spinner gate_spinner;
     int ID =0;
     int IDProofNum=0;
 
@@ -99,6 +101,21 @@ public class VisitorEntry extends AppCompatActivity {
 
         // Initialize UI elements
         initializeUI();
+
+        List<List<String>> gatespinnerArray;
+        gatespinnerArray = dbsql.getGateListSpinner("MTL", sbuId);
+
+        ArrayList<String> gatespinnerarray2 = new ArrayList<>();
+        for (List<String> gate : gatespinnerArray) {
+            gatespinnerarray2.add(gate.get(2));
+        }
+        ArrayAdapter<String> gateadapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, gatespinnerarray2);
+        gateadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gate_spinner.setAdapter(gateadapter);
+
+        sbuName = gatespinnerArray.get(0).get(0);
+        sbu.setText(sbuName);
 
         Future<List<IDProof>> futureID = executorService.submit(() -> dbsql.getIdProofTypeList("", "", "Active"));
         retrieveDropDownList(futureID, spinnerIDProof);
@@ -344,6 +361,9 @@ public class VisitorEntry extends AppCompatActivity {
 
     // Method to initialize UI elements
     private void initializeUI() {
+        gate_spinner = findViewById(R.id.gate_spinner);
+        sbu = findViewById(R.id.unit_name);
+
         editTextMobileNumber = findViewById(R.id.editTextMobileNumber);
         editTextVisitorName = findViewById(R.id.editTextVisitorName);
         editTextPlace = findViewById(R.id.editTextPlace);
