@@ -73,6 +73,8 @@ public class VisitorEntry extends AppCompatActivity {
     private String selectedNumberIdProof;
     private String selectedFileIdProof,sbuName;
 
+    private long unique_id;
+
     private Spinner gate_spinner;
     int ID =0;
     int IDProofNum=0;
@@ -91,6 +93,8 @@ public class VisitorEntry extends AppCompatActivity {
             userId = intent.getStringExtra("userId");
             defaultGateId = intent.getStringExtra("defaultGateId");
             sbuId = intent.getStringExtra("sbuId");
+            if(intent.hasExtra("uniqueId"))
+                unique_id= Long.parseLong(intent.getStringExtra("uniqueId"));
             Log.d("visitor entry","userid="+userId);
             Log.d("visitor entry","sbuid="+sbuId);
             Log.d("visitor entry","defaultid="+defaultGateId);
@@ -130,7 +134,6 @@ public class VisitorEntry extends AppCompatActivity {
         Future<List<VisitingArea>> futureVisitingAreas = executorService.submit(() -> dbsql.getVisitingAreaList("", Integer.parseInt(sbuId), "", "Active"));
         retrieveDropDownList(futureVisitingAreas, spinnerVisitingArea);
 
-
         // Set listeners for buttons
         buttonSave.setOnClickListener(v -> {
             if (validateInputs()) {
@@ -156,7 +159,7 @@ public class VisitorEntry extends AppCompatActivity {
                     }
 
                     String mobileNum = editTextMobileNumber.getText().toString();
-                    long unique_id = getUniqueId(mobileNum);
+                    unique_id = getUniqueId(mobileNum);
 
                     if(!(editTextIDProofNumber.getText().toString().isEmpty()))
                         IDProofNum = Integer.parseInt(editTextIDProofNumber.getText().toString());
@@ -164,13 +167,32 @@ public class VisitorEntry extends AppCompatActivity {
                         IDProofNum=0;
                     List<String> update = null;
                     try {
-                        update = dbsql.updateVisitorIDProofDetails(unique_id, ID, String.valueOf(IDProofNum), null, null);
-                        Log.d("Update Status", "Update saved with unique Id " + update.get(0) + " to database");
+                        if(unique_id!=-2) {
+                            update = dbsql.updateVisitorIDProofDetails(unique_id, ID, String.valueOf(IDProofNum), null, null);
+                            Log.d("Update Status", "Update saved with unique Id " + update.get(0) + " to database");
+                        }
+                        else
+                        {
+                            List<String> tempVisitor;
+                            tempVisitor=dbsql.addNewVisitorEntry("",Integer.parseInt(sbuId),1,Integer.parseInt(defaultGateId),"","","","","",0,"","","",0,"","","","","","","","","","",0,"","","","","",Integer.parseInt(userId));
+                            if(tempVisitor.get(0).equals("Id : null"))
+                            {
+                                Log.d("V","Visitor not added");
+                            }
+                            else
+                            {
+                                Log.d("V","Visitor added with "+tempVisitor.get(0));
+                                String temp=tempVisitor.get(0);
+                                Log.d("V","UniqueId generated = "+temp);
+                                unique_id=Integer.parseInt(temp);
+                            }
+                        }
                     } catch (SQLException e) {
                         Log.d("Update Status", "Update not saved to database");
                         throw new RuntimeException(e);
                     }
 
+                    long finalUnique_id = unique_id;
                     runOnUiThread(() -> {
                         saveData();
                         Intent intentPhoto = new Intent(VisitorEntry.this, PhotoCapture.class);
@@ -183,6 +205,7 @@ public class VisitorEntry extends AppCompatActivity {
                         intentPhoto.putExtra("VisitorEntry.userId", userId);
                         intentPhoto.putExtra("VisitorEntry.sbuId", sbuId);
                         intentPhoto.putExtra("VisitorEntry.ID", String.valueOf(ID));
+                        intentPhoto.putExtra("unique_Id", String.valueOf(finalUnique_id));
                         if(IDProofNum!=0)
                             intentPhoto.putExtra("IDProofNum",String.valueOf(IDProofNum));
                         startActivity(intentPhoto);
@@ -499,8 +522,16 @@ public class VisitorEntry extends AppCompatActivity {
     {
         Future<Integer> future = executorService.submit(() -> {
             List<VisitorSearchResult> visitorSearchResults = dbsql.getVisitorSearchByMobile(mobileNum, Integer.parseInt(defaultGateId), Integer.parseInt(userId));
-            VisitorSearchResult visitor_details = visitorSearchResults.get(0);
-            return visitor_details.getUniqueId();
+            if(!visitorSearchResults.isEmpty()) {
+                Log.d("Future visitorsearchresult","Id found "+visitorSearchResults.get(0).getUniqueId());
+                VisitorSearchResult visitor_details = visitorSearchResults.get(0);
+                return visitor_details.getUniqueId();
+            }
+            else
+            {
+                Log.d("Future visitorsearchresult","Id not found");
+                return -2;
+            }
         });
 
         try {

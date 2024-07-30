@@ -2130,42 +2130,22 @@ public class DatabaseHelperSQL {
     public List<String> addNewVisitorEntry(
             String compId, int sbuId, int locationId, int gateId, String mobileNo,
             String visitorName, String visitorPlace, String visitorDesignation, String visitorCompany,
-            int visitorTypeId, String purpose, String visitingFaculty, String approverName, int visitingAreaId,
-            String refMail, String asset1, String asset2, String asset3, String asset4, String asset5,
-            String securityName, String securityId, String photoFilePath, String photoFileName,
-            int idProofType, String idProofNo, String idProofFilePath, String idProofFileName,
-            String approvalMailFilePath, String approvalMailFileName, int userId) {
+            int visitorTypeId, String purpose, String visitingFaculty, String approverName,
+            int visitingAreaId, String refMail, String asset1, String asset2, String asset3,
+            String asset4, String asset5, String securityName, String securityId,
+            String photoFilePath, String photoFileName, int idProofType, String idProofNo,
+            String idProofFilePath, String idProofFileName, String approvalMailFilePath,
+            String approvalMailFileName, int userId) throws SQLException {
 
-        Connection conn = getConnection();
-        String spString = "{call dbo.SP_addNewVisitorEntry(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
-
+        Connection conn=getConnection();
         List<String> result = new ArrayList<>();
-        result.add("ID: Not Available");
-        result.add("VisitorId: Not Available");
-        result.add("VisitorName: Not Available");
-        result.add("ApproverName: Not Available");
-        result.add("VisitorDesignation: Not Available");
-        result.add("VisitorCompany: Not Available");
-        result.add("VisitingAreaName: Not Available");
-        result.add("Assets: Not Available");
-        result.add("SecurityName: Not Available");
-        result.add("SecurityId: Not Available");
-        result.add("EntryDateTime: Not Available");
-        result.add("RefMail: Not Available");
-        result.add("UnitAddress: Not Available");
-        result.add("UnitDescription: Not Available");
-        result.add("Var1: Not Available");
-        result.add("Var2: Not Available");
-        result.add("Var3: Not Available");
-        result.add("Var4: Not Available");
-        result.add("NDAFlag: Not Available");
-        result.add("NDAUniqueId: Not Available");
-        result.add("PrevNDAUpdatedDate: Not Available");
+        result.add("Id : null");
 
-        CallableStatement sp = null;
+        String spString = "{call [dbo].[SP_addNewVisitorEntry] (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)}";
+        CallableStatement sp=null;
         ResultSet rs = null;
-
-        try {
+        try
+        {
             sp = conn.prepareCall(spString);
             sp.setString(1, compId);
             sp.setInt(2, sbuId);
@@ -2179,8 +2159,8 @@ public class DatabaseHelperSQL {
             sp.setInt(10, visitorTypeId);
             sp.setString(11, purpose);
             sp.setString(12, visitingFaculty);
-            sp.setInt(13, visitingAreaId);
-            sp.setString(14, approverName);
+            sp.setString(13, approverName);
+            sp.setInt(14, visitingAreaId);
             sp.setString(15, refMail);
             sp.setString(16, asset1);
             sp.setString(17, asset2);
@@ -2197,56 +2177,13 @@ public class DatabaseHelperSQL {
             sp.setString(28, idProofFileName);
             sp.setString(29, approvalMailFilePath);
             sp.setString(30, approvalMailFileName);
-            sp.setInt(31, userId);
+            sp.setInt(31,userId);
 
-            rs = sp.executeQuery();
-            if (rs.next()) {
-
-                // Retrieve output parameter
-                long id = sp.getLong(1);
-                String visitorId = sp.getString(2);
-                String visitorNameResult = sp.getString(3);
-                String approverNameResult = sp.getString(4);
-                String visitorDesignationResult = sp.getString(5);
-                String visitorCompanyResult = sp.getString(6);
-                String visitingAreaName = sp.getString(7);
-                String assets = sp.getString(8);
-                String securityNameResult = sp.getString(9);
-                String securityIdResult = sp.getString(10);
-                String entryDateTime = sp.getString(11);
-                refMail = sp.getString(12);
-                String unitAddress = sp.getString(13);
-                String unitDescription = sp.getString(14);
-                String var1 = sp.getString(15);
-                String var2 = sp.getString(16);
-                String var3 = sp.getString(17);
-                String var4 = sp.getString(18);
-                String ndaFlag = sp.getString(19);
-                int ndaUniqueId = sp.getInt(20);
-                String prevNDAUpdatedDate = sp.getString(21);
-
-                // Update result list
-                result.set(0, "ID: " + id);
-                result.set(1, "VisitorId: " + visitorId);
-                result.set(2, "VisitorName: " + visitorNameResult);
-                result.set(3, "ApproverName: " + approverNameResult);
-                result.set(4, "VisitorDesignation: " + visitorDesignationResult);
-                result.set(5, "VisitorCompany: " + visitorCompanyResult);
-                result.set(6, "VisitingAreaName: " + visitingAreaName);
-                result.set(7, "Assets: " + assets);
-                result.set(8, "SecurityName: " + securityNameResult);
-                result.set(9, "SecurityId: " + securityIdResult);
-                result.set(10, "EntryDateTime: " + (entryDateTime != null ? entryDateTime.toString() : "Not Available"));
-                result.set(11, "RefMail: " + refMail);
-                result.set(12, "UnitAddress: " + unitAddress);
-                result.set(13, "UnitDescription: " + unitDescription);
-                result.set(14, "Var1: " + var1);
-                result.set(15, "Var2: " + var2);
-                result.set(16, "Var3: " + var3);
-                result.set(17, "Var4: " + var4);
-                result.set(18, "NDAFlag: " + ndaFlag);
-                result.set(19, "NDAUniqueId: " + ndaUniqueId);
-                result.set(20, "PrevNDAUpdatedDate: " + (prevNDAUpdatedDate != null ? prevNDAUpdatedDate.toString() : "Not Available"));
+            rs=sp.executeQuery();
+            if (rs.next())
+            {
+                long id = rs.getLong("ID");
+                result.set(0, String.valueOf(id));
             }
         } catch (SQLException e) {
             Log.e("DatabaseHelperSQL", "Error in addNewVisitor: " + e.getMessage());
@@ -2260,9 +2197,9 @@ public class DatabaseHelperSQL {
                 Log.e("DatabaseHelperSQL", "Error closing resources: " + e.getMessage());
             }
         }
-
         return result;
     }
+
     public long getHighestUniqueId()
     {
         // If the mobile number does not exist, generate a new unique ID

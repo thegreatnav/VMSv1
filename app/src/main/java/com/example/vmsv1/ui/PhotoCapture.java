@@ -40,7 +40,7 @@ public class PhotoCapture extends AppCompatActivity {
     private String mobileNum;
     private int gateId,sbuId;
     private int userId;
-    private int idprooftype;
+    private int idprooftype,uniqueId;
     private String numidproof;
     private String savedImageFilename;
     private String savedImageFilepath;
@@ -110,6 +110,7 @@ public class PhotoCapture extends AppCompatActivity {
             userId = Integer.parseInt(intent.getStringExtra("VisitorEntry.userId"));
             idprooftype = Integer.parseInt(intent.getStringExtra("VisitorEntry.ID"));
             sbuId=Integer.parseInt(intent.getStringExtra("VisitorEntry.sbuId"));
+            uniqueId=Integer.parseInt(intent.getStringExtra("unique_Id"));
             if(intent.hasExtra("IDProofNum"))
                 numidproof = intent.getStringExtra("IDProofNum");
             Log.d("Intent Data", "mobileNum: " + mobileNum + ", gateId: " + gateId + ", userId: " + userId + ", idprooftype: " + idprooftype + ", numidproof: " + numidproof + ", sbuId: " + sbuId);
@@ -210,12 +211,14 @@ public class PhotoCapture extends AppCompatActivity {
         intentBack.putExtra("sbuId",String.valueOf(sbuId));
         intentBack.putExtra("ImagePath", savedImageFilepath);
         intentBack.putExtra("ImageName", savedImageFilename);
+        intentBack.putExtra("uniqueId",uniqueId);
         startActivity(intentBack);
     }
 
     private void navigateToDisplayNDA() {
         Intent intentNDA = new Intent(PhotoCapture.this, DisplayNDA.class);
         intentNDA.putExtra("sbuId",String.valueOf(sbuId));
+        intentNDA.putExtra("uniqueId",String.valueOf(uniqueId));
         startActivity(intentNDA);
     }
 

@@ -71,8 +71,8 @@ public class DisplayNDA extends AppCompatActivity {
         buttonDecline = findViewById(R.id.buttonDecline);
 
         NDADatabaseTask dbTask = new NDADatabaseTask(dbsql);
-        uniqueId=5;
-        sbuId=1;
+        //uniqueId=5;
+        //sbuId=1;
 
         dbTask.retrieveVisitorDetails(uniqueId, new NDADatabaseTask.OnNDADetailsRetrievedListener() {
             @Override
