@@ -442,8 +442,6 @@ public class VisitorEntry extends AppCompatActivity {
         });
     }
 
-
-    // Method to save data (dummy implementation)
     private void saveData() {
         Toast.makeText(this, "Data saved successfully", Toast.LENGTH_SHORT).show();
     }

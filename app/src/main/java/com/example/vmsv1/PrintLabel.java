@@ -1,6 +1,7 @@
 package com.example.vmsv1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -41,6 +42,8 @@ public class PrintLabel extends AppCompatActivity {
     private ImageView imageViewRight;
     private ProgressBar progressBar;
 
+    private long uniqueId;
+
     private ExecutorService executorService;
     private Handler mainHandler;
 
@@ -62,6 +65,14 @@ public class PrintLabel extends AppCompatActivity {
 
         db = new DatabaseHelperSQL();
 
+        Intent i = getIntent();
+        if (i.hasExtra("uniqueId")) {
+            uniqueId = Long.parseLong(i.getStringExtra("uniqueId"));
+            Log.d("Intent", "onCreate: Received uniqueId: " + uniqueId);
+        } else {
+            Log.d("MissingIntent", "onCreate: Missing intent extras 'uniqueId'");
+        }
+
         // Initialize ExecutorService and Handler
         executorService = Executors.newSingleThreadExecutor();
         mainHandler = new Handler(Looper.getMainLooper());
@@ -73,7 +84,7 @@ public class PrintLabel extends AppCompatActivity {
 
     private void fetchVisitorDetailsInBackground() {
         executorService.execute(() -> {
-            long uniqueId = 8;  // Replace with actual uniqueId retrieval logic
+            //long uniqueId = 8;  // Replace with actual uniqueId retrieval logic
             VisitorSearchResult v = db.getVisitorDetails(uniqueId);
 
             Bitmap visitorPhoto = null;

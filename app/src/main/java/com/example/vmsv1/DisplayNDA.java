@@ -140,6 +140,7 @@ public class DisplayNDA extends AppCompatActivity {
                 Log.d(TAG, "onClick: Accept button clicked");
                 Toast.makeText(DisplayNDA.this, "NDA accepted", Toast.LENGTH_SHORT).show();
                 Intent intentPrint = new Intent(DisplayNDA.this, PrintLabel.class);
+                intentPrint.putExtra("uniqueId",String.valueOf(uniqueId));
                 startActivity(intentPrint);
             }
         });
