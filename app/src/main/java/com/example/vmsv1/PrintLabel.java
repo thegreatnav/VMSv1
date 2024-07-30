@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.activity.OnBackPressedCallback;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +44,9 @@ public class PrintLabel extends AppCompatActivity {
     private ProgressBar progressBar;
 
     private long uniqueId;
+    private int userId;
+    private int gateId;
+    private int sbuId;
 
     private ExecutorService executorService;
     private Handler mainHandler;
@@ -68,6 +72,9 @@ public class PrintLabel extends AppCompatActivity {
         Intent i = getIntent();
         if (i.hasExtra("uniqueId")) {
             uniqueId = Long.parseLong(i.getStringExtra("uniqueId"));
+            sbuId = Integer.parseInt(i.getStringExtra("sbuId"));
+            userId = Integer.parseInt(i.getStringExtra("userId"));
+            gateId = Integer.parseInt(i.getStringExtra("gateId"));
             Log.d("Intent", "onCreate: Received uniqueId: " + uniqueId);
         } else {
             Log.d("MissingIntent", "onCreate: Missing intent extras 'uniqueId'");
@@ -80,7 +87,22 @@ public class PrintLabel extends AppCompatActivity {
         // Show ProgressBar and fetch visitor details in background
         progressBar.setVisibility(View.VISIBLE);
         fetchVisitorDetailsInBackground();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Navigate to MainActivity
+                Intent intentBack = new Intent(PrintLabel.this, MainActivity.class);
+                intentBack.putExtra("userId",String.valueOf(userId));
+                intentBack.putExtra("gateId",String.valueOf(gateId));
+                intentBack.putExtra("sbuId",String.valueOf(sbuId));
+                startActivity(intentBack);
+                finish(); // Optional, if you want to close the current activity
+            }
+        });
+
     }
+
 
     private void fetchVisitorDetailsInBackground() {
         executorService.execute(() -> {
