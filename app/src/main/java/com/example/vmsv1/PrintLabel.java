@@ -1,6 +1,8 @@
 package com.example.vmsv1;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.vmsv1.dataitems.VisitorSearchResult;
 import com.example.vmsv1.db.DatabaseHelperSQL;
 
+import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -70,8 +73,14 @@ public class PrintLabel extends AppCompatActivity {
 
     private void fetchVisitorDetailsInBackground() {
         executorService.execute(() -> {
-            long uniqueId = 6;  // Replace with actual uniqueId retrieval logic
+            long uniqueId = 8;  // Replace with actual uniqueId retrieval logic
             VisitorSearchResult v = db.getVisitorDetails(uniqueId);
+
+            Bitmap visitorPhoto = null;
+            if (v != null && v.getPhotoFilePath() != null) {
+                visitorPhoto = loadImageFromFile(v.getPhotoFilePath(), v.getPhotoFileName());
+            }
+            final Bitmap finalVisitorPhoto = visitorPhoto;
 
             // Update UI on the main thread
             mainHandler.post(() -> {
@@ -102,9 +111,8 @@ public class PrintLabel extends AppCompatActivity {
                     } else {
                         exitDateTime.setText("_");
                     }
-                    if (v.getPhotoFilePath() != null) {
-                        Log.d("PrintLabelClass getphotofilepath", v.getPhotoFilePath());
-                        Log.d("PrintLabelClass getphotofilename", v.getPhotoFileName());
+                    if (finalVisitorPhoto != null) {
+                        imageViewRight.setImageBitmap(finalVisitorPhoto);
                     }
                 }
                 // Hide ProgressBar after data is loaded
@@ -112,6 +120,16 @@ public class PrintLabel extends AppCompatActivity {
                 printDocument(v);
             });
         });
+    }
+
+    private Bitmap loadImageFromFile(String filePath, String fileName) {
+        File imageFile = new File(filePath);
+        if (imageFile.exists()) {
+            return BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+        } else {
+            Log.e("PrintLabel", "Image file does not exist: " + imageFile.getAbsolutePath());
+            return null;
+        }
     }
 
     private void printDocument(VisitorSearchResult v) {

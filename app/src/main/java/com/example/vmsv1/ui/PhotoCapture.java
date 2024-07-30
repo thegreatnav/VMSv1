@@ -32,6 +32,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class PhotoCapture extends AppCompatActivity {
 
@@ -52,6 +54,7 @@ public class PhotoCapture extends AppCompatActivity {
     private ActivityResultLauncher<Intent> takePictureLauncher;
 
     private DatabaseHelperSQL dbsql;
+    private ExecutorService executorService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,8 @@ public class PhotoCapture extends AppCompatActivity {
         setContentView(R.layout.activity_photo_capture);
 
         dbsql = new DatabaseHelperSQL();
+        executorService = Executors.newFixedThreadPool(4);
+
         imageViewPhoto = findViewById(R.id.imageViewPhoto);
         buttonCapture = findViewById(R.id.buttonCapture);
         buttonSaveImage = findViewById(R.id.buttonSaveImage);
@@ -136,28 +141,48 @@ public class PhotoCapture extends AppCompatActivity {
 
         File photoFile = new File(photoDirectory, customFilename + ".jpg");
 
-        try (FileOutputStream fos = new FileOutputStream(photoFile)) {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            savedImageFilename = photoFile.getName();
-            savedImageFilepath = photoFile.getAbsolutePath();
+        executorService.execute(() -> {
+            try (FileOutputStream fos = new FileOutputStream(photoFile)) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                savedImageFilename = photoFile.getName();
+                savedImageFilepath = photoFile.getAbsolutePath();
 
-            long uniqueId = getUniqueId();
+                long uniqueId = getUniqueId();
 
-            if (idprooftype > 0) {
-                if (idprooftype != 1 && idprooftype != 6) {
-                    List<String> update = dbsql.updateVisitorIDProofDetails(uniqueId, idprooftype, numidproof, savedImageFilepath, savedImageFilename);
-                    Toast.makeText(this, "Image saved with unique Id " + update.get(0) + " to " + savedImageFilepath, Toast.LENGTH_SHORT).show();
-                    navigateToVisitorEntry();
-                } else {
-                    List<String> message = dbsql.updateVisitorPhoto(uniqueId, savedImageFilepath, savedImageFilename);
-                    Toast.makeText(this, "Image saved with unique Id " + message.get(0) + " to " + savedImageFilepath, Toast.LENGTH_SHORT).show();
-                    navigateToDisplayNDA();
+                if (idprooftype > 0) {
+                    if (idprooftype != 1 && idprooftype != 6) {
+                        List<String> update = dbsql.updateVisitorIDProofDetails(uniqueId, idprooftype, numidproof, savedImageFilepath, savedImageFilename);
+                        runOnUiThread(() -> {
+                            if (!update.get(0).equals("Id : null")) {
+                                Toast.makeText(this, "ID Proof saved to " + savedImageFilepath + " and database", Toast.LENGTH_SHORT).show();
+                                Log.d("Idproof", "ID Proof saved to " + savedImageFilepath + " and database");
+                            } else {
+                                Toast.makeText(this, "ID Proof not saved to database", Toast.LENGTH_SHORT).show();
+                                Log.d("Idproof", "ID Proof not saved to database");
+                            }
+                            navigateToVisitorEntry();
+                        });
+                    } else {
+                        List<String> message = dbsql.updateVisitorPhoto(uniqueId, savedImageFilepath, savedImageFilename);
+                        runOnUiThread(() -> {
+                            if (!message.get(0).equals("Id : null")) {
+                                Toast.makeText(this, "Visitor photo saved with unique Id " + message.get(0) + " to " + savedImageFilepath, Toast.LENGTH_SHORT).show();
+                                Log.d("Idproof", "Visitor photo saved to " + savedImageFilepath + " and database");
+                            } else {
+                                Toast.makeText(this, "Visitor photo not saved to database", Toast.LENGTH_SHORT).show();
+                                Log.d("Idproof", "Visitor photo not saved to database");
+                            }
+                            navigateToDisplayNDA();
+                        });
+                    }
                 }
+            } catch (IOException | SQLException e) {
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                });
             }
-        } catch (IOException | SQLException e) {
-            Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+        });
     }
 
     private long getUniqueId() {
@@ -191,7 +216,12 @@ public class PhotoCapture extends AppCompatActivity {
     private void navigateToDisplayNDA() {
         Intent intentNDA = new Intent(PhotoCapture.this, DisplayNDA.class);
         intentNDA.putExtra("sbuId",String.valueOf(sbuId));
-        //intentNDA.putExtra("uniqueId",String.valueOf(uniqueId));
         startActivity(intentNDA);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executorService.shutdown();
     }
 }

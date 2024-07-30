@@ -102,20 +102,24 @@ public class VisitorEntry extends AppCompatActivity {
         // Initialize UI elements
         initializeUI();
 
-        List<List<String>> gatespinnerArray;
-        gatespinnerArray = dbsql.getGateListSpinner("MTL", sbuId);
+        executorService.execute(() -> {
+            List<List<String>> gatespinnerArray = dbsql.getGateListSpinner("MTL", sbuId);
 
-        ArrayList<String> gatespinnerarray2 = new ArrayList<>();
-        for (List<String> gate : gatespinnerArray) {
-            gatespinnerarray2.add(gate.get(2));
-        }
-        ArrayAdapter<String> gateadapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item, gatespinnerarray2);
-        gateadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        gate_spinner.setAdapter(gateadapter);
+            ArrayList<String> gatespinnerarray2 = new ArrayList<>();
+            for (List<String> gate : gatespinnerArray) {
+                gatespinnerarray2.add(gate.get(2));
+            }
 
-        sbuName = gatespinnerArray.get(0).get(0);
-        sbu.setText(sbuName);
+            runOnUiThread(() -> {
+                ArrayAdapter<String> gateadapter = new ArrayAdapter<>(
+                        this, android.R.layout.simple_spinner_item, gatespinnerarray2);
+                gateadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                gate_spinner.setAdapter(gateadapter);
+
+                sbuName = gatespinnerArray.get(0).get(0);
+                sbu.setText(sbuName);
+            });
+        });
 
         Future<List<IDProof>> futureID = executorService.submit(() -> dbsql.getIdProofTypeList("", "", "Active"));
         retrieveDropDownList(futureID, spinnerIDProof);
@@ -129,98 +133,89 @@ public class VisitorEntry extends AppCompatActivity {
 
         // Set listeners for buttons
         buttonSave.setOnClickListener(v -> {
-            if (validateInputs())
-            {
-                if(selectedNumberIdProof!= null)
-                {
-                    try
-                    {
-                        List<String>IDProofType = dbsql.getIDProofTypeIdByName(selectedNumberIdProof);
-                        Log.d("ID proof type id ",""+ IDProofType.get(0));
-                        ID = Integer.parseInt(IDProofType.get(0));
+            if (validateInputs()) {
+                executorService.execute(() -> {
+                    if (selectedNumberIdProof != null) {
+                        try {
+                            List<String> IDProofType = dbsql.getIDProofTypeIdByName(selectedNumberIdProof);
+                            Log.d("ID proof type id ", "" + IDProofType.get(0));
+                            ID = Integer.parseInt(IDProofType.get(0));
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else if (selectedFileIdProof != null) {
+                        try {
+                            List<String> IDProofType = dbsql.getIDProofTypeIdByName(selectedFileIdProof);
+                            Log.d("ID proof file type id ", "" + IDProofType.get(0));
+                            ID = Integer.parseInt(IDProofType.get(0));
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        ID = 6;
                     }
-                    catch (SQLException e)
-                    {
+
+                    String mobileNum = editTextMobileNumber.getText().toString();
+                    long unique_id = getUniqueId(mobileNum);
+
+                    if(!(editTextIDProofNumber.getText().toString().isEmpty()))
+                        IDProofNum = Integer.parseInt(editTextIDProofNumber.getText().toString());
+                    else
+                        IDProofNum=0;
+                    List<String> update = null;
+                    try {
+                        update = dbsql.updateVisitorIDProofDetails(unique_id, ID, String.valueOf(IDProofNum), null, null);
+                        Log.d("Update Status", "Update saved with unique Id " + update.get(0) + " to database");
+                    } catch (SQLException e) {
+                        Log.d("Update Status", "Update not saved to database");
                         throw new RuntimeException(e);
                     }
-                }
-                else if(selectedFileIdProof != null)
-                {
-                    try
-                    {
-                        List<String> IDProofType = dbsql.getIDProofTypeIdByName(selectedFileIdProof);
-                        Log.d("ID proof file type id ",""+ IDProofType.get(0));
-                        ID = Integer.parseInt(IDProofType.get(0));
-                    }
-                    catch (SQLException e)
-                    {
-                        throw new RuntimeException(e);
-                    }
-                }
-                else
-                    ID =6;
 
-                String mobileNum = editTextMobileNumber.getText().toString();
-                long unique_id=getUniqueId(mobileNum);
-
-                IDProofNum = Integer.parseInt(editTextIDProofNumber.getText().toString());
-                List<String> update = null;
-                try {
-                    update = dbsql.updateVisitorIDProofDetails(unique_id,ID, String.valueOf(IDProofNum),null,null);
-                    Log.d("Update Status","Update saved with unique Id " + update.get(0) + " to database");
-                }
-                catch (SQLException e)
-                {
-                    Log.d("Update Status","Update not saved to database");
-                    throw new RuntimeException(e);
-                }
-                saveData();
-                Intent intentPhoto = new Intent(VisitorEntry.this, PhotoCapture.class);
-                //String mobileNum = editTextMobileNumber.getText().toString();
-                Log.d("Before intent mobileNo", mobileNum);
-                Log.d("gateid", defaultGateId);
-                Log.d("userId", userId);
-                Log.d("ID", String.valueOf(ID));
-                intentPhoto.putExtra("VisitorEntry.MobileNumber",mobileNum);
-                intentPhoto.putExtra("VisitorEntry.gateId",defaultGateId);
-                intentPhoto.putExtra("VisitorEntry.userId",userId);
-                intentPhoto.putExtra("VisitorEntry.sbuId",sbuId);
-                intentPhoto.putExtra("VisitorEntry.ID",String.valueOf(ID));
-                startActivity(intentPhoto);
+                    runOnUiThread(() -> {
+                        saveData();
+                        Intent intentPhoto = new Intent(VisitorEntry.this, PhotoCapture.class);
+                        Log.d("Before intent mobileNo", mobileNum);
+                        Log.d("gateid", defaultGateId);
+                        Log.d("userId", userId);
+                        Log.d("ID", String.valueOf(ID));
+                        intentPhoto.putExtra("VisitorEntry.MobileNumber", mobileNum);
+                        intentPhoto.putExtra("VisitorEntry.gateId", defaultGateId);
+                        intentPhoto.putExtra("VisitorEntry.userId", userId);
+                        intentPhoto.putExtra("VisitorEntry.sbuId", sbuId);
+                        intentPhoto.putExtra("VisitorEntry.ID", String.valueOf(ID));
+                        if(IDProofNum!=0)
+                            intentPhoto.putExtra("IDProofNum",String.valueOf(IDProofNum));
+                        startActivity(intentPhoto);
+                    });
+                });
             }
         });
 
-        buttonSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                String mobileNo = editTextMobileNumber.getText().toString();
-                String gateId = defaultGateId;
 
-                Log.d("mobile num visitor entry ", mobileNo);
-                Log.d("gate id visitor entry", gateId); //is null
-                Log.d("User id visitor entry", userId);
+        buttonSearch.setOnClickListener(v -> {
+            String mobileNo = editTextMobileNumber.getText().toString();
+            String gateId = defaultGateId;
 
-                if (mobileNo.isEmpty() || !isNumeric(mobileNo) || mobileNo.length() != 10)
-                {
-                    Toast.makeText(VisitorEntry.this, "Enter valid number", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            Log.d("mobile num visitor entry ", mobileNo);
+            Log.d("gate id visitor entry", gateId);
+            Log.d("User id visitor entry", userId);
 
-                List<VisitorSearchResult> visitorDetails = dbsql.getVisitorSearchByMobile(mobileNo, Integer.parseInt(gateId), Integer.parseInt(userId));
-                // Process the visitor details as needed
-                if (visitorDetails.isEmpty())
-                {
-                    Toast.makeText(VisitorEntry.this, "No visitor found", Toast.LENGTH_SHORT).show();
-                } else
-                {
-                    visitor = visitorDetails.get(0);
-                    Log.d("visitor",""+visitor.getUniqueId());
-                    Log.d("visitor",""+visitor.getMobileNo());
-                    Log.d("visitor company1",""+visitor.getVisitorCompany());
-                    prefillFields(visitor);
-                }
+            if (mobileNo.isEmpty() || !isNumeric(mobileNo) || mobileNo.length() != 10) {
+                Toast.makeText(VisitorEntry.this, "Enter valid number", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            executorService.execute(() -> {
+                List<VisitorSearchResult> visitorDetails = dbsql.getVisitorSearchByMobile(mobileNo, Integer.parseInt(gateId), Integer.parseInt(userId));
+                runOnUiThread(() -> {
+                    if (visitorDetails.isEmpty()) {
+                        Toast.makeText(VisitorEntry.this, "No visitor found", Toast.LENGTH_SHORT).show();
+                    } else {
+                        visitor = visitorDetails.get(0);
+                        prefillFields(visitor);
+                    }
+                });
+            });
         });
 
         openCameraButton.setOnClickListener(v -> {
@@ -336,9 +331,9 @@ public class VisitorEntry extends AppCompatActivity {
                     // Update UI with the fetched data
                     if (items != null && !items.isEmpty()) {
                         populateSpinner(spinner, (ArrayList<T>) items);
-                        Log.d("Spinner Data","Fetched successfully");
+                        Log.d("Spinner Data", "Fetched successfully");
                     } else {
-                        Log.d("Spinner Data","Could not fetch");
+                        Log.d("Spinner Data", "Could not fetch");
                     }
                 });
 
@@ -501,16 +496,21 @@ public class VisitorEntry extends AppCompatActivity {
 
         Toast.makeText(this, "Visitor details loaded", Toast.LENGTH_SHORT).show();
     }
+
     private long getUniqueId(String mobileNum)
     {
-        Log.d("gateId",""+defaultGateId);
-        Log.d("userId",""+userId);
-        List<VisitorSearchResult> visitorSearchResults = dbsql.getVisitorSearchByMobile(mobileNum,Integer.parseInt(defaultGateId),Integer.parseInt(userId));
-        Log.d("visitor details list",""+visitorSearchResults);
-        VisitorSearchResult visitor_details = visitorSearchResults.get(0);
-        Log.d("visitor details",""+visitor_details);
+        Future<Integer> future = executorService.submit(() -> {
+            List<VisitorSearchResult> visitorSearchResults = dbsql.getVisitorSearchByMobile(mobileNum, Integer.parseInt(defaultGateId), Integer.parseInt(userId));
+            VisitorSearchResult visitor_details = visitorSearchResults.get(0);
+            return visitor_details.getUniqueId();
+        });
 
-        return visitor_details.getUniqueId();
+        try {
+            return future.get();
+        } catch (Exception e) {
+            Log.e("VisitorEntry", "Error getting unique ID", e);
+            return -1;
+        }
 
     }
 }
