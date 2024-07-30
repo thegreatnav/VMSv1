@@ -41,6 +41,8 @@ public class DisplayNDA extends AppCompatActivity {
         if (i.hasExtra("sbuId") && i.hasExtra("uniqueId")) {
             sbuId = Integer.parseInt(i.getStringExtra("sbuId"));
             uniqueId = Long.parseLong(i.getStringExtra("uniqueId"));
+            userId = Integer.parseInt(i.getStringExtra("userId"));
+            gateId = Integer.parseInt(i.getStringExtra("gateId"));
             Log.d(TAG, "onCreate: Received sbuId: " + sbuId + ", uniqueId: " + uniqueId);
         } else {
             Log.w(TAG, "onCreate: Missing intent extras 'sbuId' or 'uniqueId'");
@@ -138,9 +140,13 @@ public class DisplayNDA extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: Accept button clicked");
+                //set NDA status as 'Y' i.e., accepted
                 Toast.makeText(DisplayNDA.this, "NDA accepted", Toast.LENGTH_SHORT).show();
                 Intent intentPrint = new Intent(DisplayNDA.this, PrintLabel.class);
                 intentPrint.putExtra("uniqueId",String.valueOf(uniqueId));
+                intentPrint.putExtra("userId",String.valueOf(userId));
+                intentPrint.putExtra("gateId",String.valueOf(gateId));
+                intentPrint.putExtra("sbuId",String.valueOf(sbuId));
                 startActivity(intentPrint);
             }
         });
@@ -149,6 +155,7 @@ public class DisplayNDA extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: Decline button clicked");
+                //set NDA status as N ie declined
                 Toast.makeText(DisplayNDA.this, "NDA declined", Toast.LENGTH_SHORT).show();
                 Intent intentHome = new Intent(DisplayNDA.this, MainActivity.class);
                 startActivity(intentHome);
