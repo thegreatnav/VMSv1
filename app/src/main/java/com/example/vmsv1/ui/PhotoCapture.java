@@ -217,7 +217,9 @@ public class PhotoCapture extends AppCompatActivity {
 
     private void navigateToDisplayNDA() {
         Intent intentNDA = new Intent(PhotoCapture.this, DisplayNDA.class);
+        intentNDA.putExtra("userId",String.valueOf(userId));
         intentNDA.putExtra("sbuId",String.valueOf(sbuId));
+        intentNDA.putExtra("gateId",String.valueOf(gateId));
         intentNDA.putExtra("uniqueId",String.valueOf(uniqueId));
         startActivity(intentNDA);
     }

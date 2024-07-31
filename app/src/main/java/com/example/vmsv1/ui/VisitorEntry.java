@@ -233,6 +233,7 @@ public class VisitorEntry extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (visitorDetails.isEmpty()) {
                         Toast.makeText(VisitorEntry.this, "No visitor found", Toast.LENGTH_SHORT).show();
+                        clearFields();
                     } else {
                         visitor = visitorDetails.get(0);
                         prefillFields(visitor);
@@ -480,10 +481,10 @@ public class VisitorEntry extends AppCompatActivity {
     {
         editTextVisitorName.setText(v.getVisitorName());
         Log.d("visitor name",""+editTextVisitorName.getText().toString());
+
         if(v.getIdProofNo()!=null)
-        {
-            editTextIDProofNumber.setText(v.getIdProofNo());
-        }
+        editTextIDProofNumber.setText(v.getIdProofNo());
+
         editTextPlace.setText(v.getLocationName());
         Log.d("location",""+editTextPlace.getText());
         editTextCompanyName.setText(v.getCompName()); //null
@@ -516,6 +517,32 @@ public class VisitorEntry extends AppCompatActivity {
         setSpinnerValue(spinnerVisitingArea, visitor.getVisitingAreaName());
 
         Toast.makeText(this, "Visitor details loaded", Toast.LENGTH_SHORT).show();
+    }
+
+        private void clearFields() {
+        editTextVisitorName.setText("");
+        editTextIDProofNumber.setText("");
+        editTextPlace.setText("");
+        editTextCompanyName.setText("");
+        editTextDesignation.setText("");
+        editTextPurpose.setText("");
+        editTextVisitingStaff.setText("");
+        editTextApproverName.setText("");
+        editTextReferenceMail.setText("");
+        editTextAsset1.setText("");
+        editTextAsset2.setText("");
+        editTextAsset3.setText("");
+        editTextAsset4.setText("");
+        editTextAsset5.setText("");
+        editTextSecurityPersonnel.setText("");
+        editTextSecurityId.setText("");
+
+        // Assuming you want to reset the spinners to their default positions
+        spinnerIDProof.setSelection(0);
+        spinnerVisitorType.setSelection(0);
+        spinnerVisitingArea.setSelection(0);
+
+        Toast.makeText(this, "Fields cleared", Toast.LENGTH_SHORT).show();
     }
 
     private long getUniqueId(String mobileNum)
