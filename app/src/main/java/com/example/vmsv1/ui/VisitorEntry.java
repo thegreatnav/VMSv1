@@ -340,7 +340,7 @@ public class VisitorEntry extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Handle case when nothing is selected if needed
+                // Handle case when nothing is selected if neede
             }
         });
     }
