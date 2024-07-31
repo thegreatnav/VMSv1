@@ -174,7 +174,7 @@ public class VisitorEntry extends AppCompatActivity {
                         else
                         {
                             List<String> tempVisitor;
-                            tempVisitor=dbsql.addNewVisitorEntry("",Integer.parseInt(sbuId),1,Integer.parseInt(defaultGateId),"","","","","",0,"","","",0,"","","","","","","","","","",0,"","","","","",Integer.parseInt(userId));
+                            tempVisitor=dbsql.addNewVisitorEntry("MTL",Integer.parseInt(sbuId),1,Integer.parseInt(defaultGateId),editTextMobileNumber.getText().toString(),editTextVisitorName.getText().toString(),editTextPlace.getText().toString(),editTextDesignation.getText().toString(),editTextCompanyName.getText().toString(),spinnerVisitorType.getSelectedItemPosition(),editTextPurpose.getText().toString(),editTextVisitingStaff.getText().toString(),editTextApproverName.getText().toString(),spinnerVisitingArea.getSelectedItemPosition(),editTextReferenceMail.getText().toString(),editTextAsset1.getText().toString(),editTextAsset2.getText().toString(),editTextAsset3.getText().toString(),editTextAsset4.getText().toString(),editTextAsset5.getText().toString(),editTextSecurityPersonnel.getText().toString(),editTextSecurityId.getText().toString(),"","",ID,"","","","","",Integer.parseInt(userId));
                             if(tempVisitor.get(0).equals("Id : null"))
                             {
                                 Log.d("V","Visitor not added");
