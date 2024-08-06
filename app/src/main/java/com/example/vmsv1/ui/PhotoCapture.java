@@ -209,9 +209,16 @@ public class PhotoCapture extends AppCompatActivity {
     private void navigateToVisitorEntry() {
         Intent intentBack = new Intent(PhotoCapture.this, VisitorEntry.class);
         intentBack.putExtra("sbuId",String.valueOf(sbuId));
+        Log.d("back to vis entry", String.valueOf(sbuId));
+        Log.d("back to vis entry", String.valueOf(uniqueId));
+        Log.d("back to vis entry", String.valueOf(savedImageFilepath));
+        Log.d("back to vis entry", String.valueOf(savedImageFilename));
+        intentBack.putExtra("defaultGateId",String.valueOf(gateId));
+        intentBack.putExtra("userId",String.valueOf(userId));
+        intentBack.putExtra("MobileNum", mobileNum);
         intentBack.putExtra("ImagePath", savedImageFilepath);
         intentBack.putExtra("ImageName", savedImageFilename);
-        intentBack.putExtra("uniqueId",uniqueId);
+        intentBack.putExtra("uniqueId",String.valueOf(uniqueId));
         startActivity(intentBack);
     }
 

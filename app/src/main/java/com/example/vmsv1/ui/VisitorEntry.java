@@ -55,7 +55,7 @@ public class VisitorEntry extends AppCompatActivity {
 
     private String userId;
     private String defaultGateId;
-    private String sbuId;
+    private String sbuId,mo_no;
 
     private VisitorSearchResult visitor;
     private EditText editTextAsset1;
@@ -93,8 +93,14 @@ public class VisitorEntry extends AppCompatActivity {
             userId = intent.getStringExtra("userId");
             defaultGateId = intent.getStringExtra("defaultGateId");
             sbuId = intent.getStringExtra("sbuId");
-            if(intent.hasExtra("uniqueId"))
-                unique_id= Long.parseLong(intent.getStringExtra("uniqueId"));
+            if(intent.hasExtra("MobileNum")) {
+                mo_no = intent.getStringExtra("MobileNum");
+                Log.d("visitor entry", "mo_no=" + mo_no);
+            }
+            if(intent.hasExtra("uniqueId")) {
+                unique_id = Long.parseLong(intent.getStringExtra("uniqueId"));
+                Log.d("visitor entry", "uniqueid=" + unique_id);
+            }
             Log.d("visitor entry","userid="+userId);
             Log.d("visitor entry","sbuid="+sbuId);
             Log.d("visitor entry","defaultid="+defaultGateId);
@@ -133,6 +139,29 @@ public class VisitorEntry extends AppCompatActivity {
 
         Future<List<VisitingArea>> futureVisitingAreas = executorService.submit(() -> dbsql.getVisitingAreaList("", Integer.parseInt(sbuId), "", "Active"));
         retrieveDropDownList(futureVisitingAreas, spinnerVisitingArea);
+
+        if (intent.hasExtra("uniqueId") && intent.hasExtra("MobileNum")) {
+            Log.d("vis en","inside if");
+            String mo_no = intent.getStringExtra("MobileNum");
+            executorService.execute(() -> {
+                Log.d("visitor entry1", "mo_no=" + mo_no);
+                Log.d("visitor entry1", "defaultgateid=" + defaultGateId);
+                Log.d("visitor entry1", "userId=" + userId);
+
+                List<VisitorSearchResult> visitorDetails = dbsql.getVisitorSearchByMobile(mo_no, Integer.parseInt(defaultGateId), Integer.parseInt(userId));
+                Log.d("nnn",visitorDetails.get(0).getMobileNo());
+                if (!visitorDetails.isEmpty()) {
+                    Log.d("vis en","inside 2nd if");
+                    VisitorSearchResult visitor = visitorDetails.get(0);
+                    runOnUiThread(() -> prefillFields(visitor));
+                } else {
+                    Log.d("vis en","inside 2nd if");
+                    runOnUiThread(() -> Toast.makeText(VisitorEntry.this, "No visitor details found", Toast.LENGTH_SHORT).show());
+                }
+            });
+        }
+
+
 
         // Set listeners for buttons
         buttonSave.setOnClickListener(v -> {
@@ -230,6 +259,7 @@ public class VisitorEntry extends AppCompatActivity {
 
             executorService.execute(() -> {
                 List<VisitorSearchResult> visitorDetails = dbsql.getVisitorSearchByMobile(mobileNo, Integer.parseInt(gateId), Integer.parseInt(userId));
+
                 runOnUiThread(() -> {
                     if (visitorDetails.isEmpty()) {
                         Toast.makeText(VisitorEntry.this, "No visitor found", Toast.LENGTH_SHORT).show();
@@ -286,30 +316,55 @@ public class VisitorEntry extends AppCompatActivity {
             Log.d("gateid",""+defaultGateId);
             Log.d("userId",""+userId);
             Log.d("ID",""+ID);
+
+            unique_id = getUniqueId(mobileNum);
+
+            if(!(editTextIDProofNumber.getText().toString().isEmpty()))
+                IDProofNum = Integer.parseInt(editTextIDProofNumber.getText().toString());
+            else
+                IDProofNum=0;
+            List<String> update = null;
+            try {
+                if(unique_id!=-2) {
+                    update = dbsql.updateVisitorIDProofDetails(unique_id, ID, String.valueOf(IDProofNum), null, null);
+                    Log.d("Update Status", "Update saved with unique Id " + update.get(0) + " to database");
+                }
+                else
+                {
+                    List<String> tempVisitor;
+                    tempVisitor=dbsql.addNewVisitorEntry("MTL",Integer.parseInt(sbuId),1,Integer.parseInt(defaultGateId),editTextMobileNumber.getText().toString(),editTextVisitorName.getText().toString(),editTextPlace.getText().toString(),editTextDesignation.getText().toString(),editTextCompanyName.getText().toString(),spinnerVisitorType.getSelectedItemPosition(),editTextPurpose.getText().toString(),editTextVisitingStaff.getText().toString(),editTextApproverName.getText().toString(),spinnerVisitingArea.getSelectedItemPosition(),editTextReferenceMail.getText().toString(),editTextAsset1.getText().toString(),editTextAsset2.getText().toString(),editTextAsset3.getText().toString(),editTextAsset4.getText().toString(),editTextAsset5.getText().toString(),editTextSecurityPersonnel.getText().toString(),editTextSecurityId.getText().toString(),"","",ID,"","","","","",Integer.parseInt(userId));
+                    if(tempVisitor.get(0).equals("Id : null"))
+                    {
+                        Log.d("V","Visitor not added");
+                    }
+                    else
+                    {
+                        Log.d("V","Visitor added with "+tempVisitor.get(0));
+                        String temp=tempVisitor.get(0);
+                        Log.d("V","UniqueId generated = "+temp);
+                        unique_id=Integer.parseInt(temp);
+                    }
+                }
+            } catch (SQLException e) {
+                Log.d("Update Status", "Update not saved to database");
+                throw new RuntimeException(e);
+            }
+
+            long finalUnique_id = unique_id;
             intentPhoto.putExtra("VisitorEntry.MobileNumber",mobileNum);
             intentPhoto.putExtra("VisitorEntry.gateId",defaultGateId);
             intentPhoto.putExtra("VisitorEntry.userId",userId);
             intentPhoto.putExtra("VisitorEntry.sbuId",sbuId);
             intentPhoto.putExtra("VisitorEntry.ID",String.valueOf(ID));
+            intentPhoto.putExtra("unique_Id", String.valueOf(finalUnique_id));
             if(IDProofNum!=0)
-            {
                 intentPhoto.putExtra("IDProofNum",String.valueOf(IDProofNum));
-            }
-            if(selectedNumberIdProof!=null)
-            {
-                intentPhoto.putExtra("NumberIDProof",selectedNumberIdProof);
-            }
-            Log.d("NUMBER ID PROOF",""+selectedNumberIdProof);
-            if(selectedFileIdProof!=null)
-            {
-                intentPhoto.putExtra("FileIDProof",selectedFileIdProof);
-            }
-            Log.d("FILE ID PROOF",""+selectedFileIdProof);
             startActivity(intentPhoto);
-        });
+            });
 
 
-        // Set listener for ID proof spinner
+
+            // Set listener for ID proof spinner
         spinnerIDProof.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -483,7 +538,7 @@ public class VisitorEntry extends AppCompatActivity {
         Log.d("visitor name",""+editTextVisitorName.getText().toString());
 
         if(v.getIdProofNo()!=null)
-        editTextIDProofNumber.setText(v.getIdProofNo());
+            editTextIDProofNumber.setText(v.getIdProofNo());
 
         editTextPlace.setText(v.getLocationName());
         Log.d("location",""+editTextPlace.getText());

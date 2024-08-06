@@ -94,7 +94,7 @@ public class PrintLabel extends AppCompatActivity {
                 // Navigate to MainActivity
                 Intent intentBack = new Intent(PrintLabel.this, MainActivity.class);
                 intentBack.putExtra("userId",String.valueOf(userId));
-                intentBack.putExtra("gateId",String.valueOf(gateId));
+                intentBack.putExtra("defaultGateId",String.valueOf(gateId));
                 intentBack.putExtra("sbuId",String.valueOf(sbuId));
                 startActivity(intentBack);
                 finish(); // Optional, if you want to close the current activity

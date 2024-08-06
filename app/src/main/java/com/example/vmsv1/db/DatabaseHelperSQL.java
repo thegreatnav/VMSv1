@@ -2024,7 +2024,7 @@ public class DatabaseHelperSQL {
     public List<String> updateVisitorIDProofDetails(long uniqueId, int idProofType, String idProofNumber, String idProofFilePath, String idProofFileName) throws SQLException {
         Log.d("Inside updateVisitorIDProofDetails", "uniqueId: " + uniqueId);
         Log.d("IDProofType", String.valueOf(idProofType));
-        Log.d("IDProofNumber", idProofNumber);
+        Log.d("IDProofNumber", String.valueOf(idProofNumber));
         //Log.d("IDProofFilePath", idProofFilePath);
         //Log.d("IDProofFileName", idProofFileName);
 
